@@ -1,0 +1,6 @@
+[submodule "OpenROAD"]
+	path = OpenROAD
+	url = git@github.com:JensLiu/OpenROAD.git
+[submodule "OpenROAD-flow-scripts"]
+	path = OpenROAD-flow-scripts
+	url = git@github.com:JensLiu/OpenROAD-flow-scripts.git
