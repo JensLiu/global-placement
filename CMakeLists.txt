@@ -15,5 +15,38 @@ add_subdirectory(src/libs)
 
 # Algorithm targets belong here. Learning tools build separately in docs/plan/tools.
 add_executable(odb_hello src/main.cpp)
-target_link_libraries(odb_hello PRIVATE opendb_core)
+target_include_directories(odb_hello PRIVATE src)
+target_link_libraries(odb_hello PRIVATE opendb_core Eigen3::Eigen)
 target_compile_options(odb_hello PRIVATE -Wall -Wextra -Wpedantic)
+
+# Give standalone first-party headers the application's exact compiler flags.
+# Keep the full compilation database unchanged for normal source-file tooling.
+add_custom_target(clangd_database
+  COMMAND "${CMAKE_COMMAND}"
+    "-DGP_BUILD_DIR=${CMAKE_BINARY_DIR}"
+    "-DGP_SOURCE_DIR=${CMAKE_SOURCE_DIR}"
+    -P "${CMAKE_SOURCE_DIR}/cmake/UpdateClangdDatabase.cmake"
+  BYPRODUCTS "${CMAKE_BINARY_DIR}/clangd/compile_commands.json"
+  VERBATIM)
+add_dependencies(odb_hello clangd_database)
+
+include(CTest)
+if(BUILD_TESTING)
+  add_executable(eigen_smoke tests/eigen_smoke.cpp)
+  target_link_libraries(eigen_smoke PRIVATE Eigen3::Eigen)
+  target_compile_options(eigen_smoke PRIVATE -Wall -Wextra -Wpedantic)
+  add_test(NAME eigen_smoke COMMAND eigen_smoke)
+
+  add_executable(gordian_builder_smoke tests/gordian_builder_smoke.cpp)
+  target_include_directories(gordian_builder_smoke PRIVATE src)
+  target_link_libraries(gordian_builder_smoke PRIVATE opendb_core Eigen3::Eigen)
+  target_compile_options(gordian_builder_smoke PRIVATE -Wall -Wextra -Wpedantic)
+  add_test(NAME gordian_builder_smoke COMMAND gordian_builder_smoke)
+
+  add_executable(module_registry_views tests/module_registry_views.cpp)
+  target_include_directories(module_registry_views PRIVATE src)
+  target_link_libraries(module_registry_views PRIVATE opendb_core)
+  target_compile_options(module_registry_views PRIVATE -Wall -Wextra -Wpedantic)
+  add_test(NAME module_registry_views COMMAND module_registry_views)
+
+endif()

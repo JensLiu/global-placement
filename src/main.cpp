@@ -1,22 +1,37 @@
 #include <exception>
 #include <fstream>
-#include <iomanip>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string_view>
 
+#include "gordian/solver.hpp"
 #include "odb/db.h"
 #include "utl/Logger.h"
 
 int main(int argc, char *argv[]) {
+  const auto usage = [&](std::ostream &out) {
+    out << "Usage: " << argv[0] << " <design.odb> [--io-mode fixed|skip]\n"
+        << "  fixed (default): use positioned IOs as fixed anchors\n"
+        << "  skip: omit IO endpoints for preliminary cell placement\n";
+  };
   if (argc == 2 && std::string_view(argv[1]) == "--help") {
-    std::cout << "Usage: " << argv[0] << " <design.odb>\n";
+    usage(std::cout);
     return 0;
   }
-  if (argc != 2) {
-    std::cerr << "Usage: " << argv[0] << " <design.odb>\n";
+  if (argc != 2 && argc != 4) {
+    usage(std::cerr);
     return 1;
+  }
+  auto io_mode = gordian::IoMode::FIXED;
+  if (argc == 4) {
+    const std::string_view flag(argv[2]);
+    const std::string_view value(argv[3]);
+    if (flag != "--io-mode" || (value != "fixed" && value != "skip")) {
+      usage(std::cerr);
+      return 1;
+    }
+    io_mode = value == "fixed" ? gordian::IoMode::FIXED : gordian::IoMode::SKIP;
   }
 
   try {
@@ -29,6 +44,7 @@ int main(int argc, char *argv[]) {
     utl::Logger logger;
     std::unique_ptr<odb::dbDatabase, decltype(&odb::dbDatabase::destroy)>
         database(odb::dbDatabase::create(), &odb::dbDatabase::destroy);
+    // auto *database = odb::dbDatabase::create();
     database->setLogger(&logger);
     database->read(input);
 
@@ -37,27 +53,10 @@ int main(int argc, char *argv[]) {
     if (!block) {
       throw std::runtime_error("ODB has no top-level design block");
     }
-    const int dbu_per_micron = block->getDbUnitsPerMicron();
-    if (dbu_per_micron <= 0) {
-      throw std::runtime_error("ODB has an invalid DBU-per-micron scale");
-    }
-    const double units = dbu_per_micron;
-    const auto die = block->getDieArea();
-    const auto core = block->getCoreArea();
 
-    std::cout << "Hello from OpenDB!\n"
-              << "Design: " << block->getName() << '\n'
-              << "DBU per micron: " << dbu_per_micron << '\n'
-              << std::fixed << std::setprecision(3) << "Die (um): ("
-              << die.xMin() / units << ", " << die.yMin() / units << ") - ("
-              << die.xMax() / units << ", " << die.yMax() / units << ")\n"
-              << "Core (um): (" << core.xMin() / units << ", "
-              << core.yMin() / units << ") - (" << core.xMax() / units << ", "
-              << core.yMax() / units << ")\n"
-              << "Instances: " << block->getInsts().size() << '\n'
-              << "Nets: " << block->getNets().size() << '\n'
-              << "IO terminals: " << block->getBTerms().size() << '\n'
-              << "Rows: " << block->getRows().size() << '\n';
+    gordian::Solver gordian(block, io_mode);
+    gordian.run();
+
   } catch (const std::exception &error) {
     std::cerr << "Error reading " << argv[1] << ": " << error.what() << '\n';
     return 1;

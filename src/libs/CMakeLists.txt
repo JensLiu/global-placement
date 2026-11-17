@@ -12,6 +12,21 @@ foreach(dependency IN ITEMS abseil-cpp fmt spdlog)
   endif()
 endforeach()
 
+# Eigen is header-only. Reuse the same offline source cache as the other
+# dependencies without configuring Eigen's own tests, demos, or install rules.
+set(GP_EIGEN_SOURCE_DIR "${GP_DEPENDENCY_CACHE}/eigen+" CACHE PATH
+    "Eigen source/include root containing Eigen/Core and Eigen/Sparse")
+foreach(header IN ITEMS Core Sparse SparseCholesky IterativeLinearSolvers)
+  if(NOT EXISTS "${GP_EIGEN_SOURCE_DIR}/Eigen/${header}")
+    message(FATAL_ERROR
+      "Missing Eigen/${header} in GP_EIGEN_SOURCE_DIR=${GP_EIGEN_SOURCE_DIR}. "
+      "Set GP_EIGEN_SOURCE_DIR to an Eigen 3.4+ include root.")
+  endif()
+endforeach()
+add_library(placement_eigen INTERFACE)
+add_library(Eigen3::Eigen ALIAS placement_eigen)
+target_include_directories(placement_eigen SYSTEM INTERFACE "${GP_EIGEN_SOURCE_DIR}")
+
 set(ABSL_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 set(ABSL_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
 set(ABSL_PROPAGATE_CXX_STD ON CACHE BOOL "" FORCE)
