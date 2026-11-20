@@ -185,7 +185,9 @@ private:
     return result;
   }
 
-  // Preserve the solver's existing net-filter policy during extraction.
+public:
+  // The solver's net filter. Public so that evaluation code (the tracer's
+  // metrics) can report on exactly the nets the solver models.
   static auto include_net__(const odb::dbNet *net) -> bool {
     switch (net->getSigType().getValue()) {
     case odb::dbSigType::POWER:

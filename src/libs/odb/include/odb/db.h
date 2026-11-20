@@ -33,8 +33,8 @@
 #include "odb/isotropy.h"
 
 inline constexpr int ADS_MAX_CORNER = 10;
-inline constexpr const char* kDefaultBufBaseName{"buf"};
-inline constexpr const char* kDefaultNetBaseName{"net"};
+inline constexpr const char *kDefaultBufBaseName{"buf"};
+inline constexpr const char *kDefaultNetBaseName{"net"};
 
 namespace utl {
 class Logger;
@@ -46,8 +46,7 @@ class dbShape;
 class dbViaParams;
 class dbTransform;
 
-template <class T>
-class dbId;
+template <class T> class dbId;
 
 // Forward declarations of all database objects
 class dbBox;
@@ -198,9 +197,8 @@ class dbModuleBusPortModBTermItr;
 /// A box is the element used to represent layout shapes.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbBox : public dbObject
-{
- public:
+class dbBox : public dbObject {
+public:
   ///
   /// Get the lower coordinate.
   ///
@@ -230,13 +228,13 @@ class dbBox : public dbObject
   /// Get tech-via this box represents.
   /// returns nullptr if this box does not represent a tech-via
   ///
-  dbTechVia* getTechVia() const;
+  dbTechVia *getTechVia() const;
 
   ///
   /// Get block-via this box represents.
   /// returns nullptr if this box does not represent a block-via
   ///
-  dbVia* getBlockVia() const;
+  dbVia *getBlockVia() const;
 
   ///
   /// Return the placed location of this via.
@@ -251,12 +249,12 @@ class dbBox : public dbObject
   ///
   /// Get the translated boxes of this via
   ///
-  void getViaBoxes(std::vector<dbShape>& shapes) const;
+  void getViaBoxes(std::vector<dbShape> &shapes) const;
 
   ///
   /// Get the translated boxes of this via on the given layer
   ///
-  void getViaLayerBoxes(dbTechLayer* layer, std::vector<dbShape>& shapes) const;
+  void getViaLayerBoxes(dbTechLayer *layer, std::vector<dbShape> &shapes) const;
 
   ///
   /// Get the orientation of the box.
@@ -290,7 +288,7 @@ class dbBox : public dbObject
   ///
   /// Get the owner of this box
   ///
-  dbObject* getBoxOwner() const;
+  dbObject *getBoxOwner() const;
 
   ///
   /// Get the owner type of this box
@@ -309,7 +307,7 @@ class dbBox : public dbObject
   /// These bboxes have no layer.
   ///    All dbBox(s) that represent VIA's.
   ///
-  dbTechLayer* getTechLayer() const;
+  dbTechLayer *getTechLayer() const;
 
   ///
   /// Get the layer mask assigned to this box.
@@ -326,100 +324,79 @@ class dbBox : public dbObject
   /// Add a physical pin to a dbBPin.
   /// Returns nullptr if this dbBPin already has a pin.
   ///
-  static dbBox* create(dbBPin* bpin,
-                       dbTechLayer* layer,
-                       int x1,
-                       int y1,
-                       int x2,
-                       int y2,
-                       uint32_t mask = 0);
+  static dbBox *create(dbBPin *bpin, dbTechLayer *layer, int x1, int y1, int x2,
+                       int y2, uint32_t mask = 0);
 
   ///
   /// Add a box to a block-via.
   ///
-  static dbBox* create(dbVia* via,
-                       dbTechLayer* layer,
-                       int x1,
-                       int y1,
-                       int x2,
+  static dbBox *create(dbVia *via, dbTechLayer *layer, int x1, int y1, int x2,
                        int y2);
 
   ///
   /// Add an obstruction to a master.
   ///
-  static dbBox* create(dbMaster* master,
-                       dbTechLayer* layer,
-                       int x1,
-                       int y1,
-                       int x2,
-                       int y2);
+  static dbBox *create(dbMaster *master, dbTechLayer *layer, int x1, int y1,
+                       int x2, int y2);
 
   ///
   /// Add a via obstrction to a master.
   /// This function may fail and return nullptr if this via has no shapes.
   ///
-  static dbBox* create(dbMaster* master, dbTechVia* via, int x, int y);
+  static dbBox *create(dbMaster *master, dbTechVia *via, int x, int y);
 
   ///
   /// Add a wire-shape to a master-pin.
   ///
-  static dbBox* create(dbMPin* pin,
-                       dbTechLayer* layer,
-                       int x1,
-                       int y1,
-                       int x2,
+  static dbBox *create(dbMPin *pin, dbTechLayer *layer, int x1, int y1, int x2,
                        int y2);
 
   ///
   /// Add a wire-shape to a polygon.
   ///
-  static dbBox* create(dbPolygon* pbox, int x1, int y1, int x2, int y2);
+  static dbBox *create(dbPolygon *pbox, int x1, int y1, int x2, int y2);
 
   ///
   /// Add a via obstrction to a master-pin.
   /// This function may fail and return nullptr if this via has no shapes.
   ///
-  static dbBox* create(dbMPin* pin, dbTechVia* via, int x, int y);
+  static dbBox *create(dbMPin *pin, dbTechVia *via, int x, int y);
 
   ///
   /// Add a shape to a tech-via;
   ///
-  static dbBox* create(dbTechVia* via,
-                       dbTechLayer* layer,
-                       int x1,
-                       int y1,
-                       int x2,
-                       int y2);
+  static dbBox *create(dbTechVia *via, dbTechLayer *layer, int x1, int y1,
+                       int x2, int y2);
 
   ///
   /// Add a boundary to a region
   ///
-  static dbBox* create(dbRegion* region, int x1, int y1, int x2, int y2);
+  static dbBox *create(dbRegion *region, int x1, int y1, int x2, int y2);
 
   ///
   /// Create a halo on an instance.
   ///
-  static dbBox* create(dbInst* inst, int x1, int y1, int x2, int y2);
+  static dbBox *create(dbInst *inst, int x1, int y1, int x2, int y2);
 
   // Destroy box
-  static void destroy(dbBox* box);
+  static void destroy(dbBox *box);
 
   ///
   /// Translate a database-id back to a pointer.
   /// This function translates any dbBox which is part of a block.
   ///
-  static dbBox* getBox(dbBlock* block, uint32_t oid);
+  static dbBox *getBox(dbBlock *block, uint32_t oid);
 
   /// Translate a database-id back to a pointer.
   /// This function translates any dbBox which is part of a tech.
   ///
-  static dbBox* getBox(dbTech* tech, uint32_t oid);
+  static dbBox *getBox(dbTech *tech, uint32_t oid);
 
   ///
   /// Translate a database-id back to a pointer.
   /// This function translates any dbBox whichs is part of a master.
   ///
-  static dbBox* getBox(dbMaster* master, uint32_t oid);
+  static dbBox *getBox(dbMaster *master, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -427,12 +404,10 @@ class dbBox : public dbObject
 /// A sbox is the element used to represent special layout shapes.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbSBox : public dbBox
-{
- public:
+class dbSBox : public dbBox {
+public:
   /// Direction of segment
-  enum Direction
-  {
+  enum Direction {
     UNDEFINED = 0,
     HORIZONTAL = 1,
     VERTICAL = 2,
@@ -452,7 +427,7 @@ class dbSBox : public dbBox
   ///
   /// Get the swire of this shape
   ///
-  dbSWire* getSWire() const;
+  dbSWire *getSWire() const;
 
   ///
   /// Get Oct Wire Shape
@@ -487,7 +462,7 @@ class dbSBox : public dbBox
   ///
   /// Create a set of new sboxes from a via array
   ///
-  std::vector<dbSBox*> smashVia();
+  std::vector<dbSBox *> smashVia();
 
   ///
   /// Add a rect to a dbSWire.
@@ -506,46 +481,34 @@ class dbSBox : public dbBox
   /// These requirements are a result that the current DEF semantics (5.5) use
   /// PATH statements to output these rectangles, the paths must have even
   /// widths.
-  static dbSBox* create(dbSWire* swire,
-                        dbTechLayer* layer,
-                        int x1,
-                        int y1,
-                        int x2,
-                        int y2,
-                        dbWireShapeType type,
-                        Direction dir = UNDEFINED,
-                        int width = 0);
+  static dbSBox *create(dbSWire *swire, dbTechLayer *layer, int x1, int y1,
+                        int x2, int y2, dbWireShapeType type,
+                        Direction dir = UNDEFINED, int width = 0);
 
   ///
   /// Add a block-via to a dbSWire
   /// This function may fail and return nullptr if this via has no shapes.
   ///
-  static dbSBox* create(dbSWire* swire,
-                        dbVia* via,
-                        int x,
-                        int y,
+  static dbSBox *create(dbSWire *swire, dbVia *via, int x, int y,
                         dbWireShapeType type);
 
   ///
   /// Add a tech-via to a dbSWire.
   /// This function may fail and return nullptr if this via has no shapes.
   ///
-  static dbSBox* create(dbSWire* swire,
-                        dbTechVia* via,
-                        int x,
-                        int y,
+  static dbSBox *create(dbSWire *swire, dbTechVia *via, int x, int y,
                         dbWireShapeType type);
 
   ///
   /// Translate a database-id back to a pointer.
   /// This function translates any dbBox whichs is part of a block
   ///
-  static dbSBox* getSBox(dbBlock* block, uint32_t oid);
+  static dbSBox *getSBox(dbBlock *block, uint32_t oid);
 
   ///
   /// Destroy a SBox.
   ///
-  static void destroy(dbSBox* box);
+  static void destroy(dbSBox *box);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -555,19 +518,16 @@ class dbSBox : public dbBox
 /// of hierarchy is supported.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbBlock : public dbObject
-{
- public:
-  struct dbBTermGroup
-  {
-    std::vector<dbBTerm*> bterms;
+class dbBlock : public dbObject {
+public:
+  struct dbBTermGroup {
+    std::vector<dbBTerm *> bterms;
     bool order = false;
   };
 
-  struct dbBTermTopLayerGrid
-  {
+  struct dbBTermTopLayerGrid {
     // The single top-most routing layer of the placement grid.
-    dbTechLayer* layer = nullptr;
+    dbTechLayer *layer = nullptr;
     // The distance between each valid position on the grid in the x- and
     // y-directions, respectively.
     int x_step = 0;
@@ -591,43 +551,43 @@ class dbBlock : public dbObject
   ///
   /// Get the block chip name.
   ///
-  const char* getConstName();
+  const char *getConstName();
 
   ///
   /// Get the bounding box of this block.
   ///
-  dbBox* getBBox();
+  dbBox *getBBox();
 
   ///
   /// Get the chip this block belongs too.
   ///
-  dbChip* getChip();
+  dbChip *getChip();
 
   ///
   /// Get the database this block belongs too.
   ///
-  dbDatabase* getDataBase();
+  dbDatabase *getDataBase();
 
   ///
   /// Get the technology of this block
   ///
-  dbTech* getTech();
+  dbTech *getTech();
 
   ///
   /// Get the parent block this block. Returns nullptr if this block is the
   /// top-block of the chip.
   ///
-  dbBlock* getParent();
+  dbBlock *getParent();
 
   ///
   /// Returns the hierarchical parent of this block if it exists.
   ///
-  dbInst* getParentInst();
+  dbInst *getParentInst();
 
   ///
   /// Returns the top module of this block.
   ///
-  dbModule* getTopModule() const;
+  dbModule *getTopModule() const;
 
   ///
   /// Get the child blocks of this block.
@@ -638,7 +598,7 @@ class dbBlock : public dbObject
   /// Find a specific child-block of this block.
   /// Returns nullptr if the object was not found.
   ///
-  dbBlock* findChild(const char* name);
+  dbBlock *findChild(const char *name);
 
   ///
   /// Get all the block-terminals of this block.
@@ -649,7 +609,7 @@ class dbBlock : public dbObject
   /// Find a specific bterm of this block.
   /// Returns nullptr if the object was not found.
   ///
-  dbBTerm* findBTerm(const char* name);
+  dbBTerm *findBTerm(const char *name);
 
   ///
   /// Get all the bterm groups of this block.
@@ -660,12 +620,12 @@ class dbBlock : public dbObject
   /// Get all the block-terminals of this block.
   /// The flag order places the pins ordered in ascending x/y position.
   ///
-  void addBTermGroup(const std::vector<dbBTerm*>& bterms, bool order);
+  void addBTermGroup(const std::vector<dbBTerm *> &bterms, bool order);
 
   ///
   /// Define the top layer grid for pin placement.
   ///
-  void setBTermTopLayerGrid(const dbBTermTopLayerGrid& top_layer_grid);
+  void setBTermTopLayerGrid(const dbBTermTopLayerGrid &top_layer_grid);
 
   ///
   /// Get the top layer grid for pin placement.
@@ -681,19 +641,19 @@ class dbBlock : public dbObject
   /// Find the rectangle corresponding to the constraint region in a specific
   /// edge of the die area.
   ///
-  Rect findConstraintRegion(const Direction2D& edge, int begin, int end);
+  Rect findConstraintRegion(const Direction2D &edge, int begin, int end);
 
   ///
   /// Add region constraint for dbBTerms according to their IO type.
   ///
   void addBTermConstraintByDirection(dbIoType direction,
-                                     const Rect& constraint_region);
+                                     const Rect &constraint_region);
 
   ///
   /// Add region constraint for dbBTerms.
   ///
-  void addBTermsToConstraint(const std::vector<dbBTerm*>& bterms,
-                             const Rect& constraint_region);
+  void addBTermsToConstraint(const std::vector<dbBTerm *> &bterms,
+                             const Rect &constraint_region);
 
   ///
   /// Get all the instance-terminals of this block.
@@ -764,93 +724,90 @@ class dbBlock : public dbObject
   /// on this block.
   ///
   int globalConnect(bool force, bool verbose);
-  int globalConnect(dbGlobalConnect* gc, bool force, bool verbose);
-  int addGlobalConnect(dbRegion* region,
-                       const char* instPattern,
-                       const char* pinPattern,
-                       dbNet* net,
-                       bool do_connect);
+  int globalConnect(dbGlobalConnect *gc, bool force, bool verbose);
+  int addGlobalConnect(dbRegion *region, const char *instPattern,
+                       const char *pinPattern, dbNet *net, bool do_connect);
   void reportGlobalConnect();
   void clearGlobalConnect();
 
   ///
   /// Get the component mask shift layers.
   ///
-  std::vector<dbTechLayer*> getComponentMaskShift();
+  std::vector<dbTechLayer *> getComponentMaskShift();
 
   ///
   /// Set the component mask shift layers.
   ///
-  void setComponentMaskShift(const std::vector<dbTechLayer*>& layers);
+  void setComponentMaskShift(const std::vector<dbTechLayer *> &layers);
 
   ///
   /// Find a specific instance of this block.
   /// Returns nullptr if the object was not found.
   ///
-  dbInst* findInst(const char* name);
+  dbInst *findInst(const char *name);
 
   ///
   /// Find a specific module in this block.
   /// Returns nullptr if the object was not found.
   ///
-  dbModule* findModule(const char* name);
+  dbModule *findModule(const char *name);
 
   ///
   /// Find a specific modinst in this block. path is
   /// master_module_name/modinst_name Returns nullptr if the object was not
   /// found.
   ///
-  dbModInst* findModInst(const char* path);
+  dbModInst *findModInst(const char *path);
 
   ///
   /// Find a specific moditerm in this block. path is
   /// master_module_name/modinst_name/term_name Returns nullptr if the object
   /// was not found.
   ///
-  dbModITerm* findModITerm(const char* hierarchical_name);
+  dbModITerm *findModITerm(const char *hierarchical_name);
 
   ///
   /// Find a specific modbterm in this block. path is
   /// master_module_name/modinst_name/term_name Returns nullptr if the object
   /// was not found.
   ///
-  dbModBTerm* findModBTerm(const char* hierarchical_name);
+  dbModBTerm *findModBTerm(const char *hierarchical_name);
 
   ///
   /// Find a specific PowerDomain in this block.
   /// Returns nullptr if the object was not found.
   ///
-  dbPowerDomain* findPowerDomain(const char* name);
+  dbPowerDomain *findPowerDomain(const char *name);
 
   ///
   /// Find a specific LogicPort in this block.
   /// Returns nullptr if the object was not found.
   ///
-  dbLogicPort* findLogicPort(const char* name);
+  dbLogicPort *findLogicPort(const char *name);
 
   ///
   /// Find a specific PowerSwitch in this block.
   /// Returns nullptr if the object was not found.
   ///
-  dbPowerSwitch* findPowerSwitch(const char* name);
+  dbPowerSwitch *findPowerSwitch(const char *name);
 
   ///
   /// Find a specific Isolation in this block.
   /// Returns nullptr if the object was not found.
   ///
-  dbIsolation* findIsolation(const char* name);
+  dbIsolation *findIsolation(const char *name);
 
   ///
   /// Find a specific LevelShifter in this block.
   /// Returns nullptr if the object was not found.
   ///
-  dbLevelShifter* findLevelShifter(const char* name);
+  dbLevelShifter *findLevelShifter(const char *name);
 
   ///
   /// Find a specific group in this block.
   /// Returns nullptr if the object was not found.
   ///
-  dbGroup* findGroup(const char* name);
+  dbGroup *findGroup(const char *name);
 
   ///
   /// Find a specific iterm of this block.
@@ -861,7 +818,7 @@ class dbBlock : public dbObject
   ///
   /// For example:   inst0/A
   ///
-  dbITerm* findITerm(const char* name);
+  dbITerm *findITerm(const char *name);
 
   ///
   /// Get the obstructions of this block
@@ -892,30 +849,30 @@ class dbBlock : public dbObject
   /// Find a specific net of this block.
   /// Returns nullptr if the object was not found.
   ///
-  dbNet* findNet(const char* name) const;
+  dbNet *findNet(const char *name) const;
 
   ///
   /// Find a specific mod net of this block.
   /// Returns nullptr if the object was not found.
   ///
-  dbModNet* findModNet(const char* hierarchical_name) const;
+  dbModNet *findModNet(const char *hierarchical_name) const;
 
   //
   // Utility to write db file
   //
   // void dbBlock::writeDb(char *filename, int allNode=0);
-  void writeDb(char* filename, int allNode = 0);
+  void writeDb(char *filename, int allNode = 0);
 
   //
   // Utility to write guides file
   //
-  void writeGuides(const char* filename) const;
+  void writeGuides(const char *filename) const;
 
   ///
   /// Find a specific via of this block.
   /// Returns nullptr if the object was not found.
   ///
-  dbVia* findVia(const char* name);
+  dbVia *findVia(const char *name);
 
   ///
   /// Get the vias of this block
@@ -926,7 +883,7 @@ class dbBlock : public dbObject
   /// Get the GCell grid of this block
   /// Returns nullptr if no grid exists.
   ///
-  dbGCellGrid* getGCellGrid();
+  dbGCellGrid *getGCellGrid();
 
   ///
   /// Get the DEF units of this technology.
@@ -984,25 +941,19 @@ class dbBlock : public dbObject
   /// Left and Right are set to "zero" if the bus delimiters
   /// were not set.
   ///
-  void getBusDelimiters(char& left, char& right);
+  void getBusDelimiters(char &left, char &right);
 
   ///
   /// Get extraction counters
   ///
-  void getExtCount(int& numOfNet,
-                   int& numOfRSeg,
-                   int& numOfCapNode,
-                   int& numOfCCSeg);
+  void getExtCount(int &numOfNet, int &numOfRSeg, int &numOfCapNode,
+                   int &numOfCCSeg);
 
   ///
   /// Copy RC values from one extDb to another.
   ///
-  void copyExtDb(uint32_t fr,
-                 uint32_t to,
-                 uint32_t extDbCnt,
-                 double resFactor,
-                 double ccFactor,
-                 double gndcFactor);
+  void copyExtDb(uint32_t fr, uint32_t to, uint32_t extDbCnt, double resFactor,
+                 double ccFactor, double gndcFactor);
 
   ///
   /// Adjust RC values.
@@ -1017,15 +968,14 @@ class dbBlock : public dbObject
   ///
   /// adjust CC's of nets
   ///
-  bool adjustCC(float adjFactor,
-                double ccThreshHold,
-                std::vector<dbNet*>& nets,
-                std::vector<dbNet*>& halonets);
+  bool adjustCC(float adjFactor, double ccThreshHold,
+                std::vector<dbNet *> &nets, std::vector<dbNet *> &halonets);
 
   ///
   /// undo adjusted CC
   ///
-  void undoAdjustedCC(std::vector<dbNet*>& nets, std::vector<dbNet*>& halonets);
+  void undoAdjustedCC(std::vector<dbNet *> &nets,
+                      std::vector<dbNet *> &halonets);
 
   ///
   /// Get the number of process corners.
@@ -1050,24 +1000,24 @@ class dbBlock : public dbObject
   ///
   /// Get the index in ext Db by name
   ///
-  int getExtCornerIndex(const char* cornerName);
+  int getExtCornerIndex(const char *cornerName);
 
   ///
   /// Set corner name list
   ///
-  void setCornerNameList(const char* name_list);
+  void setCornerNameList(const char *name_list);
 
   ///
   /// Get corner name list
   ///
-  char* getCornerNameList();
+  char *getCornerNameList();
 
   ///
   /// Set the number of process corners. The maximum number of
   /// process corners is limited to 256. This method will
   /// delete all dbRCSeg, dbCCSeg, which depend on this value.
   ///
-  void setCornerCount(int cornerCnt, int extDbCnt, const char* name_list);
+  void setCornerCount(int cornerCnt, int extDbCnt, const char *name_list);
   void setCornerCount(int cnt);
 
   ///
@@ -1084,7 +1034,7 @@ class dbBlock : public dbObject
   /// Find a specific track-grid.
   /// Returns nullptr if a track-grid has not be defined for this layer.
   ///
-  dbTrackGrid* findTrackGrid(dbTechLayer* layer);
+  dbTrackGrid *findTrackGrid(dbTechLayer *layer);
 
   ///
   /// Get the rows of this block
@@ -1099,19 +1049,19 @@ class dbBlock : public dbObject
   ///
   /// Get the list of masters used in this block.
   ///
-  void getMasters(std::vector<dbMaster*>& masters);
+  void getMasters(std::vector<dbMaster *> &masters);
 
   ///
   /// Set the die area. The die-area is considered a constant regardless
   /// of the geometric elements of the dbBlock. It is generally a constant
   /// declared in DEF.
   ///
-  void setDieArea(const Rect& new_rect);
+  void setDieArea(const Rect &new_rect);
 
   ///
   /// Set the die area with polygon. Allows for non-rectangular floorplans
   ///
-  void setDieArea(const Polygon& new_area);
+  void setDieArea(const Polygon &new_area);
 
   ///
   /// Get the die area. The default die-area is (0,0,0,0).
@@ -1131,12 +1081,12 @@ class dbBlock : public dbObject
   ///
   /// Set the core area.
   ///
-  void setCoreArea(const Rect& new_area);
+  void setCoreArea(const Rect &new_area);
 
   ///
   /// Set the core area with polygon. Allows for non-rectangular floorplans
   ///
-  void setCoreArea(const Polygon& new_area);
+  void setCoreArea(const Polygon &new_area);
 
   ///
   /// Get the core area.
@@ -1151,32 +1101,32 @@ class dbBlock : public dbObject
   ///
   /// Add region in the die area where IO pins cannot be placed
   ///
-  void addBlockedRegionForPins(const Rect& region);
+  void addBlockedRegionForPins(const Rect &region);
 
   ///
   /// Get the regions in the die area where IO pins cannot be placed
   ///
-  const std::vector<Rect>& getBlockedRegionsForPins();
+  const std::vector<Rect> &getBlockedRegionsForPins();
 
   ///
   /// Set the extmain instance.
   ///
-  void setExtmi(void* ext);
+  void setExtmi(void *ext);
 
   ///
   /// Get the extmain instance.
   ///
-  void* getExtmi();
+  void *getExtmi();
 
   ///
   /// Get the extraction control settings
   ///
-  dbExtControl* getExtControl();
+  dbExtControl *getExtControl();
 
   ///
   /// Get the dbDft object for persistent dft structs
   ///
-  dbDft* getDft() const;
+  dbDft *getDft() const;
 
   ///
   /// Get the minimum routing layer
@@ -1226,7 +1176,7 @@ class dbBlock : public dbObject
   ///
   /// Get the extraction corner names
   ///
-  void getExtCornerNames(std::list<std::string>& ecl);
+  void getExtCornerNames(std::list<std::string> &ecl);
 
   ///
   /// Get the capacitor-coupled segments.
@@ -1241,34 +1191,34 @@ class dbBlock : public dbObject
   ///
   /// Get search database object for fast area searches on physical objects
   ///
-  dbBlockSearch* getSearchDb();
+  dbBlockSearch *getSearchDb();
 
   ///
   /// destroy coupling caps of nets
   ///
-  void destroyCCs(std::vector<dbNet*>& nets);
+  void destroyCCs(std::vector<dbNet *> &nets);
 
   ///
   /// destroy RC segments of nets
   ///
-  void destroyRSegs(std::vector<dbNet*>& nets);
+  void destroyRSegs(std::vector<dbNet *> &nets);
 
   ///
   /// destroy capnodes of nets
   ///
-  void destroyCNs(std::vector<dbNet*>& nets, bool cleanExtid);
+  void destroyCNs(std::vector<dbNet *> &nets, bool cleanExtid);
 
   ///
   /// destroy parasitics of nets
   ///
-  void destroyParasitics(std::vector<dbNet*>& nets);
-  void destroyCornerParasitics(std::vector<dbNet*>& nets);
+  void destroyParasitics(std::vector<dbNet *> &nets);
+  void destroyCornerParasitics(std::vector<dbNet *> &nets);
 
   ///
   /// get cc_halo_net's of input nets
   ///
-  void getCcHaloNets(std::vector<dbNet*>& changedNets,
-                     std::vector<dbNet*>& ccHaloNets);
+  void getCcHaloNets(std::vector<dbNet *> &changedNets,
+                     std::vector<dbNet *> &ccHaloNets);
 
   ///
   /// merge rsegs before doing exttree
@@ -1293,7 +1243,7 @@ class dbBlock : public dbObject
   ///
   /// get wire_updated nets
   ///
-  void getWireUpdatedNets(std::vector<dbNet*>& nets);
+  void getWireUpdatedNets(std::vector<dbNet *> &nets);
 
   ///
   /// Make a unique net name.
@@ -1308,18 +1258,16 @@ class dbBlock : public dbObject
   /// If associated_bterm is non-null, that exact top-level port may reuse the
   /// candidate name while its net association is being updated.
   ///
-  std::string makeNewNetName(const dbModule* parent = nullptr,
-                             const char* base_name = "net",
-                             const dbNameUniquifyType& uniquify
-                             = dbNameUniquifyType::ALWAYS,
-                             dbNet* corresponding_flat_net = nullptr,
-                             const dbBTerm* associated_bterm = nullptr);
-  std::string makeNewInstName(dbModInst* parent = nullptr,
-                              const char* base_name = "inst",
-                              const dbNameUniquifyType& uniquify
-                              = dbNameUniquifyType::ALWAYS);
+  std::string makeNewNetName(
+      const dbModule *parent = nullptr, const char *base_name = "net",
+      const dbNameUniquifyType &uniquify = dbNameUniquifyType::ALWAYS,
+      dbNet *corresponding_flat_net = nullptr,
+      const dbBTerm *associated_bterm = nullptr);
+  std::string makeNewInstName(
+      dbModInst *parent = nullptr, const char *base_name = "inst",
+      const dbNameUniquifyType &uniquify = dbNameUniquifyType::ALWAYS);
 
-  const char* getBaseName(const char* full_name) const;
+  const char *getBaseName(const char *full_name) const;
 
   ///
   /// Split a hierarchical name into its path segments, using this block's
@@ -1336,8 +1284,8 @@ class dbBlock : public dbObject
   /// Callers that treat an empty segment as meaningless drop it themselves.
   /// The last segment always equals getBaseName(full_name).
   ///
-  void getPathSegments(const char* full_name,
-                       std::vector<std::string_view>& segments) const;
+  void getPathSegments(const char *full_name,
+                       std::vector<std::string_view> &segments) const;
 
   ///
   /// return the regions of this design
@@ -1347,12 +1295,12 @@ class dbBlock : public dbObject
   ///
   /// Find a specific region. Returns nullptr if the region was not found.
   ///
-  dbRegion* findRegion(const char* name);
+  dbRegion *findRegion(const char *name);
 
   ///
   ///  Find the non-default-rule
   ///
-  dbTechNonDefaultRule* findNonDefaultRule(const char* name);
+  dbTechNonDefaultRule *findNonDefaultRule(const char *name);
 
   ///
   ///  Get the non-default-rules specific to this block.
@@ -1367,13 +1315,13 @@ class dbBlock : public dbObject
   ///
   ///  Find marker group for this block.
   ///
-  dbMarkerCategory* findMarkerCategory(const char* name);
+  dbMarkerCategory *findMarkerCategory(const char *name);
 
   //
   //  Write marker information to file
   //
-  void writeMarkerCategories(const std::string& file);
-  void writeMarkerCategories(std::ofstream& reports);
+  void writeMarkerCategories(const std::string &file);
+  void writeMarkerCategories(std::ofstream &reports);
 
   ///
   /// set First driving iterm on all signal nets; set 0 is none exists
@@ -1381,21 +1329,20 @@ class dbBlock : public dbObject
 
   void clearUserInstFlags();
 
-  odb::PtrMap<dbTechLayer, dbTechVia*> getDefaultVias();
+  odb::PtrMap<dbTechLayer, dbTechVia *> getDefaultVias();
 
   ///
   /// Destroy all the routing wires from signal and clock nets in this block.
   ///
   void destroyRoutes();
 
- public:
+public:
   ///
   /// Create a chip's top-block. Returns nullptr of a top-block already
   /// exists.
   /// If tech is null then the db must contain only one dbTech.
   ///
-  static dbBlock* create(dbChip* chip,
-                         const char* name,
+  static dbBlock *create(dbChip *chip, const char *name,
                          char hier_delimiter = '/');
 
   ///
@@ -1403,34 +1350,33 @@ class dbBlock : public dbObject
   /// If tech is null then the tech will be taken from 'block'
   /// Returns nullptr if a block with the same name exists.
   ///
-  static dbBlock* create(dbBlock* block,
-                         const char* name,
+  static dbBlock *create(dbBlock *block, const char *name,
                          char hier_delimiter = '/');
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbBlock* getBlock(dbChip* chip, uint32_t oid);
+  static dbBlock *getBlock(dbChip *chip, uint32_t oid);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbBlock* getBlock(dbBlock* block, uint32_t oid);
+  static dbBlock *getBlock(dbBlock *block, uint32_t oid);
 
   ///
   /// Destroy a block.
   ///
-  static void destroy(dbBlock* block);
+  static void destroy(dbBlock *block);
 
   ///
   /// Delete the bterm from the block.
   ///
-  static dbSet<dbBlock>::iterator destroy(dbSet<dbBlock>::iterator& itr);
+  static dbSet<dbBlock>::iterator destroy(dbSet<dbBlock>::iterator &itr);
 
   //
   // For debugging only.  Print block content to an ostream.
   //
-  void debugPrintContent(std::ostream& str_db);
+  void debugPrintContent(std::ostream &str_db);
   void debugPrintContent() { debugPrintContent(std::cout); }
 };
 
@@ -1440,9 +1386,8 @@ class dbBlock : public dbObject
 /// a block.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbBTerm : public dbObject
-{
- public:
+class dbBTerm : public dbObject {
+public:
   ///
   /// Get the block-terminal name.
   ///
@@ -1451,14 +1396,14 @@ class dbBTerm : public dbObject
   ///
   /// Get the block-terminal name.
   ///
-  const char* getConstName() const;
+  const char *getConstName() const;
 
   ///
   /// Change the name of the bterm.
   /// Returns true if successful.
   /// Returns false if a bterm with the same name already exists.
   ///
-  bool rename(const char* name);
+  bool rename(const char *name);
 
   ///
   /// Get bbox of this term (ie the bbox of the bpins)
@@ -1528,11 +1473,11 @@ class dbBTerm : public dbObject
   ///
   /// Get the net of this block-terminal.
   ///
-  dbNet* getNet() const;
+  dbNet *getNet() const;
 
   ///
   /// Get the mod net of this block-terminal.
-  dbModNet* getModNet() const;
+  dbModNet *getModNet() const;
   ///
 
   /// Disconnect the block-terminal from its net.
@@ -1546,20 +1491,20 @@ class dbBTerm : public dbObject
 
   /// Connect the block-terminal to net.
   ///
-  void connect(dbNet* db_net, dbModNet* modnet);
-  void connect(dbNet* net);
-  void connect(dbModNet* mod_net);
+  void connect(dbNet *db_net, dbModNet *modnet);
+  void connect(dbNet *net);
+  void connect(dbModNet *mod_net);
 
   ///
   /// Get the block of this block-terminal.
   ///
-  dbBlock* getBlock() const;
+  dbBlock *getBlock() const;
 
   ///
   /// Get the chip bump associated with this block-terminal.
   /// Returns nullptr if no chip bump is associated.
   ///
-  dbChipBump* getChipBump() const;
+  dbChipBump *getChipBump() const;
 
   ///
   /// Get the hierarchical parent iterm of this bterm.
@@ -1592,7 +1537,7 @@ class dbBTerm : public dbObject
   /// B = dbBterm
   /// I = dbIterm
   ///
-  dbITerm* getITerm();
+  dbITerm *getITerm();
 
   ///
   /// Get the bpins of this bterm.
@@ -1603,14 +1548,14 @@ class dbBTerm : public dbObject
   /// This method finds the first "placed" dbPin box.
   /// returns false if there are no placed bpins.
   ///
-  bool getFirstPin(dbShape& shape);
+  bool getFirstPin(dbShape &shape);
 
   ///
   /// This method finds the location the first "placed" dbPin box.
   /// The location is the computed center of the bbox.
   /// returns false if there are no placed bpins. x and y are set to zero.
   //
-  bool getFirstPinLocation(int& x, int& y) const;
+  bool getFirstPinLocation(int &x, int &y) const;
 
   ///
   /// This method returns the placementstatus of the first dbBPin.
@@ -1621,43 +1566,43 @@ class dbBTerm : public dbObject
   ///
   /// Get the ground sensistivity pin (5.6 DEF)
   ///
-  dbBTerm* getGroundPin();
+  dbBTerm *getGroundPin();
 
   ///
   /// Set the ground sensistivity pin (5.6 DEF)
   ///
-  void setGroundPin(dbBTerm* pin);
+  void setGroundPin(dbBTerm *pin);
 
   ///
   /// Get the supply sensistivity pin (5.6 DEF)
   ///
-  dbBTerm* getSupplyPin();
+  dbBTerm *getSupplyPin();
 
   ///
   /// Set the supply sensistivity pin (5.6 DEF)
   ///
-  void setSupplyPin(dbBTerm* pin);
+  void setSupplyPin(dbBTerm *pin);
 
   ///
   /// Create a new block-terminal.
   /// Returns nullptr if a bterm with this name already exists
   ///
-  static dbBTerm* create(dbNet* net, const char* name);
+  static dbBTerm *create(dbNet *net, const char *name);
 
   ///
   /// Delete the bterm from the block.
   ///
-  static void destroy(dbBTerm* bterm);
+  static void destroy(dbBTerm *bterm);
 
   ///
   /// Delete the bterm from the block.
 
-  static dbSet<dbBTerm>::iterator destroy(dbSet<dbBTerm>::iterator& itr);
+  static dbSet<dbBTerm>::iterator destroy(dbSet<dbBTerm>::iterator &itr);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbBTerm* getBTerm(dbBlock* block, uint32_t oid);
+  static dbBTerm *getBTerm(dbBlock *block, uint32_t oid);
 
   uint32_t staVertexId();
   void staSetVertexId(uint32_t id);
@@ -1665,7 +1610,7 @@ class dbBTerm : public dbObject
   ///
   /// Set the region where the BTerm is constrained
   ///
-  void setConstraintRegion(const Rect& constraint_region);
+  void setConstraintRegion(const Rect &constraint_region);
 
   ///
   /// Get the region where the BTerm is constrained
@@ -1680,12 +1625,12 @@ class dbBTerm : public dbObject
   ///
   /// Set the bterm which position is mirrored to this bterm
   ///
-  void setMirroredBTerm(dbBTerm* mirrored_bterm);
+  void setMirroredBTerm(dbBTerm *mirrored_bterm);
 
   ///
   /// Get the bterm that is mirrored to this bterm
   ///
-  dbBTerm* getMirroredBTerm();
+  dbBTerm *getMirroredBTerm();
 
   ///
   /// Returns true if the current BTerm has a mirrored BTerm.
@@ -1705,9 +1650,8 @@ class dbBTerm : public dbObject
 ///
 ///////////////////////////////////////////////////////////////////////////////
 
-class dbBPin : public dbObject
-{
- public:
+class dbBPin : public dbObject {
+public:
   ///
   /// Get the placement status of this block-terminal.
   ///
@@ -1721,7 +1665,7 @@ class dbBPin : public dbObject
   ///
   /// Get bterm of this pin.
   ///
-  dbBTerm* getBTerm() const;
+  dbBTerm *getBTerm() const;
 
   ///
   /// Get boxes of this pin
@@ -1763,26 +1707,26 @@ class dbBPin : public dbObject
   ///
   int getMinSpacing() const;
 
-  std::vector<dbAccessPoint*> getAccessPoints() const;
+  std::vector<dbAccessPoint *> getAccessPoints() const;
 
   ///
   /// Create a new block-terminal-pin
   ///
-  static dbBPin* create(dbBTerm* bterm);
+  static dbBPin *create(dbBTerm *bterm);
 
   ///
   /// Delete the bpin from this bterm
   ///
-  static void destroy(dbBPin* bpin);
+  static void destroy(dbBPin *bpin);
 
   ///
   /// Delete the bterm from the bterm.
-  static dbSet<dbBPin>::iterator destroy(dbSet<dbBPin>::iterator& itr);
+  static dbSet<dbBPin>::iterator destroy(dbSet<dbBPin>::iterator &itr);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbBPin* getBPin(dbBlock* block, uint32_t oid);
+  static dbBPin *getBPin(dbBlock *block, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1790,9 +1734,8 @@ class dbBPin : public dbObject
 /// A Net is the element that represents a "net" on a block.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbNet : public dbObject
-{
- public:
+class dbNet : public dbObject {
+public:
   ///
   /// Get the hierarchical net name (not a base name).
   ///
@@ -1801,23 +1744,23 @@ class dbNet : public dbObject
   ///
   /// Need a version that does not do strdup every time
   ///
-  const char* getConstName() const;
+  const char *getConstName() const;
 
   ///
   /// Print net name with or without id and newline
   ///
-  void printNetName(FILE* fp, bool idFlag = true, bool newLine = true);
+  void printNetName(FILE *fp, bool idFlag = true, bool newLine = true);
 
   ///
   /// Change the name of the net.
   /// Returns true if successful.
   /// Returns false if a net with the same name already exists.
   ///
-  bool rename(const char* name);
+  bool rename(const char *name);
 
   ///
   /// Swaps the current db net name with the source db net
-  void swapNetNames(dbNet* source, bool journal = true);
+  void swapNetNames(dbNet *source, bool journal = true);
 
   ///
   /// RC netowork disconnect
@@ -1833,7 +1776,7 @@ class dbNet : public dbObject
   /// Get the weight assigned to this net.
   /// (Default: 1)
   ///
-  int getWeight();
+  int getWeight() const;
 
   ///
   /// Set the weight assigned of this net.
@@ -1864,12 +1807,12 @@ class dbNet : public dbObject
   ///
   /// Set the driving term id assigned of this net.
   ///
-  void setDrivingITerm(const dbITerm* iterm);
+  void setDrivingITerm(const dbITerm *iterm);
 
   ///
   /// Returns the driving dbITerm* of this net.
   ///
-  dbITerm* getDrivingITerm() const;
+  dbITerm *getDrivingITerm() const;
 
   ///
   /// Returns true if a fixed-bump flag has been set.
@@ -1904,7 +1847,7 @@ class dbNet : public dbObject
   ///
   /// Assuming no intersection, check if the net is in the bbox.
   ///
-  bool isEnclosed(Rect* bbox);
+  bool isEnclosed(Rect *bbox);
 
   ///
   /// Returns the mark flag value. This flag specified that the
@@ -2008,7 +1951,7 @@ class dbNet : public dbObject
   ///
   /// Get the block this net belongs to.
   ///
-  dbBlock* getBlock() const;
+  dbBlock *getBlock() const;
 
   ///
   /// Get all the instance-terminals of this net.
@@ -2018,27 +1961,27 @@ class dbNet : public dbObject
   ///
   /// Get the 1st instance-terminal of this net.
   ///
-  dbITerm* get1stITerm();
+  dbITerm *get1stITerm();
 
   ///
   /// Get the 1st inputSignal Iterm; can be
   ///
-  dbITerm* get1stSignalInput(bool io);
+  dbITerm *get1stSignalInput(bool io);
 
   ///
   /// Get the 1st driver terminal (dbITerm or dbBTerm)
   ///
-  dbObject* getFirstDriverTerm() const;
+  dbObject *getFirstDriverTerm() const;
 
   ///
   /// Get the 1st driver instance
   ///
-  dbInst* getFirstDriverInst() const;
+  dbInst *getFirstDriverInst() const;
 
   ///
   /// Get the 1st output Iterm; can be
   ///
-  dbITerm* getFirstOutput() const;
+  dbITerm *getFirstOutput() const;
 
   ///
   /// Get all the block-terminals of this net.
@@ -2048,7 +1991,7 @@ class dbNet : public dbObject
   ///
   /// Get the 1st block-terminal of this net.
   ///
-  dbBTerm* get1stBTerm();
+  dbBTerm *get1stBTerm();
 
   ///
   /// Get the special-wires of this net.
@@ -2059,19 +2002,19 @@ class dbNet : public dbObject
   /// Get the wire of this net.
   /// Returns nullptr if this net has no wire.
   ///
-  dbWire* getWire();
+  dbWire *getWire();
 
   ///
   /// Get the first swire of this net.
   /// Returns nullptr if this net has no swires.
   ///
-  dbSWire* getFirstSWire();
+  dbSWire *getFirstSWire();
 
   ///
   /// Get the global wire of thie net.
   /// Returns nullptr if this net has no global wire.
   ///
-  dbWire* getGlobalWire();
+  dbWire *getGlobalWire();
 
   ///
   /// Returns true if this dbNet is marked as special. Special nets/iterms are
@@ -2092,12 +2035,12 @@ class dbNet : public dbObject
   ///
   /// Returns true if this dbNet is connected to other dbNet.
   ///
-  bool isConnected(const dbNet* other) const;
+  bool isConnected(const dbNet *other) const;
 
   ///
   /// Returns true if this dbNet is connected to other dbModNet.
   ///
-  bool isConnected(const dbModNet* other) const;
+  bool isConnected(const dbModNet *other) const;
 
   ///
   /// Returns true if this dbNet has its pins connected by abutment
@@ -2206,17 +2149,15 @@ class dbNet : public dbObject
   ///
   /// adjust CC's of this net
   ///
-  bool adjustCC(uint32_t adjOrder,
-                float adjFactor,
-                double ccThreshHold,
-                std::vector<dbCCSeg*>& adjustedCC,
-                std::vector<dbNet*>& halonets);
+  bool adjustCC(uint32_t adjOrder, float adjFactor, double ccThreshHold,
+                std::vector<dbCCSeg *> &adjustedCC,
+                std::vector<dbNet *> &halonets);
 
   ///
   /// undo adjusted CC
   ///
-  void undoAdjustedCC(std::vector<dbCCSeg*>& adjustedCC,
-                      std::vector<dbNet*>& halonets);
+  void undoAdjustedCC(std::vector<dbCCSeg *> &adjustedCC,
+                      std::vector<dbNet *> &halonets);
 
   ///
   /// add cc capacitance to gnd capacitance of capNodes of this net
@@ -2261,7 +2202,7 @@ class dbNet : public dbObject
   ///
   /// Get the gdn cap of this net to *gndcap, total cap to *totalcap
   ///
-  void getGndTotalCap(double* gndcap, double* totalcap, double miller_mult);
+  void getGndTotalCap(double *gndcap, double *totalcap, double miller_mult);
 
   ///
   /// merge rsegs before doing exttree
@@ -2271,7 +2212,7 @@ class dbNet : public dbObject
   ///
   /// Get Cap Node given a node_num
   ///
-  dbCapNode* findCapNode(uint32_t nodeId);
+  dbCapNode *findCapNode(uint32_t nodeId);
 
   ///
   /// Get the Cap Nodes of this net.
@@ -2296,7 +2237,7 @@ class dbNet : public dbObject
   ///
   /// Get the zeroth R segment of this net.
   ///
-  dbRSeg* getZeroRSeg();
+  dbRSeg *getZeroRSeg();
 
   ///
   /// Get the 1st R segment id of this net.
@@ -2306,7 +2247,7 @@ class dbNet : public dbObject
   ///
   /// find the rseg having srcn and tgtn
   ///
-  dbRSeg* findRSeg(uint32_t srcn, uint32_t tgtn);
+  dbRSeg *findRSeg(uint32_t srcn, uint32_t tgtn);
 
   ///
   /// Set the 1st Cap node of this net.
@@ -2336,7 +2277,7 @@ class dbNet : public dbObject
   ///
   /// compact internal capnode number'
   ///
-  void collapseInternalCapNum(FILE* cap_node_map);
+  void collapseInternalCapNum(FILE *cap_node_map);
 
   ///
   /// find max number of cap nodes that are internal
@@ -2366,19 +2307,18 @@ class dbNet : public dbObject
   ///
   /// Get the source capacitor-coupled segments of this net..
   ///
-  void getSrcCCSegs(std::vector<dbCCSeg*>& segs);
+  void getSrcCCSegs(std::vector<dbCCSeg *> &segs);
 
   ///
   /// Get the target capacitor-coupled segments of this net..
   ///
-  void getTgtCCSegs(std::vector<dbCCSeg*>& segs);
+  void getTgtCCSegs(std::vector<dbCCSeg *> &segs);
 
   ///
   /// Get the nets having coupling caps with this net
   ///
-  void getCouplingNets(uint32_t corner,
-                       double ccThreshold,
-                       odb::PtrSet<dbNet>& cnets);
+  void getCouplingNets(uint32_t corner, double ccThreshold,
+                       odb::PtrSet<dbNet> &cnets);
 
   ///
   /// delete the capacitor-coupled segments.
@@ -2408,37 +2348,34 @@ class dbNet : public dbObject
   ///
   /// Set the nondefault rule applied to this net for wiring.
   ///
-  void setNonDefaultRule(dbTechNonDefaultRule* rule);
+  void setNonDefaultRule(dbTechNonDefaultRule *rule);
 
   ///
   /// Get the nondefault rule applied to this net for wiring.
   /// Returns nullptr if there is no nondefault rule.
   ///
-  dbTechNonDefaultRule* getNonDefaultRule();
+  dbTechNonDefaultRule *getNonDefaultRule();
 
   ///
   /// Get stats of this net
   ///
-  void getNetStats(uint32_t& wireCnt,
-                   uint32_t& viaCnt,
-                   uint32_t& len,
-                   uint32_t& layerCnt,
-                   uint32_t* levelTable);
+  void getNetStats(uint32_t &wireCnt, uint32_t &viaCnt, uint32_t &len,
+                   uint32_t &layerCnt, uint32_t *levelTable);
 
   ///
   /// Get wire counts of this net
   ///
-  void getWireCount(uint32_t& wireCnt, uint32_t& viaCnt);
+  void getWireCount(uint32_t &wireCnt, uint32_t &viaCnt);
 
   ///
   /// Get wire counts of this signal net
   ///
-  void getSignalWireCount(uint32_t& wireCnt, uint32_t& viaCnt);
+  void getSignalWireCount(uint32_t &wireCnt, uint32_t &viaCnt);
 
   ///
   /// Get wire counts of this power net
   ///
-  void getPowerWireCount(uint32_t& wireCnt, uint32_t& viaCnt);
+  void getPowerWireCount(uint32_t &wireCnt, uint32_t &viaCnt);
 
   ///
   /// Get term counts of this net
@@ -2469,49 +2406,47 @@ class dbNet : public dbObject
   /// Create a new net.
   /// Returns nullptr if a net with this name already exists
   ///
-  static dbNet* create(dbBlock* block,
-                       const char* name,
+  static dbNet *create(dbBlock *block, const char *name,
                        bool skipExistingCheck = false);
 
-  static dbNet* create(dbBlock* block,
-                       const char* base_name,
-                       const dbNameUniquifyType& uniquify,
-                       dbModule* parent_module = nullptr);
+  static dbNet *create(dbBlock *block, const char *base_name,
+                       const dbNameUniquifyType &uniquify,
+                       dbModule *parent_module = nullptr);
 
   ///
   /// Delete this net from this block.
   ///
-  static void destroy(dbNet* net);
+  static void destroy(dbNet *net);
 
   ///
   /// mark nets of a block.
   ///
-  static void markNets(std::vector<dbNet*>& nets, dbBlock* block, bool mk);
+  static void markNets(std::vector<dbNet *> &nets, dbBlock *block, bool mk);
 
   ///
   /// Delete the net from the block.
   ///
-  static dbSet<dbNet>::iterator destroy(dbSet<dbNet>::iterator& itr);
+  static dbSet<dbNet>::iterator destroy(dbSet<dbNet>::iterator &itr);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbNet* getNet(dbBlock* block, uint32_t oid);
+  static dbNet *getNet(dbBlock *block, uint32_t oid);
 
   ///
   /// Translate a valid database-id back to a pointer.
   ///
-  static dbNet* getValidNet(dbBlock* block, uint32_t oid);
+  static dbNet *getValidNet(dbBlock *block, uint32_t oid);
 
   ///
   /// True if can merge the iterms and bterms of the in_net with this net
   ///
-  bool canMergeNet(dbNet* in_net);
+  bool canMergeNet(dbNet *in_net);
 
   ///
   /// Merge the iterms and bterms of the in_net with this net
   ///
-  void mergeNet(dbNet* in_net);
+  void mergeNet(dbNet *in_net);
 
   ///
   /// Find the parent module instance of this net by parsing its hierarchical
@@ -2519,13 +2454,13 @@ class dbNet : public dbObject
   /// Returns nullptr if the parent is the top module.
   /// Note that a dbNet can be located at multiple hierarchical modules.
   ///
-  dbModInst* findMainParentModInst() const;
+  dbModInst *findMainParentModInst() const;
 
   ///
   /// Find the parent module of this net by parsing its hierarchical name.
   /// Returns the top module if the parent is the top module.
   ///
-  dbModule* findMainParentModule() const;
+  dbModule *findMainParentModule() const;
 
   dbSet<dbGuide> getGuides() const;
 
@@ -2554,7 +2489,7 @@ class dbNet : public dbObject
   /// e.g., If this net name = "a/b/c" and input `net` name = "a/d",
   ///       this API returns true.
   ///
-  bool isDeeperThan(const dbNet* net) const;
+  bool isDeeperThan(const dbNet *net) const;
 
   ///
   /// Find all dbModNets related to the given dbNet.
@@ -2564,12 +2499,12 @@ class dbNet : public dbObject
   /// two objects in different parts of the hierarchy, each connected
   /// by different dbModNets in different parts of the hierarchy).
   ///
-  bool findRelatedModNets(odb::PtrSet<dbModNet>& modnet_set) const;
+  bool findRelatedModNets(odb::PtrSet<dbModNet> &modnet_set) const;
 
   ///
   /// Find the modnet in the highest hierarchy related to this net.
   ///
-  dbModNet* findModNetInHighestHier() const;
+  dbModNet *findModNetInHighestHier() const;
 
   ///
   /// Rename this net with the name of the modnet in the highest hierarchy
@@ -2585,7 +2520,7 @@ class dbNet : public dbObject
   /// connected to a module output port that is unconnected in its parent
   /// module (isInternalTo == true).
   ///
-  bool isInternalTo(const dbModule* module) const;
+  bool isInternalTo(const dbModule *module) const;
 
   ///
   /// Check issues such as multiple drivers, no driver, or dangling net
@@ -2622,13 +2557,12 @@ class dbNet : public dbObject
   /// - Returns the newly created buffer instance.
   /// - If loc is null, the buffer is inserted at the load pin.
   ///
-  dbInst* insertBufferBeforeLoad(
-      dbObject* load_input_term,
-      const dbMaster* buffer_master,
-      const Point* loc = nullptr,
-      const char* new_buf_base_name = kDefaultBufBaseName,
-      const char* new_net_base_name = kDefaultNetBaseName,
-      const dbNameUniquifyType& uniquify = dbNameUniquifyType::ALWAYS);
+  dbInst *insertBufferBeforeLoad(
+      dbObject *load_input_term, const dbMaster *buffer_master,
+      const Point *loc = nullptr,
+      const char *new_buf_base_name = kDefaultBufBaseName,
+      const char *new_net_base_name = kDefaultNetBaseName,
+      const dbNameUniquifyType &uniquify = dbNameUniquifyType::ALWAYS);
 
   ///
   /// Driver-pin buffering.
@@ -2636,13 +2570,12 @@ class dbNet : public dbObject
   /// - Returns the newly created buffer instance.
   /// - If loc is null, the buffer is inserted at the driver pin.
   ///
-  dbInst* insertBufferAfterDriver(
-      dbObject* drvr_output_term,
-      const dbMaster* buffer_master,
-      const Point* loc = nullptr,
-      const char* new_buf_base_name = kDefaultBufBaseName,
-      const char* new_net_base_name = kDefaultNetBaseName,
-      const dbNameUniquifyType& uniquify = dbNameUniquifyType::ALWAYS);
+  dbInst *insertBufferAfterDriver(
+      dbObject *drvr_output_term, const dbMaster *buffer_master,
+      const Point *loc = nullptr,
+      const char *new_buf_base_name = kDefaultBufBaseName,
+      const char *new_net_base_name = kDefaultNetBaseName,
+      const dbNameUniquifyType &uniquify = dbNameUniquifyType::ALWAYS);
 
   ///
   /// Partial-loads buffering.
@@ -2656,32 +2589,30 @@ class dbNet : public dbObject
   ///   used because it may break the function of the design if the loads
   ///   contain an irrelevant load.
   ///
-  dbInst* insertBufferBeforeLoads(
-      const odb::PtrSet<dbObject>& load_pins,
-      const dbMaster* buffer_master,
-      const Point* loc = nullptr,
-      const char* new_buf_base_name = kDefaultBufBaseName,
-      const char* new_net_base_name = kDefaultNetBaseName,
-      const dbNameUniquifyType& uniquify = dbNameUniquifyType::ALWAYS,
+  dbInst *insertBufferBeforeLoads(
+      const odb::PtrSet<dbObject> &load_pins, const dbMaster *buffer_master,
+      const Point *loc = nullptr,
+      const char *new_buf_base_name = kDefaultBufBaseName,
+      const char *new_net_base_name = kDefaultNetBaseName,
+      const dbNameUniquifyType &uniquify = dbNameUniquifyType::ALWAYS,
       bool loads_on_diff_nets = false);
 
   ///
   /// Partial-loads buffering with vector load_pins support.
   ///
-  dbInst* insertBufferBeforeLoads(
-      const std::vector<dbObject*>& load_pins,
-      const dbMaster* buffer_master,
-      const Point* loc = nullptr,
-      const char* new_buf_base_name = kDefaultBufBaseName,
-      const char* new_net_base_name = kDefaultNetBaseName,
-      const dbNameUniquifyType& uniquify = dbNameUniquifyType::ALWAYS,
+  dbInst *insertBufferBeforeLoads(
+      const std::vector<dbObject *> &load_pins, const dbMaster *buffer_master,
+      const Point *loc = nullptr,
+      const char *new_buf_base_name = kDefaultBufBaseName,
+      const char *new_net_base_name = kDefaultNetBaseName,
+      const dbNameUniquifyType &uniquify = dbNameUniquifyType::ALWAYS,
       bool loads_on_diff_nets = false);
 
   ///
   /// Connect a driver iterm to a load iterm, punching ports through hierarchy
   /// as needed.
   ///
-  void hierarchicalConnect(dbObject* driver, dbObject* load);
+  void hierarchicalConnect(dbObject *driver, dbObject *load);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2690,9 +2621,8 @@ class dbNet : public dbObject
 /// a block.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbInst : public dbObject
-{
- public:
+class dbInst : public dbObject {
+public:
   ///
   /// Get the hierarchical instance name (not a base name).
   ///
@@ -2701,19 +2631,19 @@ class dbInst : public dbObject
   ///
   /// Need a version that does not do strdup every time
   ///
-  const char* getConstName() const;
+  const char *getConstName() const;
 
   ///
   /// Compare, like !strcmp
   ///
-  bool isNamed(const char* name);
+  bool isNamed(const char *name);
 
   ///
   /// Change the name of the inst.
   /// Returns true if successful.
   /// Returns false if a inst with the same name already exists.
   ///
-  bool rename(const char* name);
+  bool rename(const char *name);
 
   /////////////////////////////////////////////////////////////////
   ///
@@ -2836,7 +2766,7 @@ class dbInst : public dbObject
   /// This method returns the lower-left corner
   /// of the bounding box of this instance.
   ///
-  void getLocation(int& x, int& y) const;
+  void getLocation(int &x, int &y) const;
 
   ///
   /// This method returns the lower-left corner
@@ -2875,12 +2805,12 @@ class dbInst : public dbObject
   /// Set the transform of this instance.
   /// Equivalent to setOrient() and setOrigin()
   ///
-  void setTransform(const dbTransform& t);
+  void setTransform(const dbTransform &t);
 
   ///
   /// Get the hierarchical transform of this instance.
   ///
-  void getHierTransform(dbTransform& t);
+  void getHierTransform(dbTransform &t);
 
   /////////////////////////////////////////////////////////////////
 
@@ -2888,7 +2818,7 @@ class dbInst : public dbObject
   /// This method returns the lower-left corner
   /// of the bounding box of this instance.
   ///
-  dbBox* getBBox();
+  dbBox *getBBox();
 
   ///
   /// Get the placement status of this instance.
@@ -2990,17 +2920,17 @@ class dbInst : public dbObject
   ///
   /// Get the block of this instance.
   ///
-  dbBlock* getBlock() const;
+  dbBlock *getBlock() const;
 
   ///
   /// Get the Master of this instance.
   ///
-  dbMaster* getMaster() const;
+  dbMaster *getMaster() const;
 
   ///
   /// Get the group of this instance.
   ///
-  dbGroup* getGroup();
+  dbGroup *getGroup();
 
   ///
   /// Get the instance-terminals of this instance.
@@ -3010,42 +2940,42 @@ class dbInst : public dbObject
   ///
   /// Get the first input terminal of this instance.
   ///
-  dbITerm* getFirstInput() const;
+  dbITerm *getFirstInput() const;
 
   ///
   /// Get the first output terminal of this instance.
   ///
-  dbITerm* getFirstOutput() const;
+  dbITerm *getFirstOutput() const;
 
   ///
   /// Get the region this instance belongs to. Returns nullptr if instance has
   /// no assigned region.
   ///
-  dbRegion* getRegion();
+  dbRegion *getRegion();
 
   ///
   /// Get the module this instance belongs to. Returns nullptr if instance has
   /// no assigned module.
   ///
-  dbModule* getModule();
+  dbModule *getModule();
 
   ///
   /// Find the iterm of the given terminal name.
   /// Returns nullptr if no terminal was found.
   ///
-  dbITerm* findITerm(const char* terminal_name);
+  dbITerm *findITerm(const char *terminal_name);
 
   ///
   /// Find the iterm of the given terminal name given the master term order
   ///
-  dbITerm* getITerm(uint32_t mterm_order_id);
+  dbITerm *getITerm(uint32_t mterm_order_id);
 
   ///
   /// Get the all the instances connected to the net of each iterm of this
   /// instance. Only traverse nets of the specified SigType. Default is
   /// dbSigType::SIGNAL.
   ///
-  void getConnectivity(std::vector<dbInst*>& neighbors,
+  void getConnectivity(std::vector<dbInst *> &neighbors,
                        dbSigType::Value value = dbSigType::SIGNAL);
 
   ///
@@ -3084,7 +3014,7 @@ class dbInst : public dbObject
   ///    2) The block must be a direct child of the instance block.
   ///    3) block bterms must map 1-to-1 (by name) to the master mterms.
   ///
-  bool bindBlock(dbBlock* block, bool force = false);
+  bool bindBlock(dbBlock *block, bool force = false);
 
   ///
   /// Unbind the hierarchical (child) block from this instance.
@@ -3100,13 +3030,13 @@ class dbInst : public dbObject
   /// Get the hierarchical (child) block bound to this instance.
   /// Returns nullptr if this instance has no child.
   ///
-  dbBlock* getChild();
+  dbBlock *getChild();
 
   ///
   /// Get the parent instance of this instance.
   /// Returns nullptr if this instance has no parent.
   ///
-  dbInst* getParent();
+  dbInst *getParent();
 
   ///
   /// Get the children of this instance.
@@ -3127,7 +3057,7 @@ class dbInst : public dbObject
   /// Returns a halo assigned to this instance.
   /// Returns nullptr if this instance has no halo.
   ///
-  dbBox* getHalo();
+  dbBox *getHalo();
 
   ///
   /// Returns a halo assigned to this instance with orientation applied.
@@ -3164,7 +3094,7 @@ class dbInst : public dbObject
   ///
   /// Get the iterm that represents this mterm
   ///
-  dbITerm* getITerm(dbMTerm* mterm);
+  dbITerm *getITerm(dbMTerm *mterm);
 
   ///
   /// Swap the master of this instance.
@@ -3175,7 +3105,7 @@ class dbInst : public dbObject
   ///
   /// This method invalidates any existing dbSet<dbITerm>::iterator.
   ///
-  bool swapMaster(dbMaster* master);
+  bool swapMaster(dbMaster *master);
 
   ///
   /// Is the master's type BLOCK or any of its subtypes
@@ -3201,7 +3131,7 @@ class dbInst : public dbObject
   /// Get the scan version of this instance.
   /// Returns nullptr if this instance has no scan version.
   ///
-  dbScanInst* getScanInst() const;
+  dbScanInst *getScanInst() const;
 
   void setPinAccessIdx(uint32_t idx);
 
@@ -3211,7 +3141,7 @@ class dbInst : public dbObject
   /// Get the chip bump associated with this instance.
   /// Returns a pointer to the dbChipBump object if present, otherwise nullptr.
   ///
-  dbChipBump* getChipBump() const;
+  dbChipBump *getChipBump() const;
 
   ///
   /// Create a new instance.
@@ -3221,33 +3151,24 @@ class dbInst : public dbObject
   /// Returns nullptr if the master is not FROZEN.
   /// If dbmodule is non null the dbInst is added to that module.
   ///
-  static dbInst* create(dbBlock* block,
-                        dbMaster* master,
-                        const char* name,
+  static dbInst *create(dbBlock *block, dbMaster *master, const char *name,
                         bool physical_only = false,
-                        dbModule* parent_module = nullptr);
+                        dbModule *parent_module = nullptr);
 
   ///
   /// Create a new instance with a unique name.
   ///
-  static dbInst* create(dbBlock* block,
-                        dbMaster* master,
-                        const char* base_name,
-                        const dbNameUniquifyType& uniquify,
-                        dbModule* parent_module = nullptr);
+  static dbInst *create(dbBlock *block, dbMaster *master, const char *base_name,
+                        const dbNameUniquifyType &uniquify,
+                        dbModule *parent_module = nullptr);
 
-  static dbInst* create(dbBlock* block,
-                        dbMaster* master,
-                        const char* name,
-                        dbRegion* region,
-                        bool physical_only = false,
-                        dbModule* parent_module = nullptr);
+  static dbInst *create(dbBlock *block, dbMaster *master, const char *name,
+                        dbRegion *region, bool physical_only = false,
+                        dbModule *parent_module = nullptr);
 
-  static dbInst* makeUniqueDbInst(dbBlock* block,
-                                  dbMaster* master,
-                                  const char* name,
-                                  bool physical_only = false,
-                                  dbModule* target_module = nullptr);
+  static dbInst *makeUniqueDbInst(dbBlock *block, dbMaster *master,
+                                  const char *name, bool physical_only = false,
+                                  dbModule *target_module = nullptr);
 
   ///
   /// Create a new instance of child_block in top_block.
@@ -3255,29 +3176,28 @@ class dbInst : public dbObject
   /// interface dbMaster from child_block, and bind the instance
   /// to the child_block.
   ///
-  static dbInst* create(dbBlock* top_block,
-                        dbBlock* child_block,
-                        const char* name);
+  static dbInst *create(dbBlock *top_block, dbBlock *child_block,
+                        const char *name);
 
   ///
   /// Delete the instance from the block.
   ///
-  static void destroy(dbInst* inst);
+  static void destroy(dbInst *inst);
 
   ///
   /// Safely delete the inst from the block within an iterator
   ///
-  static dbSet<dbInst>::iterator destroy(dbSet<dbInst>::iterator& itr);
+  static dbSet<dbInst>::iterator destroy(dbSet<dbInst>::iterator &itr);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbInst* getInst(dbBlock* block, uint32_t oid);
+  static dbInst *getInst(dbBlock *block, uint32_t oid);
 
   ///
   /// Translate a valid database-id back to a pointer.
   ///
-  static dbInst* getValidInst(dbBlock* block, uint32_t oid);
+  static dbInst *getValidInst(dbBlock *block, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3286,27 +3206,26 @@ class dbInst : public dbObject
 /// to a master-terminal of an instance.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbITerm : public dbObject
-{
- public:
+class dbITerm : public dbObject {
+public:
   ///
   /// Get the instance of this instance-terminal.
   ///
-  dbInst* getInst() const;
+  dbInst *getInst() const;
 
   ///
   /// Get the net of this instance-terminal.
   /// Returns nullptr if this instance-terminal has NOT been connected
   /// to a net.
   ///
-  dbNet* getNet() const;
+  dbNet *getNet() const;
 
-  dbModNet* getModNet() const;
+  dbModNet *getModNet() const;
 
   ///
   /// Get the master-terminal that this instance-terminal is representing.
   ///
-  dbMTerm* getMTerm() const;
+  dbMTerm *getMTerm() const;
 
   ///
   /// Get the name of this iterm.  This is not persistently stored
@@ -3322,7 +3241,7 @@ class dbITerm : public dbObject
   ///
   /// Get the block this instance-terminal belongs too.
   ///
-  dbBlock* getBlock() const;
+  dbBlock *getBlock() const;
 
   ///
   /// Get the signal type of this instance-terminal.
@@ -3447,22 +3366,22 @@ class dbITerm : public dbObject
   /// B = dbBterm
   /// I = dbIterm
   ///
-  dbBTerm* getBTerm();
+  dbBTerm *getBTerm();
 
   ///
   /// Connect this iterm to a single "flat" net.
   ///
-  void connect(dbNet* net);
+  void connect(dbNet *net);
 
   // connect this iterm to a single dbmodNet
 
-  void connect(dbModNet* net);
+  void connect(dbModNet *net);
 
   // simultaneously connect this iterm to both a dbnet and a mod net.
   // but do not do a reassociate (that is done by higher level api
   // call in dbNetwork::connectPin)
   //
-  void connect(dbNet* db_net, dbModNet* db_mod_net);
+  void connect(dbNet *db_net, dbModNet *db_mod_net);
 
   ///
   /// Disconnect this iterm from the net it is connected to.
@@ -3485,26 +3404,26 @@ class dbITerm : public dbObject
   /// Get the average of the centers for the iterm shapes
   /// Returns false if iterm has no shapes
   ///
-  bool getAvgXY(int* x, int* y) const;
+  bool getAvgXY(int *x, int *y) const;
 
   ///
   /// Returns all geometries of all dbMPin associated with
   /// the dbMTerm.
   ///
-  std::vector<std::pair<dbTechLayer*, Rect>> getGeometries() const;
+  std::vector<std::pair<dbTechLayer *, Rect>> getGeometries() const;
 
-  void setAccessPoint(dbMPin* pin, dbAccessPoint* ap);
+  void setAccessPoint(dbMPin *pin, dbAccessPoint *ap);
 
   ///
   /// Returns preferred access points per each pin.
   /// One preffered access point, if available, for each pin.
   ///
-  std::vector<dbAccessPoint*> getPrefAccessPoints() const;
+  std::vector<dbAccessPoint *> getPrefAccessPoints() const;
 
   ///
   /// Returns all access points for each pin.
   ///
-  odb::PtrMap<dbMPin, std::vector<dbAccessPoint*>> getAccessPoints() const;
+  odb::PtrMap<dbMPin, std::vector<dbAccessPoint *>> getAccessPoints() const;
 
   ///
   /// Destroys all access points of each pin.
@@ -3514,7 +3433,7 @@ class dbITerm : public dbObject
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbITerm* getITerm(dbBlock* block, uint32_t oid);
+  static dbITerm *getITerm(dbBlock *block, uint32_t oid);
 
   uint32_t staVertexId();
   void staSetVertexId(uint32_t id);
@@ -3526,9 +3445,8 @@ class dbITerm : public dbObject
 /// These vias are typically generated to be used in power routing.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbVia : public dbObject
-{
- public:
+class dbVia : public dbObject {
+public:
   ///
   /// Get the via name.
   ///
@@ -3537,7 +3455,7 @@ class dbVia : public dbObject
   ///
   /// Get the via name.
   ///
-  const char* getConstName();
+  const char *getConstName();
 
   ///
   /// Get the pattern value of this via.
@@ -3549,17 +3467,17 @@ class dbVia : public dbObject
   /// Set the pattern value of this via.
   /// The pattern is ignored if the pattern is already set on this via
   ///
-  void setPattern(const char* pattern);
+  void setPattern(const char *pattern);
 
   ///
   /// Set generate rule that was used to genreate this via.
   ///
-  void setViaGenerateRule(dbTechViaGenerateRule* rule);
+  void setViaGenerateRule(dbTechViaGenerateRule *rule);
 
   ///
   /// Get the generate rule that was used to genreate this via.
   ///
-  dbTechViaGenerateRule* getViaGenerateRule();
+  dbTechViaGenerateRule *getViaGenerateRule();
 
   ///
   /// Returns true if this via has params.
@@ -3570,7 +3488,7 @@ class dbVia : public dbObject
   /// Set via params to generate this via. This method will create the shapes
   /// of this via. All previous shapes are destroyed.
   ///
-  void setViaParams(const dbViaParams& params);
+  void setViaParams(const dbViaParams &params);
 
   ///
   /// Get the via params used to generate this via.
@@ -3580,13 +3498,13 @@ class dbVia : public dbObject
   ///
   /// Get the block this via belongs too.
   ///
-  dbBlock* getBlock();
+  dbBlock *getBlock();
 
   ///
   /// Get the bbox of this via
   /// Returns nullptr if this via has no shapes.
   ///
-  dbBox* getBBox();
+  dbBox *getBBox();
 
   ///
   /// Get the boxes of this via.
@@ -3597,13 +3515,13 @@ class dbVia : public dbObject
   /// Get the upper-most layer of this via reaches
   /// Returns nullptr if this via has no shapes.
   ///
-  dbTechLayer* getTopLayer();
+  dbTechLayer *getTopLayer();
 
   ///
   /// Get the lower-most layer of this via reaches
   /// Returns nullptr if this via has no shapes.
   ///
-  dbTechLayer* getBottomLayer();
+  dbTechLayer *getBottomLayer();
 
   ///
   /// Returns true if this via is a rotated version of a block or tech via.
@@ -3621,13 +3539,13 @@ class dbVia : public dbObject
   // Get the tech-via that this roated via represents.
   /// Returns nullptr if this via does not represent a tech via
   //
-  dbTechVia* getTechVia();
+  dbTechVia *getTechVia();
 
   //
   // Get the block-via that this roated via represents.
   /// Returns nullptr if this via does not represent a block via
   //
-  dbVia* getBlockVia();
+  dbVia *getBlockVia();
 
   void setDefault(bool);
 
@@ -3637,37 +3555,33 @@ class dbVia : public dbObject
   /// Create a block specific via.
   /// Returns nullptr if a via with this name already exists.
   ///
-  static dbVia* create(dbBlock* block, const char* name);
+  static dbVia *create(dbBlock *block, const char *name);
 
   ///
   /// Created a rotated version of the specified block-via.
   /// Returns nullptr if a via with this name already exists.
   ///
-  static dbVia* create(dbBlock* block,
-                       const char* name,
-                       dbVia* via,
+  static dbVia *create(dbBlock *block, const char *name, dbVia *via,
                        dbOrientType type);
 
   ///
   /// Created a rotated version of the specified tech-via.
   /// Returns nullptr if a via with this name already exists.
   ///
-  static dbVia* create(dbBlock* block,
-                       const char* name,
-                       dbTechVia* via,
+  static dbVia *create(dbBlock *block, const char *name, dbTechVia *via,
                        dbOrientType type);
 
   /// Copy all the VIA's from the src-block to the dst-block.
   /// Returns false the copy failed.
-  static bool copy(dbBlock* dst, dbBlock* src);
+  static bool copy(dbBlock *dst, dbBlock *src);
 
   /// Copy the VIA to the dst-block.
-  static dbVia* copy(dbBlock* dst, dbVia* src);
+  static dbVia *copy(dbBlock *dst, dbVia *src);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbVia* getVia(dbBlock* block, uint32_t oid);
+  static dbVia *getVia(dbBlock *block, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3679,25 +3593,24 @@ class dbVia : public dbObject
 ///  the dbWireDecoder class.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbWire : public dbObject
-{
- public:
+class dbWire : public dbObject {
+public:
   ///
   /// Get the block this wire belongs too.
   ///
-  dbBlock* getBlock();
+  dbBlock *getBlock();
 
   ///
   /// Get the net this wire is attached too.
   /// Returns nullptr if this wire is not attached to a net.
   ///
-  dbNet* getNet();
+  dbNet *getNet();
 
   ///
   /// Append the wire to this wire. This operation will fail if the wire
   /// is from another block and the wire contains bterms or iterms.
   ///
-  void append(dbWire* wire, bool singleSegmentWire = false);
+  void append(dbWire *wire, bool singleSegmentWire = false);
 
   ///
   /// Get junction id of the wire shape connected to the terminal.
@@ -3708,14 +3621,14 @@ class dbWire : public dbObject
   /// Get the shape of this shape-id.
   /// PRECONDITION: shape-id is a segment or via
   ///
-  void getShape(int shape_id, dbShape& shape);
+  void getShape(int shape_id, dbShape &shape);
 
   ///
   /// Get the segment of this segment-id
   ///
   /// PRECONDITION: segment_id is a segment
   ///
-  void getSegment(int segment_id, dbShape& shape);
+  void getSegment(int segment_id, dbShape &shape);
 
   ///
   /// Get the segment of this segment-id, where layer is the layer of the
@@ -3723,26 +3636,26 @@ class dbWire : public dbObject
   ///
   /// PRECONDITION: segment_id is a segment
   ///
-  void getSegment(int segment_id, dbTechLayer* layer, dbShape& shape);
+  void getSegment(int segment_id, dbTechLayer *layer, dbShape &shape);
 
   ///
   /// Get the previous via of this shape-id.
   /// returns false if the previous shape is not a via.
   ///
-  bool getPrevVia(int shape_id, dbShape& shape);
+  bool getPrevVia(int shape_id, dbShape &shape);
 
   ///
   /// Get the via that follows of this shape-id.
   /// returns false if the next shape is not a via.
   ///
-  bool getNextVia(int shape_id, dbShape& shape);
+  bool getNextVia(int shape_id, dbShape &shape);
 
   ///
   /// Get the via boxes of this via_shape-id.
   ///
   /// returns false if this shape_id is not a via.
   ///
-  bool getViaBoxes(int via_shape_id, std::vector<dbShape>& shapes);
+  bool getViaBoxes(int via_shape_id, std::vector<dbShape> &shapes);
 
   ///
   /// Returns true if this wire is a global-wire
@@ -3777,7 +3690,7 @@ class dbWire : public dbObject
   ///
   /// Get junction property
   ///
-  bool getProperty(int jid, int& property);
+  bool getProperty(int jid, int &property);
 
   ///
   /// Set junction property
@@ -3802,7 +3715,7 @@ class dbWire : public dbObject
   ///   detachd from
   //       the other net.
   ///
-  void attach(dbNet* net);
+  void attach(dbNet *net);
 
   ///
   /// Detach this wire from a net.
@@ -3813,29 +3726,26 @@ class dbWire : public dbObject
   /// Create a wire.
   /// Returns nullptr if this net already has the specified wire dbWire.
   ///
-  static dbWire* create(dbNet* net, bool global_wire = false);
+  static dbWire *create(dbNet *net, bool global_wire = false);
 
   ///
   /// Create an unattached wire.
   ///
-  static dbWire* create(dbBlock* block, bool global_wire = false);
+  static dbWire *create(dbBlock *block, bool global_wire = false);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbWire* getWire(dbBlock* block, uint32_t oid);
+  static dbWire *getWire(dbBlock *block, uint32_t oid);
 
   ///
   /// Destroy a wire.
   ///
-  static void destroy(dbWire* wire);
+  static void destroy(dbWire *wire);
 
- private:
-  void addOneSeg(unsigned char op,
-                 int value,
-                 uint32_t jj,
-                 int* did,
-                 dbRSeg** new_rsegs);
+private:
+  void addOneSeg(unsigned char op, int value, uint32_t jj, int *did,
+                 dbRSeg **new_rsegs);
   void addOneSeg(unsigned char op, int value);
 
   friend class dbNet;
@@ -3846,18 +3756,17 @@ class dbWire : public dbObject
 ///  A dbSWire is the element used to represent special-net wires.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbSWire : public dbObject
-{
- public:
+class dbSWire : public dbObject {
+public:
   ///
   /// Get the block this wire belongs too.
   ///
-  dbBlock* getBlock();
+  dbBlock *getBlock();
 
   ///
   /// Get the net this wire is attached too.
   ///
-  dbNet* getNet();
+  dbNet *getNet();
 
   ///
   /// Return the wire-type.
@@ -3872,7 +3781,7 @@ class dbSWire : public dbObject
   ///
   /// Returns the shield net if the wire-type is dbWireType::SHIELD
   ///
-  dbNet* getShield();
+  dbNet *getShield();
 
   ///
   /// Get the wires of this special wire.
@@ -3882,22 +3791,22 @@ class dbSWire : public dbObject
   ///
   /// Create a new special-wire.
   ///
-  static dbSWire* create(dbNet* net, dbWireType type, dbNet* shield = nullptr);
+  static dbSWire *create(dbNet *net, dbWireType type, dbNet *shield = nullptr);
 
   ///
   /// Delete this wire
   ///
-  static void destroy(dbSWire* swire);
+  static void destroy(dbSWire *swire);
 
   ///
   /// Delete this wire
   ///
-  static dbSet<dbSWire>::iterator destroy(dbSet<dbSWire>::iterator& itr);
+  static dbSet<dbSWire>::iterator destroy(dbSet<dbSWire>::iterator &itr);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbSWire* getSWire(dbBlock* block, uint32_t oid);
+  static dbSWire *getSWire(dbBlock *block, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3912,48 +3821,41 @@ class dbSWire : public dbObject
 /// A dbTrackGrid is the element that represents a block tracks.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbTrackGrid : public dbObject
-{
- public:
+class dbTrackGrid : public dbObject {
+public:
   ///
   /// Get the layer for this track-grid.
   ///
-  dbTechLayer* getTechLayer();
+  dbTechLayer *getTechLayer();
 
   ///
   /// Get the "X" track coordinates for a this tech-layer.
   ///
-  void getGridX(std::vector<int>& x_grid);
-  const std::vector<int>& getGridX();
+  void getGridX(std::vector<int> &x_grid);
+  const std::vector<int> &getGridX();
 
   ///
   /// Get the "Y" track coordinates for a this tech-layer.
   ///
-  void getGridY(std::vector<int>& y_grid);
-  const std::vector<int>& getGridY();
+  void getGridY(std::vector<int> &y_grid);
+  const std::vector<int> &getGridY();
 
   ///
   /// Get the block this grid belongs too.
   ///
-  dbBlock* getBlock();
+  dbBlock *getBlock();
 
   ///
   /// Add a "X" grid pattern.
   ///
-  void addGridPatternX(int origin_x,
-                       int line_count,
-                       int step,
-                       int first_mask = 0,
-                       bool samemask = false);
+  void addGridPatternX(int origin_x, int line_count, int step,
+                       int first_mask = 0, bool samemask = false);
 
   ///
   /// Add a "Y" grid pattern.
   ///
-  void addGridPatternY(int origin_y,
-                       int line_count,
-                       int step,
-                       int first_mask = 0,
-                       bool samemask = false);
+  void addGridPatternY(int origin_y, int line_count, int step,
+                       int first_mask = 0, bool samemask = false);
 
   ///
   /// Get the number of "X" grid patterns.
@@ -3968,47 +3870,38 @@ class dbTrackGrid : public dbObject
   ///
   /// Get the "ith" "X" grid pattern.
   ///
-  void getGridPatternX(int i, int& origin_x, int& line_count, int& step);
-  void getGridPatternX(int i,
-                       int& origin_x,
-                       int& line_count,
-                       int& step,
-                       int& first_mask,
-                       bool& samemask);
+  void getGridPatternX(int i, int &origin_x, int &line_count, int &step);
+  void getGridPatternX(int i, int &origin_x, int &line_count, int &step,
+                       int &first_mask, bool &samemask);
 
   ///
   /// Get the "ith" "Y" grid pattern.
   ///
-  void getGridPatternY(int i, int& origin_y, int& line_count, int& step);
-  void getGridPatternY(int i,
-                       int& origin_y,
-                       int& line_count,
-                       int& step,
-                       int& first_mask,
-                       bool& samemask);
+  void getGridPatternY(int i, int &origin_y, int &line_count, int &step);
+  void getGridPatternY(int i, int &origin_y, int &line_count, int &step,
+                       int &first_mask, bool &samemask);
   ///
   /// Create an empty Track grid.
   /// Returns nullptr if a the grid for this layer already exists.
   ///
-  static dbTrackGrid* create(dbBlock* block, dbTechLayer* layer);
+  static dbTrackGrid *create(dbBlock *block, dbTechLayer *layer);
 
   ///
   /// Get the spacing between tracks for this grid.
   /// If the layer has a multi pattern spacing, returns the average.
   ///
-  void getAverageTrackSpacing(int& track_step,
-                              int& track_init,
-                              int& num_tracks);
+  void getAverageTrackSpacing(int &track_step, int &track_init,
+                              int &num_tracks);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbTrackGrid* getTrackGrid(dbBlock* block, uint32_t oid);
+  static dbTrackGrid *getTrackGrid(dbBlock *block, uint32_t oid);
 
   ///
   /// destroy a grid
   ///
-  static void destroy(dbTrackGrid* grid_);
+  static void destroy(dbTrackGrid *grid_);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -4017,19 +3910,18 @@ class dbTrackGrid : public dbObject
 /// obstruction in a block.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbObstruction : public dbObject
-{
- public:
+class dbObstruction : public dbObject {
+public:
   ///
   /// Get the bbox of this obstruction.
   ///
-  dbBox* getBBox();
+  dbBox *getBBox();
 
   ///
   /// Get the instance associated with this obstruction.
   /// Returns nullptr of no instance was associated with this obstruction
   ///
-  dbInst* getInstance();
+  dbInst *getInstance();
 
   ///
   /// Declare this obstruction to be a "slot" obstruction.
@@ -4103,18 +3995,18 @@ class dbObstruction : public dbObject
   ///
   /// Get the block this obstruction belongs too.
   ///
-  dbBlock* getBlock();
+  dbBlock *getBlock();
 
   ///
   /// Delete this obstruction from this block.
   ///
-  static void destroy(dbObstruction* obstruction);
+  static void destroy(dbObstruction *obstruction);
 
   ///
   /// Delete the blockage from the block.
   ///
-  static dbSet<dbObstruction>::iterator destroy(
-      dbSet<dbObstruction>::iterator& itr);
+  static dbSet<dbObstruction>::iterator
+  destroy(dbSet<dbObstruction>::iterator &itr);
 
   ///
   /// Returns true if this obstruction is system created. System created
@@ -4134,18 +4026,13 @@ class dbObstruction : public dbObject
   ///
   /// Create a routing obstruction.
   ///
-  static dbObstruction* create(dbBlock* block,
-                               dbTechLayer* layer,
-                               int x1,
-                               int y1,
-                               int x2,
-                               int y2,
-                               dbInst* inst = nullptr);
+  static dbObstruction *create(dbBlock *block, dbTechLayer *layer, int x1,
+                               int y1, int x2, int y2, dbInst *inst = nullptr);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbObstruction* getObstruction(dbBlock* block, uint32_t oid);
+  static dbObstruction *getObstruction(dbBlock *block, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -4153,19 +4040,18 @@ class dbObstruction : public dbObject
 /// A dbBlockage is the element that represents a placement blockage in a block.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbBlockage : public dbObject
-{
- public:
+class dbBlockage : public dbObject {
+public:
   ///
   /// Get the bbox of this blockage.
   ///
-  dbBox* getBBox();
+  dbBox *getBBox();
 
   ///
   /// Get the instance associated with this blockage.
   /// Returns nullptr of no instance was associated with this blockage
   ///
-  dbInst* getInstance();
+  dbInst *getInstance();
 
   ///
   /// Declare this blockage to have been pushed into this block.
@@ -4215,29 +4101,25 @@ class dbBlockage : public dbObject
   ///
   /// Get the block this blockage belongs too.
   ///
-  dbBlock* getBlock();
+  dbBlock *getBlock();
 
   ///
   /// Create a placement blockage.
   ///
-  static dbBlockage* create(dbBlock* block,
-                            int x1,
-                            int y1,
-                            int x2,
-                            int y2,
-                            dbInst* inst = nullptr);
+  static dbBlockage *create(dbBlock *block, int x1, int y1, int x2, int y2,
+                            dbInst *inst = nullptr);
 
-  static void destroy(dbBlockage* blockage);
+  static void destroy(dbBlockage *blockage);
 
   ///
   /// Delete the blockage from the block.
   ///
-  static dbSet<dbBlockage>::iterator destroy(dbSet<dbBlockage>::iterator& itr);
+  static dbSet<dbBlockage>::iterator destroy(dbSet<dbBlockage>::iterator &itr);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbBlockage* getBlockage(dbBlock* block, uint32_t oid);
+  static dbBlockage *getBlockage(dbBlock *block, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -4249,37 +4131,36 @@ class dbBlockage : public dbObject
 /// meaning.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbCapNode : public dbObject
-{
- public:
+class dbCapNode : public dbObject {
+public:
   ///
   /// Add the capacitances of other capnode to this capnode
   ///
-  void addCapnCapacitance(dbCapNode* other);
+  void addCapnCapacitance(dbCapNode *other);
 
   ///
   /// Add the gndCap of this capnode to *gndcap and *totalcap
   ///
-  void addGndCap(double* gndcap, double* totalcap);
+  void addGndCap(double *gndcap, double *totalcap);
 
   /// Add the gndCap to *gndcap and *totalcap, ccCap to *totalcap
   ///
-  void addGndTotalCap(double* gndcap, double* totalcap, double miller_mult);
+  void addGndTotalCap(double *gndcap, double *totalcap, double miller_mult);
 
   ///
   /// Get the gndCap of this capnode to *gndcap and *totalcap
   ///
-  void getGndCap(double* gndcap, double* totalcap);
+  void getGndCap(double *gndcap, double *totalcap);
 
   ///
   /// Get the gndCap to *gndcap and *totalcap, ccCap to *totalcap
   ///
-  void getGndTotalCap(double* gndcap, double* totalcap, double miller_mult);
+  void getGndTotalCap(double *gndcap, double *totalcap, double miller_mult);
 
   ///
   /// Add the caps of all corners of CC's from this capnode to *totalcap
   ///
-  void accAllCcCap(double* totalcap, double miller_mult);
+  void accAllCcCap(double *totalcap, double miller_mult);
 
   ///
   /// Set the capacitance of this CapNode segment for this process corner. Value
@@ -4316,10 +4197,9 @@ class dbCapNode : public dbObject
   ///
   /// adjust CC's of this capNode
   ///
-  void adjustCC(uint32_t adjOrder,
-                float adjFactor,
-                std::vector<dbCCSeg*>& adjustedCC,
-                std::vector<dbNet*>& halonets);
+  void adjustCC(uint32_t adjOrder, float adjFactor,
+                std::vector<dbCCSeg *> &adjustedCC,
+                std::vector<dbNet *> &halonets);
 
   ///
   /// Get the capacitance of this capNode segment for this process corner.
@@ -4357,10 +4237,10 @@ class dbCapNode : public dbObject
   bool isBranch();
   bool isDangling();
   bool isForeign();
-  bool isTreeNode();  // bterm, iterm, branch
+  bool isTreeNode(); // bterm, iterm, branch
   // bool isSourceNodeBterm();
-  bool isSourceTerm(dbBlock* mblock = nullptr);
-  bool isInoutTerm(dbBlock* mblock = nullptr);
+  bool isSourceTerm(dbBlock *mblock = nullptr);
+  bool isInoutTerm(dbBlock *mblock = nullptr);
 
   ///
   /// Returns the select flag value. This flag specified that the
@@ -4413,17 +4293,17 @@ class dbCapNode : public dbObject
   ///
   /// Get the coordinates of this node if iterm or bterm
   ///
-  bool getTermCoords(int& x, int& y, dbBlock* mblock = nullptr);
+  bool getTermCoords(int &x, int &y, dbBlock *mblock = nullptr);
 
   ///
   /// Get the iterm of this node
   ///
-  dbITerm* getITerm(dbBlock* mblock = nullptr);
+  dbITerm *getITerm(dbBlock *mblock = nullptr);
 
   ///
   /// Get the bterm of this node
   ///
-  dbBTerm* getBTerm(dbBlock* mblock = nullptr);
+  dbBTerm *getBTerm(dbBlock *mblock = nullptr);
 
   ///
   /// Set the _ycoord of this node
@@ -4453,7 +4333,7 @@ class dbCapNode : public dbObject
   ///
   /// Net given the capNode id
   ///
-  dbNet* getNet();
+  dbNet *getNet();
 
   ///
   /// set net
@@ -4469,7 +4349,7 @@ class dbCapNode : public dbObject
   /// Create a new rc-segment
   /// The default values for each process corner is 0.0.
   ///
-  static dbCapNode* create(dbNet* net, uint32_t node, bool foreign);
+  static dbCapNode *create(dbNet *net, uint32_t node, bool foreign);
 
   ///
   /// add a seg onto a net
@@ -4479,24 +4359,24 @@ class dbCapNode : public dbObject
   ///
   /// Destroy a rc-segment.
   ///
-  static void destroy(dbCapNode* seg, bool destroyCC = true);
+  static void destroy(dbCapNode *seg, bool destroyCC = true);
 
   ///
   /// Destroy a rc-segment.
   ///
-  static dbSet<dbCapNode>::iterator destroy(dbSet<dbCapNode>::iterator& itr);
+  static dbSet<dbCapNode>::iterator destroy(dbSet<dbCapNode>::iterator &itr);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbCapNode* getCapNode(dbBlock* block, uint32_t oid);
+  static dbCapNode *getCapNode(dbBlock *block, uint32_t oid);
 
- private:
+private:
   ///
   /// Get the capacitance of this capNode segment for this process corner.
   /// Returns value in femto-fards.
   ///
-  void getCapTable(double* cap);
+  void getCapTable(double *cap);
 
   friend class dbRSeg;
 };
@@ -4510,18 +4390,17 @@ class dbCapNode : public dbObject
 /// meaning.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbRSeg : public dbObject
-{
- public:
+class dbRSeg : public dbObject {
+public:
   ///
   /// Add the resistances of other rseg to this rseg
   ///
-  void addRSegResistance(dbRSeg* other);
+  void addRSegResistance(dbRSeg *other);
 
   ///
   /// Add the capacitances of other rseg to this rseg
   ///
-  void addRSegCapacitance(dbRSeg* other);
+  void addRSegCapacitance(dbRSeg *other);
 
   ///
   /// Get the resistance of this RC segment for this process corner. Returns
@@ -4532,37 +4411,37 @@ class dbRSeg : public dbObject
   ///
   /// Get the resistance of this RC segment to *res
   ///
-  void getAllRes(double* res);
+  void getAllRes(double *res);
 
   ///
   /// Add the resistance of this RC segment to *res
   ///
-  void addAllRes(double* res);
+  void addAllRes(double *res);
 
   ///
   /// Get the gdn cap of this RC segment to *gndcap and *totalcap
   ///
-  void getGndCap(double* gndcap, double* totalcap);
+  void getGndCap(double *gndcap, double *totalcap);
 
   ///
   /// Add the gdn cap of this RC segment to *gndcap and *totalcap
   ///
-  void addGndCap(double* gndcap, double* totalcap);
+  void addGndCap(double *gndcap, double *totalcap);
 
   ///
   /// Get the gdn cap of this RC segment to *gndcap, total cap to *totalcap
   ///
-  void getGndTotalCap(double* gndcap, double* totalcap, double miller_mult);
+  void getGndTotalCap(double *gndcap, double *totalcap, double miller_mult);
 
   ///
   /// Add the gdn cap of this RC segment to *gndcap, total cap to *totalcap
   ///
-  void addGndTotalCap(double* gndcap, double* totalcap, double miller_mult);
+  void addGndTotalCap(double *gndcap, double *totalcap, double miller_mult);
 
   ///
   /// do merge rsegs
   ///
-  void mergeRCs(std::vector<dbRSeg*>& mrsegs);
+  void mergeRCs(std::vector<dbRSeg *> &mrsegs);
 
   ///
   /// Adjust the capacitance of this RC segment for this process corner.
@@ -4615,7 +4494,7 @@ class dbRSeg : public dbObject
   ///
   /// Get the CC segs of this RC segment,
   ///
-  void getCcSegs(std::vector<dbCCSeg*>& ccsegs);
+  void getCcSegs(std::vector<dbCCSeg *> &ccsegs);
 
   ///
   /// print the CC segs of this RC segment,
@@ -4627,7 +4506,7 @@ class dbRSeg : public dbObject
   ///
   /// Get the capacitance table of this RC segment. value is in FF
   ///
-  void getCapTable(double* cap);
+  void getCapTable(double *cap);
 
   ///
   /// Set the resistance of this RC segment for this process corner. Value must
@@ -4658,7 +4537,7 @@ class dbRSeg : public dbObject
   ///
   /// Get the rc-network source node of this segment,
   ///
-  dbCapNode* getSourceCapNode();
+  dbCapNode *getSourceCapNode();
 
   ///
   /// Set the rc-network source node of this segment,
@@ -4673,7 +4552,7 @@ class dbRSeg : public dbObject
   ///
   /// Get the rc-network target node of this segment,
   ///
-  dbCapNode* getTargetCapNode();
+  dbCapNode *getTargetCapNode();
 
   ///
   /// Set the rc-network target node of this segment,
@@ -4693,7 +4572,7 @@ class dbRSeg : public dbObject
   ///
   /// Get coordinates of this RC-segment.
   ///
-  void getCoords(int& x, int& y);
+  void getCoords(int &x, int &y);
 
   ///
   /// Set shape-id of this RC-segment, and the target capNode if internal.
@@ -4713,7 +4592,7 @@ class dbRSeg : public dbObject
   ///
   /// returns length and width.
   ///
-  uint32_t getLengthWidth(uint32_t& w);
+  uint32_t getLengthWidth(uint32_t &w);
 
   ///
   /// add a seg onto a net
@@ -4723,38 +4602,35 @@ class dbRSeg : public dbObject
   ///
   /// Get the net of this RC-segment.
   ///
-  dbNet* getNet();
+  dbNet *getNet();
 
   ///
   /// Create a new r-segment
   /// The default values for each process corner is 0.0.
   ///
-  static dbRSeg* create(dbNet* net,
-                        int x,
-                        int y,
-                        uint32_t path_dir,
+  static dbRSeg *create(dbNet *net, int x, int y, uint32_t path_dir,
                         bool allocate_cap);
 
   ///
   /// Destroy a rc-segment.
   ///
-  static void destroy(dbRSeg* seg);
-  static void destroy(dbRSeg* seg, dbNet* net);
+  static void destroy(dbRSeg *seg);
+  static void destroy(dbRSeg *seg, dbNet *net);
 
   ///
   /// simple destroy a disconnected rc-segment
   ///
-  static void destroyS(dbRSeg* seg);
+  static void destroyS(dbRSeg *seg);
 
   ///
   /// Destroy a rc-segment.
   ///
-  static dbSet<dbRSeg>::iterator destroy(dbSet<dbRSeg>::iterator& itr);
+  static dbSet<dbRSeg>::iterator destroy(dbSet<dbRSeg>::iterator &itr);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbRSeg* getRSeg(dbBlock* block, uint32_t oid);
+  static dbRSeg *getRSeg(dbBlock *block, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -4767,9 +4643,8 @@ class dbRSeg : public dbObject
 /// meaning.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbCCSeg : public dbObject
-{
- public:
+class dbCCSeg : public dbObject {
+public:
   ///
   /// Adjust the capacitance of this CC segment
   ///
@@ -4801,35 +4676,35 @@ class dbCCSeg : public dbObject
   ///
   /// Add the capacitance of all corners of this CC segment to *ttcap
   ///
-  void accAllCcCap(double* ttcap, double miller_mult);
+  void accAllCcCap(double *ttcap, double miller_mult);
 
   ///
   /// Get the capacitance of all corners of this CC segment to *ttcap
   ///
-  void getAllCcCap(double* ttcap);
+  void getAllCcCap(double *ttcap);
 
   ///
   /// Set the capacitance of all corners of this CC segment by *ttcap
   ///
-  void setAllCcCap(double* ttcap);
+  void setAllCcCap(double *ttcap);
 
-  dbCapNode* getSourceCapNode();
-  dbCapNode* getTargetCapNode();
+  dbCapNode *getSourceCapNode();
+  dbCapNode *getTargetCapNode();
 
   ///
   /// Add capacitance of other CC segment to this CC segment
   ///
-  void addCcCapacitance(dbCCSeg* other);
+  void addCcCapacitance(dbCCSeg *other);
 
   ///
   /// Change this CC segement's capNode orig to capNode new
   ///
-  void swapCapnode(dbCapNode* orig, dbCapNode* newn);
+  void swapCapnode(dbCapNode *orig, dbCapNode *newn);
 
   ///
   /// Get the capNode of this CC segment, other than oneCap
   ///
-  dbCapNode* getTheOtherCapn(dbCapNode* oneCap, uint32_t& cid);
+  dbCapNode *getTheOtherCapn(dbCapNode *oneCap, uint32_t &cid);
 
   /// Get the rc-network source node of this segment,
   ///
@@ -4853,12 +4728,12 @@ class dbCCSeg : public dbObject
   ///
   /// Get the source net of this CC-segment.
   ///
-  dbNet* getSourceNet();
+  dbNet *getSourceNet();
 
   ///
   /// Get the target net of this CC-segment.
   ///
-  dbNet* getTargetNet();
+  dbNet *getTargetNet();
 
   ///
   /// Get the infile cnt of this CC-segment.
@@ -4894,12 +4769,12 @@ class dbCCSeg : public dbObject
   ///
   /// unlink cc from capn
   ///
-  void unLink_cc_seg(dbCapNode* capn);
+  void unLink_cc_seg(dbCapNode *capn);
 
   ///
   /// link cc to capn
   ///
-  void Link_cc_seg(dbCapNode* capn, uint32_t cseq);
+  void Link_cc_seg(dbCapNode *capn, uint32_t cseq);
 
   ///
   /// relink _cc_tgt_segs of a net
@@ -4912,45 +4787,44 @@ class dbCCSeg : public dbObject
   ///
   /// Returns nullptr if not found
   ///
-  static dbCCSeg* findCC(dbCapNode* nodeA, dbCapNode* nodeB);
+  static dbCCSeg *findCC(dbCapNode *nodeA, dbCapNode *nodeB);
 
   ///
   /// Create a new cc-segment.
   /// The default values for each process corner is 0.0.
   ///
-  static dbCCSeg* create(dbCapNode* nodeA,
-                         dbCapNode* nodeB,
+  static dbCCSeg *create(dbCapNode *nodeA, dbCapNode *nodeB,
                          bool mergeParallel = false);
 
   ///
   /// Destroy a cc-segment.
   ///
-  static void destroy(dbCCSeg* seg);
+  static void destroy(dbCCSeg *seg);
 
   ///
   /// simple destroy disconnected cc-segment
   ///
-  static void destroyS(dbCCSeg* seg);
+  static void destroyS(dbCCSeg *seg);
 
   ///
   /// Destroy a cc-segment.
   ///
-  static dbSet<dbCCSeg>::iterator destroy(dbSet<dbCCSeg>::iterator& itr);
+  static dbSet<dbCCSeg>::iterator destroy(dbSet<dbCCSeg>::iterator &itr);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbCCSeg* getCCSeg(dbBlock* block, uint32_t oid);
+  static dbCCSeg *getCCSeg(dbBlock *block, uint32_t oid);
 
   ///
   /// disconnect a cc-segment
   ///
-  static void disconnect(dbCCSeg* tcc_);
+  static void disconnect(dbCCSeg *tcc_);
 
   ///
   /// connect a cc-segment
   ///
-  static void connect(dbCCSeg* tcc_);
+  static void connect(dbCCSeg *tcc_);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -4958,9 +4832,8 @@ class dbCCSeg : public dbObject
 /// A Row is the element that represents placement sites.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbRow : public dbObject
-{
- public:
+class dbRow : public dbObject {
+public:
   ///
   /// Get the row name.
   ///
@@ -4969,12 +4842,12 @@ class dbRow : public dbObject
   ///
   /// Get the row name.
   ///
-  const char* getConstName();
+  const char *getConstName();
 
   ///
   /// Get the row site.
   ///
-  dbSite* getSite();
+  dbSite *getSite();
 
   ///
   /// Get the origin of this row
@@ -5010,35 +4883,29 @@ class dbRow : public dbObject
   ///
   /// Get the block this row belongs too.
   ///
-  dbBlock* getBlock();
+  dbBlock *getBlock();
 
   ///
   /// Create a new row.
   ///
-  static dbRow* create(dbBlock* block,
-                       const char* name,
-                       dbSite* site,
-                       int origin_x,
-                       int origin_y,
-                       dbOrientType orient,
-                       dbRowDir direction,
-                       int num_sites,
-                       int spacing);
+  static dbRow *create(dbBlock *block, const char *name, dbSite *site,
+                       int origin_x, int origin_y, dbOrientType orient,
+                       dbRowDir direction, int num_sites, int spacing);
 
   ///
   /// Destroy a row.
   ///
-  static void destroy(dbRow* row);
+  static void destroy(dbRow *row);
 
   ///
   /// Destroy a row.
   ///
-  static dbSet<dbRow>::iterator destroy(dbSet<dbRow>::iterator& itr);
+  static dbSet<dbRow>::iterator destroy(dbSet<dbRow>::iterator &itr);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbRow* getRow(dbBlock* block, uint32_t oid);
+  static dbRow *getRow(dbBlock *block, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -5046,13 +4913,12 @@ class dbRow : public dbObject
 /// A fill is the element that one metal fill shape
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbFill : public dbObject
-{
- public:
+class dbFill : public dbObject {
+public:
   ///
   /// Get the fill bounding box.
   ///
-  void getRect(Rect& rect);
+  void getRect(Rect &rect);
 
   ///
   /// Returns true if this fill requires OPC (Optical proximity correction)
@@ -5068,34 +4934,28 @@ class dbFill : public dbObject
   ///
   /// Get the layer of this fill.
   ///
-  dbTechLayer* getTechLayer();
+  dbTechLayer *getTechLayer();
 
   ///
   /// Create a new fill.
   ///
-  static dbFill* create(dbBlock* block,
-                        bool needs_opc,
-                        uint32_t mask_number,
-                        dbTechLayer* layer,
-                        int x1,
-                        int y1,
-                        int x2,
-                        int y2);
+  static dbFill *create(dbBlock *block, bool needs_opc, uint32_t mask_number,
+                        dbTechLayer *layer, int x1, int y1, int x2, int y2);
 
   ///
   /// Destroy a fill.
   ///
-  static void destroy(dbFill* fill);
+  static void destroy(dbFill *fill);
 
   ///
   /// Destroy fills.
   ///
-  static dbSet<dbFill>::iterator destroy(dbSet<dbFill>::iterator& itr);
+  static dbSet<dbFill>::iterator destroy(dbSet<dbFill>::iterator &itr);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbFill* getFill(dbBlock* block, uint32_t oid);
+  static dbFill *getFill(dbBlock *block, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -5103,9 +4963,8 @@ class dbFill : public dbObject
 /// A Region is the element that represents a placement region.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbRegion : public dbObject
-{
- public:
+class dbRegion : public dbObject {
+public:
   ///
   /// Get the region name.
   ///
@@ -5148,27 +5007,27 @@ class dbRegion : public dbObject
   ///
   /// Get the overlap area between the region and a rectangle
   ///
-  int64_t getOverlapArea(const Rect& r);
+  int64_t getOverlapArea(const Rect &r);
 
   ///
   /// Add this instance to the region
   ///
-  void addInst(dbInst* inst);
+  void addInst(dbInst *inst);
 
   ///
   /// Remove this instance from the region
   ///
-  void removeInst(dbInst* inst);
+  void removeInst(dbInst *inst);
 
   ///
   /// Remove this group from the region
   ///
-  void removeGroup(dbGroup* group);
+  void removeGroup(dbGroup *group);
 
   ///
   /// Add group to this region.
   ///
-  void addGroup(dbGroup* group);
+  void addGroup(dbGroup *group);
 
   ///
   /// Get the groups of this region.
@@ -5178,28 +5037,28 @@ class dbRegion : public dbObject
   ///
   /// Get the block of this region
   ///
-  dbBlock* getBlock();
+  dbBlock *getBlock();
 
   ///
   /// Create a new region. Returns nullptr if a region with this name already
   /// exists in the block.
   ///
-  static dbRegion* create(dbBlock* block, const char* name);
+  static dbRegion *create(dbBlock *block, const char *name);
 
   ///
   /// Destroy a region.
   ///
-  static void destroy(dbRegion* region);
+  static void destroy(dbRegion *region);
 
   ///
   /// Destroy a region.
   ///
-  static dbSet<dbRegion>::iterator destroy(dbSet<dbRegion>::iterator& itr);
+  static dbSet<dbRegion>::iterator destroy(dbSet<dbRegion>::iterator &itr);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbRegion* getRegion(dbBlock* block, uint32_t oid);
+  static dbRegion *getRegion(dbBlock *block, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -5208,9 +5067,8 @@ class dbRegion : public dbObject
 /// called Masters.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbLib : public dbObject
-{
- public:
+class dbLib : public dbObject {
+public:
   ///
   /// Get the library name.
   ///
@@ -5219,7 +5077,7 @@ class dbLib : public dbObject
   ///
   /// Get the library name.
   ///
-  const char* getConstName();
+  const char *getConstName();
 
   ///
   /// Get the Database units per micron.
@@ -5229,7 +5087,7 @@ class dbLib : public dbObject
   ///
   /// Get the technology of this library
   ///
-  dbTech* getTech();
+  dbTech *getTech();
 
   ///
   /// Get the master-cells of this library
@@ -5240,7 +5098,7 @@ class dbLib : public dbObject
   /// Finds a specific master-cell in the library
   /// Returns nullptr if the object was not found.
   ///
-  dbMaster* findMaster(const char* name);
+  dbMaster *findMaster(const char *name);
 
   ///
   /// Get the sites of this library
@@ -5251,7 +5109,7 @@ class dbLib : public dbObject
   /// Finds a specific site in the library
   /// Returns nullptr if the object was not found.
   ///
-  dbSite* findSite(const char* name);
+  dbSite *findSite(const char *name);
 
   ///
   /// Get the LEF units of this technology.
@@ -5281,25 +5139,23 @@ class dbLib : public dbObject
   /// Left and Right are set to "zero" if the bus delimiters
   /// were not set.
   ///
-  void getBusDelimiters(char& left, char& right);
+  void getBusDelimiters(char &left, char &right);
 
   ///
   /// Create a new library.
   ///
-  static dbLib* create(dbDatabase* db,
-                       const char* name,
-                       dbTech* tech,
+  static dbLib *create(dbDatabase *db, const char *name, dbTech *tech,
                        char hierarchy_delimiter = '/');
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbLib* getLib(dbDatabase* db, uint32_t oid);
+  static dbLib *getLib(dbDatabase *db, uint32_t oid);
 
   ///
   /// Destroy a library.
   ///
-  static void destroy(dbLib* lib);
+  static void destroy(dbLib *lib);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -5308,15 +5164,13 @@ class dbLib : public dbObject
 /// library.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbSite : public dbObject
-{
- public:
-  struct OrientedSite
-  {
-    dbSite* site;
+class dbSite : public dbObject {
+public:
+  struct OrientedSite {
+    dbSite *site;
     dbOrientType orientation;
-    friend bool operator==(const OrientedSite& lhs, const OrientedSite& rhs);
-    friend bool operator!=(const OrientedSite& lhs, const OrientedSite& rhs);
+    friend bool operator==(const OrientedSite &lhs, const OrientedSite &rhs);
+    friend bool operator!=(const OrientedSite &lhs, const OrientedSite &rhs);
   };
   using RowPattern = std::vector<OrientedSite>;
 
@@ -5328,7 +5182,7 @@ class dbSite : public dbObject
   ///
   /// Get the site name.
   ///
-  const char* getConstName();
+  const char *getConstName();
 
   ///
   /// Get the width of this site
@@ -5393,7 +5247,7 @@ class dbSite : public dbObject
   ///
   /// set the row pattern of this site
   ///
-  void setRowPattern(const RowPattern& row_pattern);
+  void setRowPattern(const RowPattern &row_pattern);
 
   ///
   /// Returns true if the row pattern is not empty
@@ -5413,18 +5267,18 @@ class dbSite : public dbObject
   ///
   /// Get the library of this site.
   ///
-  dbLib* getLib();
+  dbLib *getLib();
 
   ///
   /// Create a new site.
   /// Returns nullptr if a site with this name already exists
   ///
-  static dbSite* create(dbLib* lib, const char* name);
+  static dbSite *create(dbLib *lib, const char *name);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbSite* getSite(dbLib* lib, uint32_t oid);
+  static dbSite *getSite(dbLib *lib, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -5432,9 +5286,8 @@ class dbSite : public dbObject
 /// A Master is the element that represents a master-cell from the library.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbMaster : public dbObject
-{
- public:
+class dbMaster : public dbObject {
+public:
   ///
   /// Get the master cell name.
   ///
@@ -5443,7 +5296,7 @@ class dbMaster : public dbObject
   ///
   /// Get the master cell name.
   ///
-  const char* getConstName() const;
+  const char *getConstName() const;
 
   ///
   /// Get the x,y origin of this master
@@ -5542,7 +5395,7 @@ class dbMaster : public dbObject
   /// Get the Logical equivalent of this master
   /// Returns nullptr if no equivalent was set.
   ///
-  dbMaster* getLEQ();
+  dbMaster *getLEQ();
 
   ///
   /// Set the Logical equivalent of this master
@@ -5551,13 +5404,13 @@ class dbMaster : public dbObject
   /// does not enforce this. Typically, if the LEQ is
   /// set in the LEF file, than the LEQ's form a ring.
   ///
-  void setLEQ(dbMaster* master);
+  void setLEQ(dbMaster *master);
 
   ///
   /// Get the Electical equivalent of this master
   /// Returns nullptr if no equivalent was set.
   ///
-  dbMaster* getEEQ();
+  dbMaster *getEEQ();
 
   ///
   /// Set the Electical equivalent of this master
@@ -5566,7 +5419,7 @@ class dbMaster : public dbObject
   /// does not enforce this. Typically, if the EEQ is
   /// set in the LEF file, than the EEQ's form a ring.
   ///
-  void setEEQ(dbMaster* master);
+  void setEEQ(dbMaster *master);
 
   ///
   /// Mark that this site has X-Symmetry
@@ -5612,13 +5465,13 @@ class dbMaster : public dbObject
   /// Find a specific master-terminal
   /// Returns nullptr if the object was not found.
   ///
-  dbMTerm* findMTerm(const char* name);
-  dbMTerm* findMTerm(dbBlock* block, const char* name);
+  dbMTerm *findMTerm(const char *name);
+  dbMTerm *findMTerm(dbBlock *block, const char *name);
 
   ///
   /// Get the library of this master.
   ///
-  dbLib* getLib();
+  dbLib *getLib();
 
   ///
   /// Get the obstructions of this master
@@ -5633,13 +5486,13 @@ class dbMaster : public dbObject
   ///
   /// Get the placement bounding box of this master.
   ///
-  void getPlacementBoundary(Rect& r);
+  void getPlacementBoundary(Rect &r);
 
   ///
   /// Apply the suppiled transform to the master obsutrctions and pin
   /// geometries.
   ///
-  void transform(dbTransform& t);
+  void transform(dbTransform &t);
 
   ///
   /// Freeze this master. dbMTerms cannot be added or delete from the master
@@ -5683,13 +5536,13 @@ class dbMaster : public dbObject
   ///
   /// Set the site of this master.
   /// h
-  void setSite(dbSite* site);
+  void setSite(dbSite *site);
 
   ///
   /// Set the site of this master.
   /// Returns nullptr if no site has been set.
   ///
-  dbSite* getSite();
+  dbSite *getSite();
 
   ///
   /// Returns a database unique id for this master.
@@ -5705,25 +5558,24 @@ class dbMaster : public dbObject
   /// Create a new master.
   /// Returns nullptr if a master with this name already exists
   ///
-  static dbMaster* create(dbLib* lib, const char* name);
+  static dbMaster *create(dbLib *lib, const char *name);
 
   ///
   /// Destroy a dbMaster.
   ///
-  static void destroy(dbMaster* master);
+  static void destroy(dbMaster *master);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbMaster* getMaster(dbLib* lib, uint32_t oid);
+  static dbMaster *getMaster(dbLib *lib, uint32_t oid);
 
-  void* staCell();
-  void staSetCell(void* cell);
+  void *staCell();
+  void staSetCell(void *cell);
 };
 
-class dbGDSLib : public dbObject
-{
- public:
+class dbGDSLib : public dbObject {
+public:
   void setLibname(std::string libname);
 
   std::string getLibname() const;
@@ -5732,12 +5584,12 @@ class dbGDSLib : public dbObject
 
   std::pair<double, double> getUnits() const;
 
-  dbGDSStructure* findGDSStructure(const char* name) const;
+  dbGDSStructure *findGDSStructure(const char *name) const;
 
   dbSet<dbGDSStructure> getGDSStructures();
 
-  static dbGDSLib* create(dbDatabase* db, const std::string& name);
-  static void destroy(dbGDSLib* lib);
+  static dbGDSLib *create(dbDatabase *db, const std::string &name);
+  static void destroy(dbGDSLib *lib);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -5745,9 +5597,8 @@ class dbGDSLib : public dbObject
 /// A MTerm is the element that represents a terminal on a Master.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbMTerm : public dbObject
-{
- public:
+class dbMTerm : public dbObject {
+public:
   ///
   /// Get the master term name.
   ///
@@ -5756,13 +5607,13 @@ class dbMTerm : public dbObject
   ///
   /// Get the master term name.
   ///
-  const char* getConstName();
+  const char *getConstName();
 
   ///
   /// Get the master term name. Change lib_bus_del to blk_bus_del if needed
   ///
-  char* getName(dbInst* inst, char* ttname);
-  char* getName(dbBlock* block, dbMaster* master, char* ttname);
+  char *getName(dbInst *inst, char *ttname);
+  char *getName(dbBlock *block, dbMaster *master, char *ttname);
 
   ///
   /// Get the signal type of this master-terminal.
@@ -5808,7 +5659,7 @@ class dbMTerm : public dbObject
   ///
   /// Get the master this master-terminal belongs too.
   ///
-  dbMaster* getMaster();
+  dbMaster *getMaster();
 
   ///
   /// Get the physical pins of this terminal.
@@ -5823,16 +5674,16 @@ class dbMTerm : public dbObject
   ///
   /// Add antenna info that is not specific to an oxide model.
   ///
-  void addPartialMetalAreaEntry(double inval, dbTechLayer* refly = nullptr);
-  void addPartialMetalSideAreaEntry(double inval, dbTechLayer* refly = nullptr);
-  void addPartialCutAreaEntry(double inval, dbTechLayer* refly = nullptr);
-  void addDiffAreaEntry(double inval, dbTechLayer* refly = nullptr);
+  void addPartialMetalAreaEntry(double inval, dbTechLayer *refly = nullptr);
+  void addPartialMetalSideAreaEntry(double inval, dbTechLayer *refly = nullptr);
+  void addPartialCutAreaEntry(double inval, dbTechLayer *refly = nullptr);
+  void addDiffAreaEntry(double inval, dbTechLayer *refly = nullptr);
 
   ///
   /// Antenna info that is specific to an oxide model.
   ///
-  dbTechAntennaPinModel* createDefaultAntennaModel();
-  dbTechAntennaPinModel* createOxide2AntennaModel();
+  dbTechAntennaPinModel *createDefaultAntennaModel();
+  dbTechAntennaPinModel *createOxide2AntennaModel();
 
   ///
   /// Access and write antenna rule models -- get functions will return nullptr
@@ -5840,24 +5691,24 @@ class dbMTerm : public dbObject
   ///
   bool hasDefaultAntennaModel() const;
   bool hasOxide2AntennaModel() const;
-  dbTechAntennaPinModel* getDefaultAntennaModel() const;
-  dbTechAntennaPinModel* getOxide2AntennaModel() const;
+  dbTechAntennaPinModel *getDefaultAntennaModel() const;
+  dbTechAntennaPinModel *getOxide2AntennaModel() const;
 
   // From LEF's ANTENNADIFFAREA on the MACRO's PIN
-  void getDiffArea(std::vector<std::pair<double, dbTechLayer*>>& data);
+  void getDiffArea(std::vector<std::pair<double, dbTechLayer *>> &data);
 
   // From LEF's ANTENNAPARTIALMETALAREA on the MACRO's PIN
-  void getPartialMetalArea(std::vector<std::pair<double, dbTechLayer*>>& data);
+  void getPartialMetalArea(std::vector<std::pair<double, dbTechLayer *>> &data);
 
   // From LEF's ANTENNAPARTIALMETALSIDEAREA on the MACRO's PIN
-  void getPartialMetalSideArea(
-      std::vector<std::pair<double, dbTechLayer*>>& data);
+  void
+  getPartialMetalSideArea(std::vector<std::pair<double, dbTechLayer *>> &data);
 
   // From LEF's ANTENNAPARTIALCUTAREA on the MACRO's PIN
-  void getPartialCutArea(std::vector<std::pair<double, dbTechLayer*>>& data);
+  void getPartialCutArea(std::vector<std::pair<double, dbTechLayer *>> &data);
 
-  void* staPort();
-  void staSetPort(void* port);
+  void *staPort();
+  void staSetPort(void *port);
 
   ///
   /// Return the index of this mterm on this master.
@@ -5869,8 +5720,7 @@ class dbMTerm : public dbObject
   /// Create a new master terminal.
   /// Returns nullptr if a master terminal with this name already exists
   ///
-  static dbMTerm* create(dbMaster* master,
-                         const char* name,
+  static dbMTerm *create(dbMaster *master, const char *name,
                          dbIoType io_type = dbIoType(),
                          dbSigType sig_type = dbSigType(),
                          dbMTermShapeType shape_type = dbMTermShapeType());
@@ -5878,7 +5728,7 @@ class dbMTerm : public dbObject
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbMTerm* getMTerm(dbMaster* master, uint32_t oid);
+  static dbMTerm *getMTerm(dbMaster *master, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -5886,18 +5736,17 @@ class dbMTerm : public dbObject
 /// A MPin is the element that represents a physical pin on a master-terminal.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbMPin : public dbObject
-{
- public:
+class dbMPin : public dbObject {
+public:
   ///
   /// Get the master-terminal this pin belongs too.
   ///
-  dbMTerm* getMTerm();
+  dbMTerm *getMTerm();
 
   ///
   /// Get the master this pin belongs too.
   ///
-  dbMaster* getMaster();
+  dbMaster *getMaster();
 
   ///
   /// Get the geometry of this pin.
@@ -5914,19 +5763,19 @@ class dbMPin : public dbObject
   ///
   Rect getBBox();
 
-  std::vector<std::vector<odb::dbAccessPoint*>> getPinAccess() const;
+  std::vector<std::vector<odb::dbAccessPoint *>> getPinAccess() const;
 
   void clearPinAccess(int pin_access_idx);
 
   ///
   /// Create a new physical pin.
   ///
-  static dbMPin* create(dbMTerm* mterm);
+  static dbMPin *create(dbMTerm *mterm);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbMPin* getMPin(dbMaster* master, uint32_t oid);
+  static dbMPin *getMPin(dbMaster *master, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -5934,9 +5783,8 @@ class dbMPin : public dbObject
 /// A Tech is the element that represents technology specific data.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbTech : public dbObject
-{
- public:
+class dbTech : public dbObject {
+public:
   ///
   /// Get the tech name.
   ///
@@ -5957,26 +5805,26 @@ class dbTech : public dbObject
   /// Find the technology layer.
   /// Returns nullptr if the object was not found.
   ///
-  dbTechLayer* findLayer(const char* name);
+  dbTechLayer *findLayer(const char *name);
 
   ///
   /// Find the technology layer.
   /// Returns nullptr if the object was not found.
   ///
-  dbTechLayer* findLayer(int layer_number);
+  dbTechLayer *findLayer(int layer_number);
 
   ///
   /// Find the technology routing layer.
   /// Returns nullptr if the object was not found.
   ///
-  dbTechLayer* findRoutingLayer(int level_number);
+  dbTechLayer *findRoutingLayer(int level_number);
 
   ///
   /// Find the frontside (non-LEF58_BACKSIDE) routing layer closest to
   /// the substrate (i.e. the lowest routing-level index that is not
   /// marked backside). Returns nullptr if there is no such layer.
   ///
-  dbTechLayer* firstFrontsideRoutingLayer();
+  dbTechLayer *firstFrontsideRoutingLayer();
 
   ///
   /// Find the LEF58_BACKSIDE routing layer closest to the substrate
@@ -5984,7 +5832,7 @@ class dbTech : public dbObject
   /// since backside metals are stacked outward from M0 toward BRDL in
   /// LEF order). Returns nullptr if there is no backside routing layer.
   ///
-  dbTechLayer* firstBacksideRoutingLayer();
+  dbTechLayer *firstBacksideRoutingLayer();
 
   ///
   /// Get the technolgy vias. This includes non-default-rule-vias.
@@ -5995,7 +5843,7 @@ class dbTech : public dbObject
   /// Find the technology via.
   /// Returns nullptr if the object was not found.
   ///
-  dbTechVia* findVia(const char* name);
+  dbTechVia *findVia(const char *name);
 
   ///
   /// Get the LEF units of this technology.
@@ -6081,18 +5929,18 @@ class dbTech : public dbObject
   ///
   /// Find a specific rule
   ///
-  dbTechNonDefaultRule* findNonDefaultRule(const char* rulename);
+  dbTechNonDefaultRule *findNonDefaultRule(const char *rulename);
 
   ///
   /// Find a specific rule
   /// Returns nullptr if no rule exists.
   ///
-  dbTechSameNetRule* findSameNetRule(dbTechLayer* l1, dbTechLayer* l2);
+  dbTechSameNetRule *findSameNetRule(dbTechLayer *l1, dbTechLayer *l2);
 
   ///
   /// Get the same-net rules of this non-default rule.
   ///
-  void getSameNetRules(std::vector<dbTechSameNetRule*>& rules);
+  void getSameNetRules(std::vector<dbTechSameNetRule *> &rules);
 
   ///
   ///
@@ -6117,12 +5965,12 @@ class dbTech : public dbObject
   ///
   ///
   ///
-  dbTechViaRule* findViaRule(const char* name);
+  dbTechViaRule *findViaRule(const char *name);
 
   ///
   ///
   ///
-  dbTechViaGenerateRule* findViaGenerateRule(const char* name);
+  dbTechViaGenerateRule *findViaGenerateRule(const char *name);
 
   ///
   ///
@@ -6133,18 +5981,18 @@ class dbTech : public dbObject
   /// Create a new technology.
   /// Returns nullptr if a database technology already exists
   ///
-  static dbTech* create(dbDatabase* db, const char* name);
+  static dbTech *create(dbDatabase *db, const char *name);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbTech* getTech(dbDatabase* db, uint32_t oid);
+  static dbTech *getTech(dbDatabase *db, uint32_t oid);
 
   ///
   /// Destroy a technology.
   /// TODO: Define what happens to the libs and the chip.
   ///
-  static void destroy(dbTech* tech);
+  static void destroy(dbTech *tech);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -6153,9 +6001,8 @@ class dbTech : public dbObject
 /// a technolgy.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbTechVia : public dbObject
-{
- public:
+class dbTechVia : public dbObject {
+public:
   ///
   /// Get the via name.
   ///
@@ -6164,7 +6011,7 @@ class dbTechVia : public dbObject
   ///
   /// Get the via name.
   ///
-  const char* getConstName();
+  const char *getConstName();
 
   ///
   /// Returns true if this via is a default
@@ -6200,7 +6047,7 @@ class dbTechVia : public dbObject
   /// Set the pattern value of this via.
   /// The pattern is ignored if the pattern is already set on this via
   ///
-  void setPattern(const char* pattern);
+  void setPattern(const char *pattern);
 
   ///
   /// Get the pattern value of this via.
@@ -6211,12 +6058,12 @@ class dbTechVia : public dbObject
   ///
   /// Set generate rule that was used to genreate this via.
   ///
-  void setViaGenerateRule(dbTechViaGenerateRule* rule);
+  void setViaGenerateRule(dbTechViaGenerateRule *rule);
 
   ///
   /// Get the generate rule that was used to genreate this via.
   ///
-  dbTechViaGenerateRule* getViaGenerateRule();
+  dbTechViaGenerateRule *getViaGenerateRule();
 
   ///
   /// Returns true if this via has params.
@@ -6227,7 +6074,7 @@ class dbTechVia : public dbObject
   /// Set via params to generate this via. This method will create the shapes
   /// of this via. All previous shapes are destroyed.
   ///
-  void setViaParams(const dbViaParams& params);
+  void setViaParams(const dbViaParams &params);
 
   ///
   /// Get the via params used to generate this via.
@@ -6237,13 +6084,13 @@ class dbTechVia : public dbObject
   ///
   /// Get the technology this via belongs too.
   ///
-  dbTech* getTech();
+  dbTech *getTech();
 
   ///
   /// Get the bbox of this via.
   /// Returns nullptr if this via has no shapes.
   ///
-  dbBox* getBBox();
+  dbBox *getBBox();
 
   ///
   /// Get the boxes of this VIA
@@ -6254,44 +6101,43 @@ class dbTechVia : public dbObject
   /// Get the upper-most layer of this via reaches
   /// Returns nullptr if this via has no shapes.
   ///
-  dbTechLayer* getTopLayer();
+  dbTechLayer *getTopLayer();
 
   ///
   /// Get the lower-most layer of this via reaches
   /// Returns nullptr if this via has no shapes.
   ///
-  dbTechLayer* getBottomLayer();
+  dbTechLayer *getBottomLayer();
 
   ///
   /// Returns the non-default rule this via belongs too.
   /// Returns nullptr if this via is not part of a non-default rule.
   ///
-  dbTechNonDefaultRule* getNonDefaultRule();
+  dbTechNonDefaultRule *getNonDefaultRule();
 
   ///
   /// Create a new via.
   /// Returns nullptr if a via with this name already exists.
   ///
-  static dbTechVia* create(dbTech* tech, const char* name);
+  static dbTechVia *create(dbTech *tech, const char *name);
 
   ///
   /// Create a new non-default-rule via.
   /// Returns nullptr if a via with this name already exists.
   ///
-  static dbTechVia* create(dbTechNonDefaultRule* rule, const char* name);
+  static dbTechVia *create(dbTechNonDefaultRule *rule, const char *name);
   ///
   /// Create a new non-default-rule via by cloning an existing via (not
   /// necessarily from the same non-default rule
   /// Returns nullptr if a via with this name already exists.
   ///
-  static dbTechVia* clone(dbTechNonDefaultRule* rule,
-                          dbTechVia* invia_,
-                          const char* new_name);
+  static dbTechVia *clone(dbTechNonDefaultRule *rule, dbTechVia *invia_,
+                          const char *new_name);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbTechVia* getTechVia(dbTech* tech, uint32_t oid);
+  static dbTechVia *getTechVia(dbTech *tech, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -6299,9 +6145,8 @@ class dbTechVia : public dbObject
 /// A TechViaRule is the element that represents a LEF VIARULE
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbTechViaRule : public dbObject
-{
- public:
+class dbTechViaRule : public dbObject {
+public:
   ///
   /// Get the via-rule name.
   ///
@@ -6310,7 +6155,7 @@ class dbTechViaRule : public dbObject
   ///
   /// Add this via to this rule
   ///
-  void addVia(dbTechVia* via);
+  void addVia(dbTechVia *via);
 
   ///
   /// Get the number of vias assigned to this rule
@@ -6320,7 +6165,7 @@ class dbTechViaRule : public dbObject
   ///
   /// Return the via of this index. The index ranges from [0 ... (viaCount-1)]
   ///
-  dbTechVia* getVia(uint32_t indx);
+  dbTechVia *getVia(uint32_t indx);
 
   ///
   /// Get the number of layer-rules assigned to this rule
@@ -6331,18 +6176,18 @@ class dbTechViaRule : public dbObject
   /// Return the layer-rule of this index. The index ranges from [0 ...
   /// (viaCount-1)]
   ///
-  dbTechViaLayerRule* getViaLayerRule(uint32_t indx);
+  dbTechViaLayerRule *getViaLayerRule(uint32_t indx);
 
   ///
   /// Create a new via.
   /// Returns nullptr if a via-rule with this name already exists.
   ///
-  static dbTechViaRule* create(dbTech* tech, const char* name);
+  static dbTechViaRule *create(dbTech *tech, const char *name);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbTechViaRule* getTechViaRule(dbTech* tech, uint32_t oid);
+  static dbTechViaRule *getTechViaRule(dbTech *tech, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -6350,13 +6195,12 @@ class dbTechViaRule : public dbObject
 /// A TechViaLayerRule is the element that represents a LEF VIARULE LAYER
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbTechViaLayerRule : public dbObject
-{
- public:
+class dbTechViaLayerRule : public dbObject {
+public:
   ///
   /// Get the layer
   ///
-  dbTechLayer* getLayer();
+  dbTechLayer *getLayer();
 
   ///
   /// Get the rule direction
@@ -6376,7 +6220,7 @@ class dbTechViaLayerRule : public dbObject
   ///
   /// Returns the width rule
   ///
-  void getWidth(int& minWidth, int& maxWidth);
+  void getWidth(int &minWidth, int &maxWidth);
 
   ///
   /// Set the width rule
@@ -6391,7 +6235,7 @@ class dbTechViaLayerRule : public dbObject
   ///
   /// Returns the enclosure rule
   ///
-  void getEnclosure(int& overhang1, int& overhang2);
+  void getEnclosure(int &overhang1, int &overhang2);
 
   ///
   /// Set the enclosure rule
@@ -6436,12 +6280,12 @@ class dbTechViaLayerRule : public dbObject
   ///
   /// Get the rect rule
   ///
-  void getRect(Rect& r);
+  void getRect(Rect &r);
 
   ///
   /// Set the rect rule
   ///
-  void setRect(const Rect& r);
+  void setRect(const Rect &r);
 
   ///
   /// returns true if the spacing rule is set
@@ -6451,7 +6295,7 @@ class dbTechViaLayerRule : public dbObject
   ///
   /// Get the spacing rule.
   ///
-  void getSpacing(int& x_spacing, int& y_spacing);
+  void getSpacing(int &x_spacing, int &y_spacing);
 
   ///
   /// Set the spacing rule.
@@ -6476,21 +6320,19 @@ class dbTechViaLayerRule : public dbObject
   ///
   /// Create a new via-layer_rule.
   ///
-  static dbTechViaLayerRule* create(dbTech* tech,
-                                    dbTechViaRule* rule,
-                                    dbTechLayer* layer);
+  static dbTechViaLayerRule *create(dbTech *tech, dbTechViaRule *rule,
+                                    dbTechLayer *layer);
 
   ///
   /// Create a new via-layer_rule.
   ///
-  static dbTechViaLayerRule* create(dbTech* tech,
-                                    dbTechViaGenerateRule* rule,
-                                    dbTechLayer* layer);
+  static dbTechViaLayerRule *create(dbTech *tech, dbTechViaGenerateRule *rule,
+                                    dbTechLayer *layer);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbTechViaLayerRule* getTechViaLayerRule(dbTech* tech, uint32_t oid);
+  static dbTechViaLayerRule *getTechViaLayerRule(dbTech *tech, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -6498,9 +6340,8 @@ class dbTechViaLayerRule : public dbObject
 /// A TechViaGenerateRule is the element that represents a LEF VIARULE GENERATE
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbTechViaGenerateRule : public dbObject
-{
- public:
+class dbTechViaGenerateRule : public dbObject {
+public:
   ///
   /// Get the via-rule name.
   ///
@@ -6520,20 +6361,19 @@ class dbTechViaGenerateRule : public dbObject
   /// Return the layer-rule of this index. The index ranges from [0 ...
   /// (viaCount-1)]
   ///
-  dbTechViaLayerRule* getViaLayerRule(uint32_t indx);
+  dbTechViaLayerRule *getViaLayerRule(uint32_t indx);
 
   ///
   /// Create a new via.
   /// Returns nullptr if a via-rule with this name already exists.
   ///
-  static dbTechViaGenerateRule* create(dbTech* tech,
-                                       const char* name,
+  static dbTechViaGenerateRule *create(dbTech *tech, const char *name,
                                        bool is_default);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbTechViaGenerateRule* getTechViaGenerateRule(dbTech* tech,
+  static dbTechViaGenerateRule *getTechViaGenerateRule(dbTech *tech,
                                                        uint32_t oid);
 };
 
@@ -6545,15 +6385,14 @@ class dbTechViaGenerateRule : public dbObject
 ///
 ///////////////////////////////////////////////////////////////////////////////
 
-class dbTechLayerSpacingRule : public dbObject
-{
- public:
+class dbTechLayerSpacingRule : public dbObject {
+public:
   /// Combine data and predicates for elements of rule
   bool isUnconditional() const;
   uint32_t getSpacing() const;
-  bool getLengthThreshold(uint32_t& threshold) const;
-  bool getLengthThresholdRange(uint32_t& rmin, uint32_t& rmax) const;
-  bool getRange(uint32_t& rmin, uint32_t& rmax) const;
+  bool getLengthThreshold(uint32_t &threshold) const;
+  bool getLengthThresholdRange(uint32_t &rmin, uint32_t &rmax) const;
+  bool getRange(uint32_t &rmin, uint32_t &rmax) const;
   void setSpacingNotchLengthValid(bool val);
   void setSpacingEndOfNotchWidthValid(bool val);
   bool hasSpacingNotchLength() const;
@@ -6561,14 +6400,12 @@ class dbTechLayerSpacingRule : public dbObject
   bool hasRange() const;
   bool hasLengthThreshold() const;
   bool hasUseLengthThreshold() const;
-  bool getInfluence(uint32_t& influence) const;
-  bool getInfluenceRange(uint32_t& rmin, uint32_t& rmax) const;
-  bool getRangeRange(uint32_t& rmin, uint32_t& rmax) const;
-  bool getAdjacentCuts(uint32_t& numcuts,
-                       uint32_t& within,
-                       uint32_t& spacing,
-                       bool& except_same_pgnet) const;
-  bool getCutLayer4Spacing(dbTechLayer*& outly) const;
+  bool getInfluence(uint32_t &influence) const;
+  bool getInfluenceRange(uint32_t &rmin, uint32_t &rmax) const;
+  bool getRangeRange(uint32_t &rmin, uint32_t &rmax) const;
+  bool getAdjacentCuts(uint32_t &numcuts, uint32_t &within, uint32_t &spacing,
+                       bool &except_same_pgnet) const;
+  bool getCutLayer4Spacing(dbTechLayer *&outly) const;
   bool getCutStacking() const;
   bool getCutCenterToCenter() const;
   bool getCutSameNet() const;
@@ -6585,35 +6422,26 @@ class dbTechLayerSpacingRule : public dbObject
   void setInfluence(uint32_t influence);
   void setInfluenceRange(uint32_t rmin, uint32_t rmax);
   void setRangeRange(uint32_t rmin, uint32_t rmax);
-  void setAdjacentCuts(uint32_t numcuts,
-                       uint32_t within,
-                       uint32_t spacing,
+  void setAdjacentCuts(uint32_t numcuts, uint32_t within, uint32_t spacing,
                        bool except_same_pgnet);
-  void setCutLayer4Spacing(dbTechLayer* cutly);
+  void setCutLayer4Spacing(dbTechLayer *cutly);
   void setCutStacking(bool stacking);
   void setCutCenterToCenter(bool c2c);
   void setCutSameNet(bool same_net);
   void setCutParallelOverlap(bool overlap);
   void setCutArea(int64_t area);
-  void setEol(uint32_t width,
-              uint32_t within,
-              bool parallelEdge,
-              uint32_t parallelSpace,
-              uint32_t parallelWithin,
-              bool twoEdges);
-  bool getEol(uint32_t& width,
-              uint32_t& within,
-              bool& parallelEdge,
-              uint32_t& parallelSpace,
-              uint32_t& parallelWithin,
-              bool& twoEdges) const;
+  void setEol(uint32_t width, uint32_t within, bool parallelEdge,
+              uint32_t parallelSpace, uint32_t parallelWithin, bool twoEdges);
+  bool getEol(uint32_t &width, uint32_t &within, bool &parallelEdge,
+              uint32_t &parallelSpace, uint32_t &parallelWithin,
+              bool &twoEdges) const;
 
   ///
   /// Create a new layer spacing rule.
   /// Returns pointer to newly created object
   ///
-  static dbTechLayerSpacingRule* create(dbTechLayer* inly);
-  static dbTechLayerSpacingRule* getTechLayerSpacingRule(dbTechLayer* inly,
+  static dbTechLayerSpacingRule *create(dbTechLayer *inly);
+  static dbTechLayerSpacingRule *getTechLayerSpacingRule(dbTechLayer *inly,
                                                          uint32_t dbid);
 };
 
@@ -6627,22 +6455,19 @@ class dbTechLayerSpacingRule : public dbObject
 ///
 ///////////////////////////////////////////////////////////////////////////////
 
-class dbTechMinCutRule : public dbObject
-{
- public:
-  bool getMinimumCuts(uint32_t& numcuts, uint32_t& width) const;
-  void setMinimumCuts(uint32_t numcuts,
-                      uint32_t width,
-                      bool above_only,
+class dbTechMinCutRule : public dbObject {
+public:
+  bool getMinimumCuts(uint32_t &numcuts, uint32_t &width) const;
+  void setMinimumCuts(uint32_t numcuts, uint32_t width, bool above_only,
                       bool below_only);
-  bool getCutDistance(uint32_t& cut_distance) const;
+  bool getCutDistance(uint32_t &cut_distance) const;
   void setCutDistance(uint32_t cut_distance);
-  bool getLengthForCuts(uint32_t& length, uint32_t& distance) const;
+  bool getLengthForCuts(uint32_t &length, uint32_t &distance) const;
   void setLengthForCuts(uint32_t length, uint32_t distance);
   bool isAboveOnly() const;
   bool isBelowOnly() const;
-  static dbTechMinCutRule* create(dbTechLayer* inly);
-  static dbTechMinCutRule* getMinCutRule(dbTechLayer* inly, uint32_t dbid);
+  static dbTechMinCutRule *create(dbTechLayer *inly);
+  static dbTechMinCutRule *getMinCutRule(dbTechLayer *inly, uint32_t dbid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -6654,16 +6479,15 @@ class dbTechMinCutRule : public dbObject
 ///
 ///////////////////////////////////////////////////////////////////////////////
 
-class dbTechMinEncRule : public dbObject
-{
- public:
-  bool getEnclosure(int64_t& area) const;
+class dbTechMinEncRule : public dbObject {
+public:
+  bool getEnclosure(int64_t &area) const;
   void setEnclosure(int64_t area);
-  bool getEnclosureWidth(uint32_t& width) const;
+  bool getEnclosureWidth(uint32_t &width) const;
   void setEnclosureWidth(uint32_t width);
 
-  static dbTechMinEncRule* create(dbTechLayer* inly);
-  static dbTechMinEncRule* getMinEncRule(dbTechLayer* inly, uint32_t dbid);
+  static dbTechMinEncRule *create(dbTechLayer *inly);
+  static dbTechMinEncRule *getMinEncRule(dbTechLayer *inly, uint32_t dbid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -6676,18 +6500,15 @@ class dbTechMinEncRule : public dbObject
 ///
 ///////////////////////////////////////////////////////////////////////////////
 
-class dbTechV55InfluenceEntry : public dbObject
-{
- public:
-  bool getV55InfluenceEntry(uint32_t& width,
-                            uint32_t& within,
-                            uint32_t& spacing) const;
-  void setV55InfluenceEntry(const uint32_t& width,
-                            const uint32_t& within,
-                            const uint32_t& spacing);
+class dbTechV55InfluenceEntry : public dbObject {
+public:
+  bool getV55InfluenceEntry(uint32_t &width, uint32_t &within,
+                            uint32_t &spacing) const;
+  void setV55InfluenceEntry(const uint32_t &width, const uint32_t &within,
+                            const uint32_t &spacing);
 
-  static dbTechV55InfluenceEntry* create(dbTechLayer* inly);
-  static dbTechV55InfluenceEntry* getV55InfluenceEntry(dbTechLayer* inly,
+  static dbTechV55InfluenceEntry *create(dbTechLayer *inly);
+  static dbTechV55InfluenceEntry *getV55InfluenceEntry(dbTechLayer *inly,
                                                        uint32_t dbid);
 };
 
@@ -6697,9 +6518,8 @@ class dbTechV55InfluenceEntry : public dbObject
 ///
 ///////////////////////////////////////////////////////////////////////////////
 
-class dbTechLayerAntennaRule : public dbObject
-{
- public:
+class dbTechLayerAntennaRule : public dbObject {
+public:
   bool isValid() const;
 
   void setGatePlusDiffFactor(double factor);
@@ -6735,10 +6555,9 @@ class dbTechLayerAntennaRule : public dbObject
 
   // if indices.size()==0 then these are unset
   // if indices.size()==1 then this is a single value rather than a PWL
-  struct pwl_pair
-  {
-    const std::vector<double>& indices;
-    const std::vector<double>& ratios;
+  struct pwl_pair {
+    const std::vector<double> &indices;
+    const std::vector<double> &ratios;
   };
 
   pwl_pair getDiffPAR() const;
@@ -6749,16 +6568,16 @@ class dbTechLayerAntennaRule : public dbObject
   pwl_pair getGatePlusDiffPWL() const;
 
   // PWL
-  void setDiffPAR(const std::vector<double>& diff_idx,
-                  const std::vector<double>& ratios);
-  void setDiffCAR(const std::vector<double>& diff_idx,
-                  const std::vector<double>& ratios);
-  void setDiffPSR(const std::vector<double>& diff_idx,
-                  const std::vector<double>& ratios);
-  void setDiffCSR(const std::vector<double>& diff_idx,
-                  const std::vector<double>& ratios);
-  void setGatePlusDiffPWL(const std::vector<double>& diff_idx,
-                          const std::vector<double>& ratios);
+  void setDiffPAR(const std::vector<double> &diff_idx,
+                  const std::vector<double> &ratios);
+  void setDiffCAR(const std::vector<double> &diff_idx,
+                  const std::vector<double> &ratios);
+  void setDiffPSR(const std::vector<double> &diff_idx,
+                  const std::vector<double> &ratios);
+  void setDiffCSR(const std::vector<double> &diff_idx,
+                  const std::vector<double> &ratios);
+  void setGatePlusDiffPWL(const std::vector<double> &diff_idx,
+                          const std::vector<double> &ratios);
 
   // Single value
   void setDiffPAR(double ratio);
@@ -6766,10 +6585,10 @@ class dbTechLayerAntennaRule : public dbObject
   void setDiffPSR(double ratio);
   void setDiffCSR(double ratio);
 
-  void setAreaDiffReduce(const std::vector<double>& areas,
-                         const std::vector<double>& factors);
+  void setAreaDiffReduce(const std::vector<double> &areas,
+                         const std::vector<double> &factors);
 
-  static dbTechLayerAntennaRule* getAntennaRule(dbTech* inly, uint32_t dbid);
+  static dbTechLayerAntennaRule *getAntennaRule(dbTech *inly, uint32_t dbid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -6778,20 +6597,19 @@ class dbTechLayerAntennaRule : public dbObject
 ///
 ///////////////////////////////////////////////////////////////////////////////
 
-class dbTechAntennaPinModel : public dbObject
-{
- public:
-  void addGateAreaEntry(double inval, dbTechLayer* refly = nullptr);
-  void addMaxAreaCAREntry(double inval, dbTechLayer* refly = nullptr);
-  void addMaxSideAreaCAREntry(double inval, dbTechLayer* refly = nullptr);
-  void addMaxCutCAREntry(double inval, dbTechLayer* refly = nullptr);
+class dbTechAntennaPinModel : public dbObject {
+public:
+  void addGateAreaEntry(double inval, dbTechLayer *refly = nullptr);
+  void addMaxAreaCAREntry(double inval, dbTechLayer *refly = nullptr);
+  void addMaxSideAreaCAREntry(double inval, dbTechLayer *refly = nullptr);
+  void addMaxCutCAREntry(double inval, dbTechLayer *refly = nullptr);
 
-  void getGateArea(std::vector<std::pair<double, dbTechLayer*>>& data);
-  void getMaxAreaCAR(std::vector<std::pair<double, dbTechLayer*>>& data);
-  void getMaxSideAreaCAR(std::vector<std::pair<double, dbTechLayer*>>& data);
-  void getMaxCutCAR(std::vector<std::pair<double, dbTechLayer*>>& data);
+  void getGateArea(std::vector<std::pair<double, dbTechLayer *>> &data);
+  void getMaxAreaCAR(std::vector<std::pair<double, dbTechLayer *>> &data);
+  void getMaxSideAreaCAR(std::vector<std::pair<double, dbTechLayer *>> &data);
+  void getMaxCutCAR(std::vector<std::pair<double, dbTechLayer *>> &data);
 
-  static dbTechAntennaPinModel* getAntennaPinModel(dbMaster* master,
+  static dbTechAntennaPinModel *getAntennaPinModel(dbMaster *master,
                                                    uint32_t dbid);
 };
 
@@ -6801,9 +6619,8 @@ class dbTechAntennaPinModel : public dbObject
 /// rule.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbTechNonDefaultRule : public dbObject
-{
- public:
+class dbTechNonDefaultRule : public dbObject {
+public:
   ///
   /// Get the rule name.
   ///
@@ -6812,7 +6629,7 @@ class dbTechNonDefaultRule : public dbObject
   ///
   /// Get the rule name.
   ///
-  const char* getConstName();
+  const char *getConstName();
 
   ///
   /// Returns true if this rule is a block rule
@@ -6823,28 +6640,28 @@ class dbTechNonDefaultRule : public dbObject
   /// Find a specific layer-rule.
   /// Returns nullptr if there is no layer-rule.
   ///
-  dbTechLayerRule* getLayerRule(dbTechLayer* layer);
+  dbTechLayerRule *getLayerRule(dbTechLayer *layer);
 
   ///
   /// Get the layer-rules of this non-default rule.
   ///
-  void getLayerRules(std::vector<dbTechLayerRule*>& layer_rules);
+  void getLayerRules(std::vector<dbTechLayerRule *> &layer_rules);
 
   ///
   /// Get the vias of this non-default rule.
   ///
-  void getVias(std::vector<dbTechVia*>& vias);
+  void getVias(std::vector<dbTechVia *> &vias);
 
   ///
   /// Find a specific rule
   /// Returns nullptr if no rule exists.
   ///
-  dbTechSameNetRule* findSameNetRule(dbTechLayer* l1, dbTechLayer* l2);
+  dbTechSameNetRule *findSameNetRule(dbTechLayer *l1, dbTechLayer *l2);
 
   ///
   /// Get the same-net rules of this non-default rule.
   ///
-  void getSameNetRules(std::vector<dbTechSameNetRule*>& rules);
+  void getSameNetRules(std::vector<dbTechSameNetRule *> &rules);
 
   /////////////////////////
   // 5.6 DEF additions
@@ -6863,57 +6680,57 @@ class dbTechNonDefaultRule : public dbObject
   ///
   ///  Add a use via.
   ///
-  void addUseVia(dbTechVia* via);
+  void addUseVia(dbTechVia *via);
 
   ///
   ///  Get vias to use.
   ///
-  void getUseVias(std::vector<dbTechVia*>& vias);
+  void getUseVias(std::vector<dbTechVia *> &vias);
 
   ///
   ///  Add a use via.
   ///
-  void addUseViaRule(dbTechViaGenerateRule* rule);
+  void addUseViaRule(dbTechViaGenerateRule *rule);
 
   ///
   ///  Get vias to use.
   ///
-  void getUseViaRules(std::vector<dbTechViaGenerateRule*>& rules);
+  void getUseViaRules(std::vector<dbTechViaGenerateRule *> &rules);
 
   ///
   /// Assign a minimum number of cuts to this cut-layer
   ///
-  void setMinCuts(dbTechLayer* cut_layer, int count);
+  void setMinCuts(dbTechLayer *cut_layer, int count);
 
   ///
   /// Get the minimum number of cuts for this cut-layer.
   ///
   /// Returns false if a value has not been specified.
   ///
-  bool getMinCuts(dbTechLayer* cut_layer, int& count);
+  bool getMinCuts(dbTechLayer *cut_layer, int &count);
 
   ///
   /// Create a new non-default-rule.
   /// Returns nullptr if a non-default-rule with this name already exists
   ///
-  static dbTechNonDefaultRule* create(dbTech* tech, const char* name);
+  static dbTechNonDefaultRule *create(dbTech *tech, const char *name);
 
   ///
   /// Create a new non-default-rule.
   /// Returns nullptr if a non-default-rule with this name already exists
   ///
-  static dbTechNonDefaultRule* create(dbBlock* block, const char* name);
+  static dbTechNonDefaultRule *create(dbBlock *block, const char *name);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbTechNonDefaultRule* getTechNonDefaultRule(dbTech* tech,
+  static dbTechNonDefaultRule *getTechNonDefaultRule(dbTech *tech,
                                                      uint32_t oid);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbTechNonDefaultRule* getTechNonDefaultRule(dbBlock* block,
+  static dbTechNonDefaultRule *getTechNonDefaultRule(dbBlock *block,
                                                      uint32_t oid);
 };
 
@@ -6923,13 +6740,12 @@ class dbTechNonDefaultRule : public dbObject
 /// rule.
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbTechLayerRule : public dbObject
-{
- public:
+class dbTechLayerRule : public dbObject {
+public:
   ///
   /// Get the layer this rule represents
   ///
-  dbTechLayer* getLayer();
+  dbTechLayer *getLayer();
 
   ///
   /// Returns true if this rule is a block rule
@@ -6939,7 +6755,7 @@ class dbTechLayerRule : public dbObject
   ///
   /// Get the non-default-rule this layer-rule belongs too.
   ///
-  dbTechNonDefaultRule* getNonDefaultRule();
+  dbTechNonDefaultRule *getNonDefaultRule();
 
   ///
   /// Get the minimum path-width.
@@ -7005,18 +6821,18 @@ class dbTechLayerRule : public dbObject
   /// Create a new layer-rule.
   /// Returns nullptr if a layer-rule for this layer already exists.
   ///
-  static dbTechLayerRule* create(dbTechNonDefaultRule* rule,
-                                 dbTechLayer* layer);
+  static dbTechLayerRule *create(dbTechNonDefaultRule *rule,
+                                 dbTechLayer *layer);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbTechLayerRule* getTechLayerRule(dbTech* tech, uint32_t oid);
+  static dbTechLayerRule *getTechLayerRule(dbTech *tech, uint32_t oid);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbTechLayerRule* getTechLayerRule(dbBlock* block, uint32_t oid);
+  static dbTechLayerRule *getTechLayerRule(dbBlock *block, uint32_t oid);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -7024,18 +6840,17 @@ class dbTechLayerRule : public dbObject
 /// A TechSameNetRule
 ///
 ///////////////////////////////////////////////////////////////////////////////
-class dbTechSameNetRule : public dbObject
-{
- public:
+class dbTechSameNetRule : public dbObject {
+public:
   ///
   /// Get the layer this rule represents
   ///
-  dbTechLayer* getLayer1();
+  dbTechLayer *getLayer1();
 
   ///
   /// Get the layer this rule represents
   ///
-  dbTechLayer* getLayer2();
+  dbTechLayer *getLayer2();
 
   ///
   /// Get the minimum net-to-net spacing.
@@ -7061,26 +6876,24 @@ class dbTechSameNetRule : public dbObject
   /// Create a new default samenet rule.
   /// Returns nullptr if a rule already exists between these layers.
   ///
-  static dbTechSameNetRule* create(dbTechLayer* layer1, dbTechLayer* layer2);
+  static dbTechSameNetRule *create(dbTechLayer *layer1, dbTechLayer *layer2);
   ///
   /// Create a new non-default samenet rule.
   /// Returns nullptr if a rule already exists between these layers.
   ///
-  static dbTechSameNetRule* create(dbTechNonDefaultRule* rule,
-                                   dbTechLayer* layer1,
-                                   dbTechLayer* layer2);
+  static dbTechSameNetRule *create(dbTechNonDefaultRule *rule,
+                                   dbTechLayer *layer1, dbTechLayer *layer2);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbTechSameNetRule* getTechSameNetRule(dbTech* tech, uint32_t oid);
+  static dbTechSameNetRule *getTechSameNetRule(dbTech *tech, uint32_t oid);
 };
 
-class dbViaParams : private _dbViaParams
-{
- public:
+class dbViaParams : private _dbViaParams {
+public:
   dbViaParams();
-  dbViaParams(const dbViaParams& p) = default;
+  dbViaParams(const dbViaParams &p) = default;
 
   int getXCutSize() const;
   int getYCutSize() const;
@@ -7098,9 +6911,9 @@ class dbViaParams : private _dbViaParams
   int getYTopOffset() const;
   int getXBottomOffset() const;
   int getYBottomOffset() const;
-  dbTechLayer* getTopLayer() const;
-  dbTechLayer* getCutLayer() const;
-  dbTechLayer* getBottomLayer() const;
+  dbTechLayer *getTopLayer() const;
+  dbTechLayer *getCutLayer() const;
+  dbTechLayer *getBottomLayer() const;
 
   void setXCutSize(int value);
   void setYCutSize(int value);
@@ -7118,14 +6931,14 @@ class dbViaParams : private _dbViaParams
   void setYTopOffset(int value);
   void setXBottomOffset(int value);
   void setYBottomOffset(int value);
-  void setTopLayer(dbTechLayer* layer);
-  void setCutLayer(dbTechLayer* layer);
-  void setBottomLayer(dbTechLayer* layer);
+  void setTopLayer(dbTechLayer *layer);
+  void setCutLayer(dbTechLayer *layer);
+  void setBottomLayer(dbTechLayer *layer);
 
- private:
-  dbViaParams(const _dbViaParams& p);
+private:
+  dbViaParams(const _dbViaParams &p);
 
-  dbTech* _tech;
+  dbTech *_tech;
 
   friend class dbVia;
   friend class dbTechVia;
@@ -7133,21 +6946,20 @@ class dbViaParams : private _dbViaParams
 
 // Generator Code Begin ClassDefinition
 
-class dbAccessPoint : public dbObject
-{
- public:
-  void setPoint(const Point& point);
+class dbAccessPoint : public dbObject {
+public:
+  void setPoint(const Point &point);
 
   Point getPoint() const;
 
-  void setLayer(dbTechLayer* layer);
+  void setLayer(dbTechLayer *layer);
 
-  dbBPin* getBPin() const;
+  dbBPin *getBPin() const;
 
   // User Code Begin dbAccessPoint
-  void setAccesses(const std::vector<dbDirection>& accesses);
+  void setAccesses(const std::vector<dbDirection> &accesses);
 
-  void getAccesses(std::vector<dbDirection>& tbl) const;
+  void getAccesses(std::vector<dbDirection> &tbl) const;
 
   void setLowType(dbAccessType type_low);
 
@@ -7160,39 +6972,36 @@ class dbAccessPoint : public dbObject
   void setAccess(bool access, dbDirection dir);
 
   bool hasAccess(dbDirection dir = dbDirection::NONE)
-      const;  // NONE refers to access in any direction
+      const; // NONE refers to access in any direction
 
-  dbTechLayer* getLayer() const;
+  dbTechLayer *getLayer() const;
 
-  dbMPin* getMPin() const;
+  dbMPin *getMPin() const;
 
-  std::vector<std::vector<dbObject*>> getVias() const;
+  std::vector<std::vector<dbObject *>> getVias() const;
 
-  void addTechVia(int num_cuts, dbTechVia* via);
+  void addTechVia(int num_cuts, dbTechVia *via);
 
-  void addBlockVia(int num_cuts, dbVia* via);
+  void addBlockVia(int num_cuts, dbVia *via);
 
-  void addSegment(const Rect& segment,
-                  const bool& begin_style_trunc,
-                  const bool& end_style_trunc);
+  void addSegment(const Rect &segment, const bool &begin_style_trunc,
+                  const bool &end_style_trunc);
 
-  const std::vector<std::tuple<Rect, bool, bool>>& getSegments() const;
+  const std::vector<std::tuple<Rect, bool, bool>> &getSegments() const;
 
-  static dbAccessPoint* create(dbBlock* block,
-                               dbMPin* pin,
+  static dbAccessPoint *create(dbBlock *block, dbMPin *pin,
                                uint32_t pin_access_idx);
 
-  static dbAccessPoint* create(dbBPin*);
+  static dbAccessPoint *create(dbBPin *);
 
-  static dbAccessPoint* getAccessPoint(dbBlock* block, uint32_t dbid);
+  static dbAccessPoint *getAccessPoint(dbBlock *block, uint32_t dbid);
 
-  static void destroy(dbAccessPoint* ap);
+  static void destroy(dbAccessPoint *ap);
   // User Code End dbAccessPoint
 };
 
-class dbAlignmentMarkerRule : public dbObject
-{
- public:
+class dbAlignmentMarkerRule : public dbObject {
+public:
   void setTolerance(int tolerance);
 
   // Max center-to-center misalignment (DBU) between paired markers; 0 means
@@ -7201,66 +7010,62 @@ class dbAlignmentMarkerRule : public dbObject
 
   // User Code Begin dbAlignmentMarkerRule
   // getters
-  dbMaster* getMasterA() const;
-  dbMaster* getMasterB() const;
+  dbMaster *getMasterA() const;
+  dbMaster *getMasterB() const;
   // Allowed relative orientations of master_b w.r.t. master_a: master_b.orient
   // == master_a.orient * rel_orient. Empty means no orientation constraint.
   std::vector<dbOrientType> getRelativeOrientations() const;
   // setters
   void setRelativeOrientations(
-      const std::vector<dbOrientType>& relative_orientations);
+      const std::vector<dbOrientType> &relative_orientations);
   void addRelativeOrientation(dbOrientType relative_orientation);
 
-  static dbAlignmentMarkerRule* create(dbMaster* master_a, dbMaster* master_b);
-  static void destroy(dbAlignmentMarkerRule* alignment_marker_rule);
+  static dbAlignmentMarkerRule *create(dbMaster *master_a, dbMaster *master_b);
+  static void destroy(dbAlignmentMarkerRule *alignment_marker_rule);
   // User Code End dbAlignmentMarkerRule
 };
 
-class dbBusPort : public dbObject
-{
- public:
+class dbBusPort : public dbObject {
+public:
   int getFrom() const;
 
   int getTo() const;
 
-  dbModBTerm* getPort() const;
+  dbModBTerm *getPort() const;
 
-  void setMembers(dbModBTerm* members);
+  void setMembers(dbModBTerm *members);
 
-  dbModBTerm* getMembers() const;
+  dbModBTerm *getMembers() const;
 
-  void setLast(dbModBTerm* last);
+  void setLast(dbModBTerm *last);
 
-  dbModBTerm* getLast() const;
+  dbModBTerm *getLast() const;
 
-  dbModule* getParent() const;
+  dbModule *getParent() const;
 
   // User Code Begin dbBusPort
   // get element by bit index in bus (allows for up/down)
   // linear access
-  dbModBTerm* getBusIndexedElement(int index);
+  dbModBTerm *getBusIndexedElement(int index);
   dbSet<dbModBTerm> getBusPortMembers();
   int getSize() const;
   bool getUpdown() const;
 
-  static dbBusPort* create(dbModule* parentModule,
-                           dbModBTerm* port,
-                           int from_ix,
-                           int to_ix);
+  static dbBusPort *create(dbModule *parentModule, dbModBTerm *port,
+                           int from_ix, int to_ix);
 
   // User Code End dbBusPort
 };
 
-class dbCellEdgeSpacing : public dbObject
-{
- public:
-  void setFirstEdgeType(const std::string& first_edge_type);
+class dbCellEdgeSpacing : public dbObject {
+public:
+  void setFirstEdgeType(const std::string &first_edge_type);
 
-  const std::string& getFirstEdgeType() const;
+  const std::string &getFirstEdgeType() const;
 
-  void setSecondEdgeType(const std::string& second_edge_type);
+  void setSecondEdgeType(const std::string &second_edge_type);
 
-  const std::string& getSecondEdgeType() const;
+  const std::string &getSecondEdgeType() const;
 
   void setSpacing(int spacing);
 
@@ -7288,28 +7093,20 @@ class dbCellEdgeSpacing : public dbObject
 
   // User Code Begin dbCellEdgeSpacing
 
-  static dbCellEdgeSpacing* create(dbTech*);
+  static dbCellEdgeSpacing *create(dbTech *);
 
-  static void destroy(dbCellEdgeSpacing*);
+  static void destroy(dbCellEdgeSpacing *);
 
   // User Code End dbCellEdgeSpacing
 };
 
-class dbChip : public dbObject
-{
- public:
-  enum class ChipType
-  {
-    DIE,
-    RDL,
-    IP,
-    SUBSTRATE,
-    HIER
-  };
+class dbChip : public dbObject {
+public:
+  enum class ChipType { DIE, RDL, IP, SUBSTRATE, HIER };
 
-  const char* getName() const;
+  const char *getName() const;
 
-  void setOffset(const Point& offset);
+  void setOffset(const Point &offset);
 
   Point getOffset() const;
 
@@ -7375,7 +7172,7 @@ class dbChip : public dbObject
 
   dbSet<dbChipPath> getChipPaths() const;
 
-  dbChipPath* findChipPath(const char* name) const;
+  dbChipPath *findChipPath(const char *name) const;
 
   // User Code Begin dbChip
 
@@ -7384,7 +7181,7 @@ class dbChip : public dbObject
   /// Get the top-block of this chip.
   /// Returns nullptr if a top-block has NOT been created.
   ///
-  dbBlock* getBlock();
+  dbBlock *getBlock();
 
   dbSet<dbChipInst> getChipInsts() const;
 
@@ -7392,70 +7189,67 @@ class dbChip : public dbObject
 
   dbSet<dbChipNet> getChipNets() const;
 
-  dbChipInst* findChipInst(const std::string& name) const;
+  dbChipInst *findChipInst(const std::string &name) const;
 
-  dbChipRegion* findChipRegion(const std::string& name) const;
+  dbChipRegion *findChipRegion(const std::string &name) const;
 
-  dbTech* getTech() const;
+  dbTech *getTech() const;
 
   Rect getBBox() const;
 
   Cuboid getCuboid() const;
 
-  dbMarkerCategory* findMarkerCategory(const char* name) const;
+  dbMarkerCategory *findMarkerCategory(const char *name) const;
 
   ///
   /// Create a new chip.
   /// Returns nullptr if there is no database technology.
   ///
-  static dbChip* create(dbDatabase* db,
-                        dbTech* tech,
-                        const std::string& name = "",
+  static dbChip *create(dbDatabase *db, dbTech *tech,
+                        const std::string &name = "",
                         ChipType type = ChipType::DIE);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbChip* getChip(dbDatabase* db, uint32_t oid);
+  static dbChip *getChip(dbDatabase *db, uint32_t oid);
 
   ///
   /// Destroy a chip.
   ///
-  static void destroy(dbChip* chip);
+  static void destroy(dbChip *chip);
   // User Code End dbChip
 };
 
-class dbChipBump : public dbObject
-{
- public:
+class dbChipBump : public dbObject {
+public:
   // User Code Begin dbChipBump
-  dbChip* getChip() const;
+  dbChip *getChip() const;
 
-  dbChipRegion* getChipRegion() const;
+  dbChipRegion *getChipRegion() const;
 
-  dbInst* getInst() const;
+  dbInst *getInst() const;
 
-  dbNet* getNet() const;
+  dbNet *getNet() const;
 
-  dbBTerm* getBTerm() const;
+  dbBTerm *getBTerm() const;
 
-  void setNet(dbNet* net);
+  void setNet(dbNet *net);
 
-  void setBTerm(dbBTerm* bterm);
+  void setBTerm(dbBTerm *bterm);
 
-  static dbChipBump* create(dbChipRegion* chip_region, dbInst* inst);
+  static dbChipBump *create(dbChipRegion *chip_region, dbInst *inst);
 
   // User Code End dbChipBump
 };
 
-class dbChipBumpInst : public dbObject
-{
- public:
+class dbChipBumpInst : public dbObject {
+public:
   // User Code Begin dbChipBumpInst
 
-  dbChipBump* getChipBump() const;
+  dbChipBump *getChipBump() const;
 
-  dbChipRegionInst* getChipRegionInst() const;
+  dbChipRegionInst *getChipRegionInst() const;
 
   // User Code End dbChipBumpInst
 };
@@ -7466,32 +7260,30 @@ class dbChipBumpInst : public dbObject
 // corresponds to a bump landing and references the dbChipBumpInst where
 // the vertical connection meets a die or RDL pin; this is how the per-die
 // parasitic networks are stitched together across the stack at the bumps.
-class dbChipCapNode : public dbObject
-{
- public:
+class dbChipCapNode : public dbObject {
+public:
   void setCapacitance(float capacitance);
 
   float getCapacitance() const;
 
   // User Code Begin dbChipCapNode
-  dbChipNet* getChipNet() const;
+  dbChipNet *getChipNet() const;
 
-  dbChipBumpInst* getChipBumpInst() const;
+  dbChipBumpInst *getChipBumpInst() const;
 
-  void setChipBumpInst(dbChipBumpInst* chip_bump_inst);
+  void setChipBumpInst(dbChipBumpInst *chip_bump_inst);
 
-  dbBTerm* getBTerm() const;
+  dbBTerm *getBTerm() const;
 
-  static dbChipCapNode* create(dbChipNet* chip_net);
+  static dbChipCapNode *create(dbChipNet *chip_net);
 
-  static void destroy(dbChipCapNode* chip_cap_node);
+  static void destroy(dbChipCapNode *chip_cap_node);
   // User Code End dbChipCapNode
 };
 
-class dbChipConn : public dbObject
-{
- public:
-  const std::string& getName() const;
+class dbChipConn : public dbObject {
+public:
+  const std::string &getName() const;
 
   void setThickness(int thickness);
 
@@ -7499,45 +7291,43 @@ class dbChipConn : public dbObject
 
   // User Code Begin dbChipConn
 
-  dbChip* getParentChip() const;
+  dbChip *getParentChip() const;
 
-  dbChipRegionInst* getTopRegion() const;
+  dbChipRegionInst *getTopRegion() const;
 
-  dbChipRegionInst* getBottomRegion() const;
+  dbChipRegionInst *getBottomRegion() const;
 
-  std::vector<dbChipInst*> getTopRegionPath() const;
+  std::vector<dbChipInst *> getTopRegionPath() const;
 
-  std::vector<dbChipInst*> getBottomRegionPath() const;
+  std::vector<dbChipInst *> getBottomRegionPath() const;
 
-  static dbChipConn* create(const std::string& name,
-                            dbChip* parent_chip,
-                            const std::vector<dbChipInst*>& top_region_path,
-                            dbChipRegionInst* top_region,
-                            const std::vector<dbChipInst*>& bottom_region_path,
-                            dbChipRegionInst* bottom_region);
+  static dbChipConn *create(const std::string &name, dbChip *parent_chip,
+                            const std::vector<dbChipInst *> &top_region_path,
+                            dbChipRegionInst *top_region,
+                            const std::vector<dbChipInst *> &bottom_region_path,
+                            dbChipRegionInst *bottom_region);
 
-  static void destroy(dbChipConn* chipConn);
+  static void destroy(dbChipConn *chipConn);
   // User Code End dbChipConn
 };
 
-class dbChipInst : public dbObject
-{
- public:
-  const std::string& getName() const;
+class dbChipInst : public dbObject {
+public:
+  const std::string &getName() const;
 
   void setOrient(dbOrientType3D orient);
 
   dbOrientType3D getOrient() const;
 
-  dbChip* getMasterChip() const;
+  dbChip *getMasterChip() const;
 
-  dbChip* getParentChip() const;
+  dbChip *getParentChip() const;
 
   // User Code Begin dbChipInst
 
   dbTransform getTransform() const;
 
-  void setLoc(const Point3D& loc);
+  void setLoc(const Point3D &loc);
 
   Point3D getLoc() const;
 
@@ -7547,25 +7337,23 @@ class dbChipInst : public dbObject
 
   dbSet<dbChipRegionInst> getRegions() const;
 
-  dbChipRegionInst* findChipRegionInst(dbChipRegion* chip_region) const;
+  dbChipRegionInst *findChipRegionInst(dbChipRegion *chip_region) const;
 
-  dbChipRegionInst* findChipRegionInst(const std::string& name) const;
+  dbChipRegionInst *findChipRegionInst(const std::string &name) const;
 
-  static odb::dbChipInst* create(dbChip* parent_chip,
-                                 dbChip* master_chip,
-                                 const std::string& name);
+  static odb::dbChipInst *create(dbChip *parent_chip, dbChip *master_chip,
+                                 const std::string &name);
 
-  static void destroy(dbChipInst* chipInst);
+  static void destroy(dbChipInst *chipInst);
   // User Code End dbChipInst
 };
 
-class dbChipNet : public dbObject
-{
- public:
-  const std::string& getName() const;
+class dbChipNet : public dbObject {
+public:
+  const std::string &getName() const;
 
   // User Code Begin dbChipNet
-  dbChip* getChip() const;
+  dbChip *getChip() const;
 
   dbSet<dbChipCapNode> getChipCapNodes() const;
 
@@ -7575,60 +7363,50 @@ class dbChipNet : public dbObject
 
   uint32_t getNumBumpInsts() const;
 
-  dbChipBumpInst* getBumpInst(uint32_t index,
-                              std::vector<dbChipInst*>& path) const;
+  dbChipBumpInst *getBumpInst(uint32_t index,
+                              std::vector<dbChipInst *> &path) const;
 
-  void addBumpInst(dbChipBumpInst* bump_inst,
-                   const std::vector<dbChipInst*>& path);
+  void addBumpInst(dbChipBumpInst *bump_inst,
+                   const std::vector<dbChipInst *> &path);
 
-  static dbChipNet* create(dbChip* chip, const std::string& name);
+  static dbChipNet *create(dbChip *chip, const std::string &name);
 
-  static void destroy(dbChipNet* net);
+  static void destroy(dbChipNet *net);
   // User Code End dbChipNet
 };
 
-class dbChipPath : public dbObject
-{
- public:
-  const char* getName() const;
+class dbChipPath : public dbObject {
+public:
+  const char *getName() const;
 
   // User Code Begin dbChipPath
-  struct Entry
-  {
-    std::vector<dbChipInst*> chip_inst_path;  // hierarchical path to the region
-    dbChipRegionInst* region;
-    bool negated;  // do not touch this region, i.e., the path must be connected
-                   // without crossing this region
+  struct Entry {
+    std::vector<dbChipInst *> chip_inst_path; // hierarchical path to the region
+    dbChipRegionInst *region;
+    bool negated; // do not touch this region, i.e., the path must be connected
+                  // without crossing this region
   };
 
-  dbChip* getChip() const;
+  dbChip *getChip() const;
 
   std::vector<Entry> getEntries() const;
 
-  void addEntry(const std::vector<dbChipInst*>& chip_inst_path,
-                dbChipRegionInst* region,
-                bool negated);
+  void addEntry(const std::vector<dbChipInst *> &chip_inst_path,
+                dbChipRegionInst *region, bool negated);
 
-  static dbChipPath* create(dbChip* chip, const char* name);
+  static dbChipPath *create(dbChip *chip, const char *name);
 
-  static void destroy(dbChipPath* path);
+  static void destroy(dbChipPath *path);
   // User Code End dbChipPath
 };
 
-class dbChipRegion : public dbObject
-{
- public:
-  enum class Side
-  {
-    FRONT,
-    BACK,
-    INTERNAL,
-    INTERNAL_EXT
-  };
+class dbChipRegion : public dbObject {
+public:
+  enum class Side { FRONT, BACK, INTERNAL, INTERNAL_EXT };
 
-  const std::string& getName() const;
+  const std::string &getName() const;
 
-  void setBox(const Rect& box);
+  void setBox(const Rect &box);
 
   Rect getBox() const;
 
@@ -7637,29 +7415,26 @@ class dbChipRegion : public dbObject
   // User Code Begin dbChipRegion
   Cuboid getCuboid() const;
 
-  dbChip* getChip() const;
+  dbChip *getChip() const;
 
   Side getSide() const;
 
-  dbTechLayer* getLayer() const;
+  dbTechLayer *getLayer() const;
 
-  static dbChipRegion* create(dbChip* chip,
-                              const std::string& name,
-                              Side side,
-                              dbTechLayer* layer);
+  static dbChipRegion *create(dbChip *chip, const std::string &name, Side side,
+                              dbTechLayer *layer);
 
   // User Code End dbChipRegion
 };
 
-class dbChipRegionInst : public dbObject
-{
- public:
+class dbChipRegionInst : public dbObject {
+public:
   // User Code Begin dbChipRegionInst
   Cuboid getCuboid() const;
 
-  dbChipInst* getChipInst() const;
+  dbChipInst *getChipInst() const;
 
-  dbChipRegion* getChipRegion() const;
+  dbChipRegion *getChipRegion() const;
 
   dbSet<dbChipBumpInst> getChipBumpInsts() const;
 
@@ -7671,31 +7446,28 @@ class dbChipRegionInst : public dbObject
 // of dbRSeg. Together with dbChipCapNodes it models the RC of the vertical
 // connections between stacked chips; a single bump is typically a pi
 // network -- a series dbChipRSeg with a shunt dbChipCapNode at each end.
-class dbChipRSeg : public dbObject
-{
- public:
+class dbChipRSeg : public dbObject {
+public:
   void setResistance(float resistance);
 
   float getResistance() const;
 
   // User Code Begin dbChipRSeg
-  dbChipNet* getChipNet() const;
+  dbChipNet *getChipNet() const;
 
-  dbChipCapNode* getSourceCapNode() const;
+  dbChipCapNode *getSourceCapNode() const;
 
-  dbChipCapNode* getTargetCapNode() const;
+  dbChipCapNode *getTargetCapNode() const;
 
-  static dbChipRSeg* create(dbChipNet* chip_net,
-                            dbChipCapNode* source_cap_node,
-                            dbChipCapNode* target_cap_node);
+  static dbChipRSeg *create(dbChipNet *chip_net, dbChipCapNode *source_cap_node,
+                            dbChipCapNode *target_cap_node);
 
-  static void destroy(dbChipRSeg* r_seg);
+  static void destroy(dbChipRSeg *r_seg);
   // User Code End dbChipRSeg
 };
 
-class dbDatabase : public dbObject
-{
- public:
+class dbDatabase : public dbObject {
+public:
   void setDbuPerMicron(uint32_t dbu_per_micron);
 
   uint32_t getDbuPerMicron() const;
@@ -7704,7 +7476,7 @@ class dbDatabase : public dbObject
 
   dbSet<dbChip> getChips() const;
 
-  dbChip* findChip(const char* name) const;
+  dbChip *findChip(const char *name) const;
 
   dbSet<dbProperty> getProperties() const;
 
@@ -7733,7 +7505,7 @@ class dbDatabase : public dbObject
   void setHierarchy(bool value);
   bool hasHierarchy() const;
 
-  void setTopChip(dbChip* chip);
+  void setTopChip(dbChip *chip);
   ///
   /// Return the libs contained in the database. A database can contain
   /// multiple libs.
@@ -7744,7 +7516,7 @@ class dbDatabase : public dbObject
   /// Find a specific lib.
   /// Returns nullptr if no lib was found.
   ///
-  dbLib* findLib(const char* name);
+  dbLib *findLib(const char *name);
 
   ///
   /// Return the techs contained in the database. A database can contain
@@ -7756,13 +7528,13 @@ class dbDatabase : public dbObject
   /// Find a specific tech.
   /// Returns nullptr if no tech was found.
   ///
-  dbTech* findTech(const char* name);
+  dbTech *findTech(const char *name);
 
   ///
   /// Find a specific master
   /// Returns nullptr if no master is found.
   ///
-  dbMaster* findMaster(const char* name);
+  dbMaster *findMaster(const char *name);
 
   ///
   /// This function is used to delete unused master-cells.
@@ -7774,7 +7546,7 @@ class dbDatabase : public dbObject
   /// Get the chip of this database.
   /// Returns nullptr if no chip has been created.
   ///
-  dbChip* getChip();
+  dbChip *getChip();
 
   void constructUnfoldedModel();
 
@@ -7787,7 +7559,7 @@ class dbDatabase : public dbObject
   /// Get the technology of this database if there is exactly one dbTech.
   /// Returns nullptr if no tech has been created.
   ///
-  dbTech* getTech();
+  dbTech *getTech();
 
   ///
   /// Returns the number of masters
@@ -7799,13 +7571,13 @@ class dbDatabase : public dbObject
   /// WARNING: This function destroys the data currently in the database.
   /// Throws ZIOError..
   ///
-  void read(std::istream& f);
+  void read(std::istream &f);
 
   ///
   /// Write a database to this stream.
   /// Throws ZIOError..
   ///
-  void write(std::ostream& file);
+  void write(std::ostream &file);
 
   ///
   /// ECO - The following methods implement a simple ECO mechanism for capturing
@@ -7822,49 +7594,49 @@ class dbDatabase : public dbObject
   ///
   /// Start collecting ECO changes on the specified block.
   ///
-  static void beginEco(dbBlock* block);
+  static void beginEco(dbBlock *block);
 
   ///
   /// Stop collecting ECO changes on the specified block.
   ///
-  static void endEco(dbBlock* block);
+  static void endEco(dbBlock *block);
 
   ///
   /// Commit the last ECO changes on the specified block.
   ///
-  static void commitEco(dbBlock* block);
+  static void commitEco(dbBlock *block);
 
   ///
   /// Undo the last ECO changes on the specified block.
   ///
-  static void undoEco(dbBlock* block);
+  static void undoEco(dbBlock *block);
 
   ///
   /// Returns true if the current ECO is empty
   ///
-  static bool ecoEmpty(dbBlock* block);
+  static bool ecoEmpty(dbBlock *block);
 
   ///
   /// Return true if the ECO stack is empty. The ECO stack holds
   /// the nested uncommitted ECOs that can still be undone.
   ///
-  static bool ecoStackEmpty(dbBlock* block);
+  static bool ecoStackEmpty(dbBlock *block);
 
   ///
   /// Read the ECO changes from the specified file to be applied to the
   /// specified block.
   ///
-  static void readEco(dbBlock* block, const char* filename);
+  static void readEco(dbBlock *block, const char *filename);
 
   ///
   /// Write the ECO changes to the specified file.
   ///
-  static void writeEco(dbBlock* block, const char* filename);
+  static void writeEco(dbBlock *block, const char *filename);
 
   ///
   /// links to utl::Logger
   ///
-  void setLogger(utl::Logger* logger);
+  void setLogger(utl::Logger *logger);
 
   ///
   /// Initializes the database to nothing.
@@ -7880,46 +7652,45 @@ class dbDatabase : public dbObject
   ///
   /// Used to be notified when lef/def/odb are read.
   ///
-  void addObserver(dbDatabaseObserver* observer);
-  void removeObserver(dbDatabaseObserver* observer);
+  void addObserver(dbDatabaseObserver *observer);
+  void removeObserver(dbDatabaseObserver *observer);
 
   ///
   /// Notify observers when one of these operations is complete.
   /// Fine-grained callbacks during construction are not as helpful
   /// as knowing when the data is fully loaded into odb.
   ///
-  void triggerPostReadLef(dbTech* tech, dbLib* library);
-  void triggerPostReadDef(dbBlock* block, bool floorplan);
+  void triggerPostReadLef(dbTech *tech, dbLib *library);
+  void triggerPostReadDef(dbBlock *block, bool floorplan);
   void triggerPostReadDb();
-  void triggerPostRead3Dbx(dbChip* chip);
+  void triggerPostRead3Dbx(dbChip *chip);
 
   ///
   /// Create an instance of a database
   ///
-  static dbDatabase* create();
+  static dbDatabase *create();
 
   ///
   /// Detroy an instance of a database
   ///
-  static void destroy(dbDatabase* db);
+  static void destroy(dbDatabase *db);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbDatabase* getDatabase(uint32_t oid);
+  static dbDatabase *getDatabase(uint32_t oid);
 
   ///
   /// Find an unfolded chip by its full path name (slash-joined chip-inst
   /// names). Returns nullptr if no match.
   ///
-  dbUnfoldedChipInst* findUnfoldedChip(const std::string& path) const;
+  dbUnfoldedChipInst *findUnfoldedChip(const std::string &path) const;
   // User Code End dbDatabase
 };
 
 // Top level DFT (Design for Testing) class
-class dbDft : public dbObject
-{
- public:
+class dbDft : public dbObject {
+public:
   void setScanInserted(bool scan_inserted);
 
   bool isScanInserted() const;
@@ -7927,11 +7698,9 @@ class dbDft : public dbObject
   dbSet<dbScanChain> getScanChains() const;
 };
 
-class dbGCellGrid : public dbObject
-{
- public:
-  struct GCellData
-  {
+class dbGCellGrid : public dbObject {
+public:
+  struct GCellData {
     float usage = 0;
     float capacity = 0;
   };
@@ -7941,17 +7710,17 @@ class dbGCellGrid : public dbObject
   ///
   /// Get the "X" grid coordinates
   ///
-  void getGridX(std::vector<int>& x_grid);
+  void getGridX(std::vector<int> &x_grid);
 
   ///
   /// Get the "Y" grid coordinates
   ///
-  void getGridY(std::vector<int>& y_grid);
+  void getGridY(std::vector<int> &y_grid);
 
   ///
   /// Get the block this grid belongs too.
   ///
-  dbBlock* getBlock();
+  dbBlock *getBlock();
 
   ///
   /// Add a "X" grid pattern.
@@ -7976,61 +7745,58 @@ class dbGCellGrid : public dbObject
   ///
   /// Get the "ith" "X" grid pattern.
   ///
-  void getGridPatternX(int i, int& origin_x, int& line_count, int& step);
+  void getGridPatternX(int i, int &origin_x, int &line_count, int &step);
 
   ///
   /// Get the "ith" "Y" grid pattern.
   ///
-  void getGridPatternY(int i, int& origin_y, int& line_count, int& step);
+  void getGridPatternY(int i, int &origin_y, int &line_count, int &step);
   ///
   /// Create an empty GCell grid.
   /// Returns nullptr if a grid already exists.
   ///
-  static dbGCellGrid* create(dbBlock* block);
+  static dbGCellGrid *create(dbBlock *block);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbGCellGrid* getGCellGrid(dbBlock* block, uint32_t oid);
+  static dbGCellGrid *getGCellGrid(dbBlock *block, uint32_t oid);
 
   uint32_t getXIdx(int x);
 
   uint32_t getYIdx(int y);
 
-  float getCapacity(dbTechLayer* layer, uint32_t x_idx, uint32_t y_idx) const;
+  float getCapacity(dbTechLayer *layer, uint32_t x_idx, uint32_t y_idx) const;
 
-  float getUsage(dbTechLayer* layer, uint32_t x_idx, uint32_t y_idx) const;
+  float getUsage(dbTechLayer *layer, uint32_t x_idx, uint32_t y_idx) const;
 
-  void setCapacity(dbTechLayer* layer,
-                   uint32_t x_idx,
-                   uint32_t y_idx,
+  void setCapacity(dbTechLayer *layer, uint32_t x_idx, uint32_t y_idx,
                    float capacity);
 
-  void setUsage(dbTechLayer* layer, uint32_t x_idx, uint32_t y_idx, float use);
+  void setUsage(dbTechLayer *layer, uint32_t x_idx, uint32_t y_idx, float use);
 
   void resetCongestionMap();
 
   void resetGrid();
 
-  dbMatrix<dbGCellGrid::GCellData> getLayerCongestionMap(dbTechLayer* layer);
+  dbMatrix<dbGCellGrid::GCellData> getLayerCongestionMap(dbTechLayer *layer);
 
-  dbMatrix<dbGCellGrid::GCellData> getDirectionCongestionMap(
-      const dbTechLayerDir& direction);
+  dbMatrix<dbGCellGrid::GCellData>
+  getDirectionCongestionMap(const dbTechLayerDir &direction);
   // User Code End dbGCellGrid
 };
 
-class dbGDSARef : public dbObject
-{
- public:
-  void setOrigin(const Point& origin);
+class dbGDSARef : public dbObject {
+public:
+  void setOrigin(const Point &origin);
 
   Point getOrigin() const;
 
-  void setLr(const Point& lr);
+  void setLr(const Point &lr);
 
   Point getLr() const;
 
-  void setUl(const Point& ul);
+  void setUl(const Point &ul);
 
   Point getUl() const;
 
@@ -8047,18 +7813,17 @@ class dbGDSARef : public dbObject
   int16_t getNumColumns() const;
 
   // User Code Begin dbGDSARef
-  dbGDSStructure* getStructure() const;
-  const std::vector<std::pair<std::int16_t, std::string>>& getPropattr() const;
-  void addPropattr(std::int16_t type, const std::string& value);
+  dbGDSStructure *getStructure() const;
+  const std::vector<std::pair<std::int16_t, std::string>> &getPropattr() const;
+  void addPropattr(std::int16_t type, const std::string &value);
 
-  static dbGDSARef* create(dbGDSStructure* parent, dbGDSStructure* child);
-  static void destroy(dbGDSARef* aref);
+  static dbGDSARef *create(dbGDSStructure *parent, dbGDSStructure *child);
+  static void destroy(dbGDSARef *aref);
   // User Code End dbGDSARef
 };
 
-class dbGDSBoundary : public dbObject
-{
- public:
+class dbGDSBoundary : public dbObject {
+public:
   void setLayer(int16_t layer);
 
   int16_t getLayer() const;
@@ -8067,23 +7832,22 @@ class dbGDSBoundary : public dbObject
 
   int16_t getDatatype() const;
 
-  void setXy(const std::vector<Point>& xy);
+  void setXy(const std::vector<Point> &xy);
 
-  void getXy(std::vector<Point>& tbl) const;
+  void getXy(std::vector<Point> &tbl) const;
 
   // User Code Begin dbGDSBoundary
-  const std::vector<Point>& getXY();
-  const std::vector<std::pair<std::int16_t, std::string>>& getPropattr() const;
-  void addPropattr(std::int16_t type, const std::string& value);
+  const std::vector<Point> &getXY();
+  const std::vector<std::pair<std::int16_t, std::string>> &getPropattr() const;
+  void addPropattr(std::int16_t type, const std::string &value);
 
-  static dbGDSBoundary* create(dbGDSStructure* structure);
-  static void destroy(dbGDSBoundary* boundary);
+  static dbGDSBoundary *create(dbGDSStructure *structure);
+  static void destroy(dbGDSBoundary *boundary);
   // User Code End dbGDSBoundary
 };
 
-class dbGDSBox : public dbObject
-{
- public:
+class dbGDSBox : public dbObject {
+public:
   void setLayer(int16_t layer);
 
   int16_t getLayer() const;
@@ -8092,22 +7856,21 @@ class dbGDSBox : public dbObject
 
   int16_t getDatatype() const;
 
-  void setBounds(const Rect& bounds);
+  void setBounds(const Rect &bounds);
 
   Rect getBounds() const;
 
   // User Code Begin dbGDSBox
-  const std::vector<std::pair<std::int16_t, std::string>>& getPropattr() const;
-  void addPropattr(std::int16_t type, const std::string& value);
+  const std::vector<std::pair<std::int16_t, std::string>> &getPropattr() const;
+  void addPropattr(std::int16_t type, const std::string &value);
 
-  static dbGDSBox* create(dbGDSStructure* structure);
-  static void destroy(dbGDSBox* box);
+  static dbGDSBox *create(dbGDSStructure *structure);
+  static void destroy(dbGDSBox *box);
   // User Code End dbGDSBox
 };
 
-class dbGDSPath : public dbObject
-{
- public:
+class dbGDSPath : public dbObject {
+public:
   void setLayer(int16_t layer);
 
   int16_t getLayer() const;
@@ -8116,9 +7879,9 @@ class dbGDSPath : public dbObject
 
   int16_t getDatatype() const;
 
-  void setXy(const std::vector<Point>& xy);
+  void setXy(const std::vector<Point> &xy);
 
-  void getXy(std::vector<Point>& tbl) const;
+  void getXy(std::vector<Point> &tbl) const;
 
   void setWidth(int width);
 
@@ -8129,19 +7892,18 @@ class dbGDSPath : public dbObject
   int16_t getPathType() const;
 
   // User Code Begin dbGDSPath
-  const std::vector<Point>& getXY();
-  const std::vector<std::pair<std::int16_t, std::string>>& getPropattr() const;
-  void addPropattr(std::int16_t type, const std::string& value);
+  const std::vector<Point> &getXY();
+  const std::vector<std::pair<std::int16_t, std::string>> &getPropattr() const;
+  void addPropattr(std::int16_t type, const std::string &value);
 
-  static dbGDSPath* create(dbGDSStructure* structure);
-  static void destroy(dbGDSPath* path);
+  static dbGDSPath *create(dbGDSStructure *structure);
+  static void destroy(dbGDSPath *path);
   // User Code End dbGDSPath
 };
 
-class dbGDSSRef : public dbObject
-{
- public:
-  void setOrigin(const Point& origin);
+class dbGDSSRef : public dbObject {
+public:
+  void setOrigin(const Point &origin);
 
   Point getOrigin() const;
 
@@ -8150,19 +7912,18 @@ class dbGDSSRef : public dbObject
   dbGDSSTrans getTransform() const;
 
   // User Code Begin dbGDSSRef
-  dbGDSStructure* getStructure() const;
-  const std::vector<std::pair<std::int16_t, std::string>>& getPropattr() const;
-  void addPropattr(std::int16_t type, const std::string& value);
+  dbGDSStructure *getStructure() const;
+  const std::vector<std::pair<std::int16_t, std::string>> &getPropattr() const;
+  void addPropattr(std::int16_t type, const std::string &value);
 
-  static dbGDSSRef* create(dbGDSStructure* parent, dbGDSStructure* child);
-  static void destroy(dbGDSSRef* sref);
+  static dbGDSSRef *create(dbGDSStructure *parent, dbGDSStructure *child);
+  static void destroy(dbGDSSRef *sref);
   // User Code End dbGDSSRef
 };
 
-class dbGDSStructure : public dbObject
-{
- public:
-  const char* getName() const;
+class dbGDSStructure : public dbObject {
+public:
+  const char *getName() const;
 
   dbSet<dbGDSBoundary> getGDSBoundaries() const;
 
@@ -8178,17 +7939,16 @@ class dbGDSStructure : public dbObject
 
   // User Code Begin dbGDSStructure
 
-  dbGDSLib* getGDSLib();
+  dbGDSLib *getGDSLib();
 
-  static dbGDSStructure* create(dbGDSLib* lib, const char* name);
-  static void destroy(dbGDSStructure* structure);
+  static dbGDSStructure *create(dbGDSLib *lib, const char *name);
+  static void destroy(dbGDSStructure *structure);
 
   // User Code End dbGDSStructure
 };
 
-class dbGDSText : public dbObject
-{
- public:
+class dbGDSText : public dbObject {
+public:
   void setLayer(int16_t layer);
 
   int16_t getLayer() const;
@@ -8197,7 +7957,7 @@ class dbGDSText : public dbObject
 
   int16_t getDatatype() const;
 
-  void setOrigin(const Point& origin);
+  void setOrigin(const Point &origin);
 
   Point getOrigin() const;
 
@@ -8209,56 +7969,53 @@ class dbGDSText : public dbObject
 
   dbGDSSTrans getTransform() const;
 
-  void setText(const std::string& text);
+  void setText(const std::string &text);
 
-  const std::string& getText() const;
+  const std::string &getText() const;
 
   // User Code Begin dbGDSText
-  const std::vector<std::pair<std::int16_t, std::string>>& getPropattr() const;
-  void addPropattr(std::int16_t type, const std::string& value);
+  const std::vector<std::pair<std::int16_t, std::string>> &getPropattr() const;
+  void addPropattr(std::int16_t type, const std::string &value);
 
-  static dbGDSText* create(dbGDSStructure* structure);
-  static void destroy(dbGDSText* text);
+  static dbGDSText *create(dbGDSStructure *structure);
+  static void destroy(dbGDSText *text);
   // User Code End dbGDSText
 };
 
-class dbGlobalConnect : public dbObject
-{
- public:
-  dbRegion* getRegion() const;
+class dbGlobalConnect : public dbObject {
+public:
+  dbRegion *getRegion() const;
 
-  dbNet* getNet() const;
+  dbNet *getNet() const;
 
-  const std::string& getInstPattern() const;
+  const std::string &getInstPattern() const;
 
-  const std::string& getPinPattern() const;
+  const std::string &getPinPattern() const;
 
   // User Code Begin dbGlobalConnect
-  std::vector<dbInst*> getInsts() const;
+  std::vector<dbInst *> getInsts() const;
 
-  int connect(dbInst* inst, bool force);
+  int connect(dbInst *inst, bool force);
 
-  static dbGlobalConnect* create(dbNet* net,
-                                 dbRegion* region,
-                                 const std::string& inst_pattern,
-                                 const std::string& pin_pattern);
+  static dbGlobalConnect *create(dbNet *net, dbRegion *region,
+                                 const std::string &inst_pattern,
+                                 const std::string &pin_pattern);
 
-  static void destroy(dbGlobalConnect* global_connect);
+  static void destroy(dbGlobalConnect *global_connect);
 
-  static dbSet<dbGlobalConnect>::iterator destroy(
-      dbSet<dbGlobalConnect>::iterator& itr);
+  static dbSet<dbGlobalConnect>::iterator
+  destroy(dbSet<dbGlobalConnect>::iterator &itr);
 
   // User Code End dbGlobalConnect
 };
 
-class dbGroup : public dbObject
-{
- public:
-  const char* getName() const;
+class dbGroup : public dbObject {
+public:
+  const char *getName() const;
 
-  dbGroup* getParentGroup() const;
+  dbGroup *getParentGroup() const;
 
-  dbRegion* getRegion() const;
+  dbRegion *getRegion() const;
 
   // User Code Begin dbGroup
 
@@ -8266,73 +8023,69 @@ class dbGroup : public dbObject
 
   dbGroupType getType() const;
 
-  void addModInst(dbModInst* modinst);
+  void addModInst(dbModInst *modinst);
 
-  void removeModInst(dbModInst* modinst);
+  void removeModInst(dbModInst *modinst);
 
   dbSet<dbModInst> getModInsts();
 
-  void addInst(dbInst* inst);
+  void addInst(dbInst *inst);
 
-  void removeInst(dbInst* inst);
+  void removeInst(dbInst *inst);
 
   dbSet<dbInst> getInsts();
 
-  void addGroup(dbGroup* group);
+  void addGroup(dbGroup *group);
 
-  void removeGroup(dbGroup* group);
+  void removeGroup(dbGroup *group);
 
   dbSet<dbGroup> getGroups();
 
-  void addPowerNet(dbNet* net);
+  void addPowerNet(dbNet *net);
 
-  void addGroundNet(dbNet* net);
+  void addGroundNet(dbNet *net);
 
-  void removeNet(dbNet* net);
+  void removeNet(dbNet *net);
 
   dbSet<dbNet> getPowerNets();
 
   dbSet<dbNet> getGroundNets();
 
-  static dbGroup* create(dbBlock* block, const char* name);
+  static dbGroup *create(dbBlock *block, const char *name);
 
-  static dbGroup* create(dbRegion* parent, const char* name);
+  static dbGroup *create(dbRegion *parent, const char *name);
 
-  static dbGroup* create(dbGroup* parent, const char* name);
+  static dbGroup *create(dbGroup *parent, const char *name);
 
-  static void destroy(dbGroup* group);
+  static void destroy(dbGroup *group);
 
-  static dbGroup* getGroup(dbBlock* block_, uint32_t dbid_);
+  static dbGroup *getGroup(dbBlock *block_, uint32_t dbid_);
 
   // User Code End dbGroup
 };
 
-class dbGuide : public dbObject
-{
- public:
+class dbGuide : public dbObject {
+public:
   Rect getBox() const;
 
   // User Code Begin dbGuide
 
-  dbNet* getNet() const;
+  dbNet *getNet() const;
 
-  dbTechLayer* getLayer() const;
+  dbTechLayer *getLayer() const;
 
-  dbTechLayer* getViaLayer() const;
+  dbTechLayer *getViaLayer() const;
 
   bool isCongested() const;
 
-  static dbGuide* create(dbNet* net,
-                         dbTechLayer* layer,
-                         dbTechLayer* via_layer,
-                         Rect box,
-                         bool is_congested);
+  static dbGuide *create(dbNet *net, dbTechLayer *layer, dbTechLayer *via_layer,
+                         Rect box, bool is_congested);
 
-  static dbGuide* getGuide(dbBlock* block, uint32_t dbid);
+  static dbGuide *getGuide(dbBlock *block, uint32_t dbid);
 
-  static void destroy(dbGuide* guide);
+  static void destroy(dbGuide *guide);
 
-  static dbSet<dbGuide>::iterator destroy(dbSet<dbGuide>::iterator& itr);
+  static dbSet<dbGuide>::iterator destroy(dbSet<dbGuide>::iterator &itr);
 
   bool isJumper() const;
 
@@ -8345,78 +8098,76 @@ class dbGuide : public dbObject
   // User Code End dbGuide
 };
 
-class dbIsolation : public dbObject
-{
- public:
-  const char* getName() const;
+class dbIsolation : public dbObject {
+public:
+  const char *getName() const;
 
-  void setAppliesTo(const std::string& applies_to);
+  void setAppliesTo(const std::string &applies_to);
 
-  const std::string& getAppliesTo() const;
+  const std::string &getAppliesTo() const;
 
-  void setClampValue(const std::string& clamp_value);
+  void setClampValue(const std::string &clamp_value);
 
-  const std::string& getClampValue() const;
+  const std::string &getClampValue() const;
 
-  void setIsolationSignal(const std::string& isolation_signal);
+  void setIsolationSignal(const std::string &isolation_signal);
 
-  const std::string& getIsolationSignal() const;
+  const std::string &getIsolationSignal() const;
 
-  void setIsolationSense(const std::string& isolation_sense);
+  void setIsolationSense(const std::string &isolation_sense);
 
-  const std::string& getIsolationSense() const;
+  const std::string &getIsolationSense() const;
 
-  void setLocation(const std::string& location);
+  void setLocation(const std::string &location);
 
-  const std::string& getLocation() const;
+  const std::string &getLocation() const;
 
-  void setPowerDomain(dbPowerDomain* power_domain);
+  void setPowerDomain(dbPowerDomain *power_domain);
 
-  dbPowerDomain* getPowerDomain() const;
+  dbPowerDomain *getPowerDomain() const;
 
   // User Code Begin dbIsolation
-  static dbIsolation* create(dbBlock* block, const char* name);
-  static void destroy(dbIsolation* iso);
+  static dbIsolation *create(dbBlock *block, const char *name);
+  static void destroy(dbIsolation *iso);
 
-  void addIsolationCell(const std::string& master);
+  void addIsolationCell(const std::string &master);
 
-  std::vector<dbMaster*> getIsolationCells();
+  std::vector<dbMaster *> getIsolationCells();
 
-  bool appliesTo(const dbIoType& io);
+  bool appliesTo(const dbIoType &io);
 
   // User Code End dbIsolation
 };
 
-class dbLevelShifter : public dbObject
-{
- public:
-  const char* getName() const;
+class dbLevelShifter : public dbObject {
+public:
+  const char *getName() const;
 
-  dbPowerDomain* getDomain() const;
+  dbPowerDomain *getDomain() const;
 
-  void setSource(const std::string& source);
+  void setSource(const std::string &source);
 
-  const std::string& getSource() const;
+  const std::string &getSource() const;
 
-  void setSink(const std::string& sink);
+  void setSink(const std::string &sink);
 
-  const std::string& getSink() const;
+  const std::string &getSink() const;
 
   void setUseFunctionalEquivalence(bool use_functional_equivalence);
 
   bool isUseFunctionalEquivalence() const;
 
-  void setAppliesTo(const std::string& applies_to);
+  void setAppliesTo(const std::string &applies_to);
 
-  const std::string& getAppliesTo() const;
+  const std::string &getAppliesTo() const;
 
-  void setAppliesToBoundary(const std::string& applies_to_boundary);
+  void setAppliesToBoundary(const std::string &applies_to_boundary);
 
-  const std::string& getAppliesToBoundary() const;
+  const std::string &getAppliesToBoundary() const;
 
-  void setRule(const std::string& rule);
+  void setRule(const std::string &rule);
 
-  const std::string& getRule() const;
+  const std::string &getRule() const;
 
   void setThreshold(float threshold);
 
@@ -8430,79 +8181,75 @@ class dbLevelShifter : public dbObject
 
   bool isForceShift() const;
 
-  void setLocation(const std::string& location);
+  void setLocation(const std::string &location);
 
-  const std::string& getLocation() const;
+  const std::string &getLocation() const;
 
-  void setInputSupply(const std::string& input_supply);
+  void setInputSupply(const std::string &input_supply);
 
-  const std::string& getInputSupply() const;
+  const std::string &getInputSupply() const;
 
-  void setOutputSupply(const std::string& output_supply);
+  void setOutputSupply(const std::string &output_supply);
 
-  const std::string& getOutputSupply() const;
+  const std::string &getOutputSupply() const;
 
-  void setInternalSupply(const std::string& internal_supply);
+  void setInternalSupply(const std::string &internal_supply);
 
-  const std::string& getInternalSupply() const;
+  const std::string &getInternalSupply() const;
 
-  void setNamePrefix(const std::string& name_prefix);
+  void setNamePrefix(const std::string &name_prefix);
 
-  const std::string& getNamePrefix() const;
+  const std::string &getNamePrefix() const;
 
-  void setNameSuffix(const std::string& name_suffix);
+  void setNameSuffix(const std::string &name_suffix);
 
-  const std::string& getNameSuffix() const;
+  const std::string &getNameSuffix() const;
 
-  void setCellName(const std::string& cell_name);
+  void setCellName(const std::string &cell_name);
 
-  const std::string& getCellName() const;
+  const std::string &getCellName() const;
 
-  void setCellInput(const std::string& cell_input);
+  void setCellInput(const std::string &cell_input);
 
-  const std::string& getCellInput() const;
+  const std::string &getCellInput() const;
 
-  void setCellOutput(const std::string& cell_output);
+  void setCellOutput(const std::string &cell_output);
 
-  const std::string& getCellOutput() const;
+  const std::string &getCellOutput() const;
 
   // User Code Begin dbLevelShifter
 
-  static dbLevelShifter* create(dbBlock* block,
-                                const char* name,
-                                dbPowerDomain* domain);
-  static void destroy(dbLevelShifter* shifter);
+  static dbLevelShifter *create(dbBlock *block, const char *name,
+                                dbPowerDomain *domain);
+  static void destroy(dbLevelShifter *shifter);
 
-  void addElement(const std::string& element);
-  void addExcludeElement(const std::string& element);
-  void addInstance(const std::string& instance, const std::string& port);
+  void addElement(const std::string &element);
+  void addExcludeElement(const std::string &element);
+  void addInstance(const std::string &instance, const std::string &port);
   std::vector<std::string> getElements() const;
   std::vector<std::string> getExcludeElements() const;
   std::vector<std::pair<std::string, std::string>> getInstances() const;
   // User Code End dbLevelShifter
 };
 
-class dbLogicPort : public dbObject
-{
- public:
-  const char* getName() const;
+class dbLogicPort : public dbObject {
+public:
+  const char *getName() const;
 
-  const std::string& getDirection() const;
+  const std::string &getDirection() const;
 
   // User Code Begin dbLogicPort
-  static dbLogicPort* create(dbBlock* block,
-                             const char* name,
-                             const std::string& direction);
-  static void destroy(dbLogicPort* lp);
+  static dbLogicPort *create(dbBlock *block, const char *name,
+                             const std::string &direction);
+  static void destroy(dbLogicPort *lp);
   // User Code End dbLogicPort
 };
 
-class dbMarker : public dbObject
-{
- public:
-  void setComment(const std::string& comment);
+class dbMarker : public dbObject {
+public:
+  void setComment(const std::string &comment);
 
-  const std::string& getComment() const;
+  const std::string &getComment() const;
 
   void setLineNumber(int line_number);
 
@@ -8526,40 +8273,39 @@ class dbMarker : public dbObject
 
   using MarkerShape = std::variant<Point, Line, Rect, Polygon, Cuboid>;
 
-  dbMarkerCategory* getCategory() const;
+  dbMarkerCategory *getCategory() const;
   std::vector<MarkerShape> getShapes() const;
-  dbTechLayer* getTechLayer() const;
+  dbTechLayer *getTechLayer() const;
   Rect getBBox() const;
 
   odb::PtrSet<dbObject> getSources() const;
 
-  void addShape(const Point& pt);
-  void addShape(const Line& line);
-  void addShape(const Rect& rect);
-  void addShape(const Polygon& polygon);
-  void addShape(const Cuboid& cuboid);
+  void addShape(const Point &pt);
+  void addShape(const Line &line);
+  void addShape(const Rect &rect);
+  void addShape(const Polygon &polygon);
+  void addShape(const Cuboid &cuboid);
 
-  void setTechLayer(dbTechLayer* layer);
+  void setTechLayer(dbTechLayer *layer);
 
-  void addSource(dbObject* obj);
-  bool addObstructionFromBlock(dbBlock* block);
+  void addSource(dbObject *obj);
+  bool addObstructionFromBlock(dbBlock *block);
 
-  static dbMarker* create(dbMarkerCategory* category);
-  static void destroy(dbMarker* marker);
+  static dbMarker *create(dbMarkerCategory *category);
+  static void destroy(dbMarker *marker);
 
   // User Code End dbMarker
 };
 
-class dbMarkerCategory : public dbObject
-{
- public:
-  const char* getName() const;
+class dbMarkerCategory : public dbObject {
+public:
+  const char *getName() const;
 
-  void setDescription(const std::string& description);
+  void setDescription(const std::string &description);
 
-  const std::string& getDescription() const;
+  const std::string &getDescription() const;
 
-  void setSource(const std::string& source);
+  void setSource(const std::string &source);
 
   void setMaxMarkers(int max_markers);
 
@@ -8569,68 +8315,57 @@ class dbMarkerCategory : public dbObject
 
   dbSet<dbMarkerCategory> getMarkerCategories() const;
 
-  dbMarkerCategory* findMarkerCategory(const char* name) const;
+  dbMarkerCategory *findMarkerCategory(const char *name) const;
 
   // User Code Begin dbMarkerCategory
 
-  dbMarkerCategory* getTopCategory() const;
-  dbObject* getParent() const;
+  dbMarkerCategory *getTopCategory() const;
+  dbObject *getParent() const;
   std::string getSource() const;
 
   odb::PtrSet<dbMarker> getAllMarkers() const;
 
-  bool rename(const char* name);
+  bool rename(const char *name);
 
   int getMarkerCount() const;
 
-  void writeJSON(const std::string& path) const;
-  void writeJSON(std::ofstream& report) const;
-  void writeTR(const std::string& path) const;
-  void writeTR(std::ofstream& report) const;
+  void writeJSON(const std::string &path) const;
+  void writeJSON(std::ofstream &report) const;
+  void writeTR(const std::string &path) const;
+  void writeTR(std::ofstream &report) const;
 
-  static odb::PtrSet<dbMarkerCategory> fromJSON(dbChip* chip,
-                                                const std::string& path);
-  static odb::PtrSet<dbMarkerCategory> fromJSON(dbChip* chip,
-                                                const char* source,
-                                                std::ifstream& report);
-  static dbMarkerCategory* fromTR(dbChip* chip,
-                                  const char* name,
-                                  const std::string& path);
-  static dbMarkerCategory* fromTR(dbChip* chip,
-                                  const char* name,
-                                  const char* source,
-                                  std::ifstream& report);
+  static odb::PtrSet<dbMarkerCategory> fromJSON(dbChip *chip,
+                                                const std::string &path);
+  static odb::PtrSet<dbMarkerCategory>
+  fromJSON(dbChip *chip, const char *source, std::ifstream &report);
+  static dbMarkerCategory *fromTR(dbChip *chip, const char *name,
+                                  const std::string &path);
+  static dbMarkerCategory *fromTR(dbChip *chip, const char *name,
+                                  const char *source, std::ifstream &report);
 
-  static dbMarkerCategory* create(dbBlock* block, const char* name);
-  static dbMarkerCategory* createOrReplace(dbBlock* block, const char* name);
-  static dbMarkerCategory* createOrGet(dbBlock* block, const char* name);
-  static dbMarkerCategory* create(dbChip* chip, const char* name);
-  static dbMarkerCategory* createOrReplace(dbChip* chip, const char* name);
-  static dbMarkerCategory* createOrGet(dbChip* chip, const char* name);
-  static dbMarkerCategory* create(dbMarkerCategory* category, const char* name);
-  static dbMarkerCategory* createOrGet(dbMarkerCategory* category,
-                                       const char* name);
-  static dbMarkerCategory* createOrReplace(dbMarkerCategory* category,
-                                           const char* name);
-  static void destroy(dbMarkerCategory* category);
+  static dbMarkerCategory *create(dbBlock *block, const char *name);
+  static dbMarkerCategory *createOrReplace(dbBlock *block, const char *name);
+  static dbMarkerCategory *createOrGet(dbBlock *block, const char *name);
+  static dbMarkerCategory *create(dbChip *chip, const char *name);
+  static dbMarkerCategory *createOrReplace(dbChip *chip, const char *name);
+  static dbMarkerCategory *createOrGet(dbChip *chip, const char *name);
+  static dbMarkerCategory *create(dbMarkerCategory *category, const char *name);
+  static dbMarkerCategory *createOrGet(dbMarkerCategory *category,
+                                       const char *name);
+  static dbMarkerCategory *createOrReplace(dbMarkerCategory *category,
+                                           const char *name);
+  static void destroy(dbMarkerCategory *category);
 
   // User Code End dbMarkerCategory
 };
 
-class dbMasterEdgeType : public dbObject
-{
- public:
-  enum EdgeDir
-  {
-    TOP,
-    RIGHT,
-    LEFT,
-    BOTTOM
-  };
+class dbMasterEdgeType : public dbObject {
+public:
+  enum EdgeDir { TOP, RIGHT, LEFT, BOTTOM };
 
-  void setEdgeType(const std::string& edge_type);
+  void setEdgeType(const std::string &edge_type);
 
-  const std::string& getEdgeType() const;
+  const std::string &getEdgeType() const;
 
   void setCellRow(int cell_row);
 
@@ -8653,21 +8388,20 @@ class dbMasterEdgeType : public dbObject
 
   dbMasterEdgeType::EdgeDir getEdgeDir() const;
 
-  static dbMasterEdgeType* create(dbMaster* master);
+  static dbMasterEdgeType *create(dbMaster *master);
 
-  static void destroy(dbMasterEdgeType* edge_type);
+  static void destroy(dbMasterEdgeType *edge_type);
 
   // User Code End dbMasterEdgeType
 };
 
-class dbMetalWidthViaMap : public dbObject
-{
- public:
+class dbMetalWidthViaMap : public dbObject {
+public:
   void setViaCutClass(bool via_cut_class);
 
   bool isViaCutClass() const;
 
-  void setCutLayer(dbTechLayer* cut_layer);
+  void setCutLayer(dbTechLayer *cut_layer);
 
   void setBelowLayerWidthLow(int below_layer_width_low);
 
@@ -8685,9 +8419,9 @@ class dbMetalWidthViaMap : public dbObject
 
   int getAboveLayerWidthHigh() const;
 
-  void setViaName(const std::string& via_name);
+  void setViaName(const std::string &via_name);
 
-  const std::string& getViaName() const;
+  const std::string &getViaName() const;
 
   void setPgVia(bool pg_via);
 
@@ -8695,39 +8429,38 @@ class dbMetalWidthViaMap : public dbObject
 
   // User Code Begin dbMetalWidthViaMap
 
-  dbTechLayer* getCutLayer() const;
+  dbTechLayer *getCutLayer() const;
 
-  static dbMetalWidthViaMap* create(dbTech* tech);
+  static dbMetalWidthViaMap *create(dbTech *tech);
 
-  static void destroy(dbMetalWidthViaMap* via_map);
+  static void destroy(dbMetalWidthViaMap *via_map);
 
-  static dbMetalWidthViaMap* getMetalWidthViaMap(dbTech* tech, uint32_t dbid);
+  static dbMetalWidthViaMap *getMetalWidthViaMap(dbTech *tech, uint32_t dbid);
 
   // User Code End dbMetalWidthViaMap
 };
 
-class dbModBTerm : public dbObject
-{
- public:
-  const char* getName() const;
+class dbModBTerm : public dbObject {
+public:
+  const char *getName() const;
 
-  dbModule* getParent() const;
+  dbModule *getParent() const;
 
   // User Code Begin dbModBTerm
   std::string getHierarchicalName() const;
-  void setParentModITerm(dbModITerm* parent_pin);
-  dbModITerm* getParentModITerm() const;
-  void setModNet(dbModNet* modNet);
-  dbModNet* getModNet() const;
-  void setSigType(const dbSigType& type);
+  void setParentModITerm(dbModITerm *parent_pin);
+  dbModITerm *getParentModITerm() const;
+  void setModNet(dbModNet *modNet);
+  dbModNet *getModNet() const;
+  void setSigType(const dbSigType &type);
   dbSigType getSigType() const;
-  void setIoType(const dbIoType& type);
+  void setIoType(const dbIoType &type);
   dbIoType getIoType() const;
-  void connect(dbModNet* net);
+  void connect(dbModNet *net);
   void disconnect();
   bool isBusPort() const;
-  void setBusPort(dbBusPort*);
-  dbBusPort* getBusPort() const;
+  void setBusPort(dbBusPort *);
+  dbBusPort *getBusPort() const;
 
   ///
   /// Returns the module instance that contains this module boundary terminal.
@@ -8736,91 +8469,85 @@ class dbModBTerm : public dbObject
   /// - Returns nullptr if there is no instantiated module or dbModBTerm is not
   ///   connected to a dbModITerm.
   ///
-  dbModInst* getModInst() const;
+  dbModInst *getModInst() const;
 
-  static dbModBTerm* create(dbModule* parentModule, const char* name);
-  static void destroy(dbModBTerm*);
-  static dbSet<dbModBTerm>::iterator destroy(dbSet<dbModBTerm>::iterator& itr);
-  static dbModBTerm* getModBTerm(dbBlock* block, uint32_t dbid);
+  static dbModBTerm *create(dbModule *parentModule, const char *name);
+  static void destroy(dbModBTerm *);
+  static dbSet<dbModBTerm>::iterator destroy(dbSet<dbModBTerm>::iterator &itr);
+  static dbModBTerm *getModBTerm(dbBlock *block, uint32_t dbid);
   // User Code End dbModBTerm
 };
 
-class dbModInst : public dbObject
-{
- public:
-  const char* getName() const;
+class dbModInst : public dbObject {
+public:
+  const char *getName() const;
 
-  dbModule* getParent() const;
+  dbModule *getParent() const;
 
-  dbModule* getMaster() const;
+  dbModule *getMaster() const;
 
-  dbGroup* getGroup() const;
+  dbGroup *getGroup() const;
 
   // User Code Begin dbModInst
   std::string getHierarchicalName() const;
-  dbModITerm* findModITerm(const char* name);
+  dbModITerm *findModITerm(const char *name);
   dbSet<dbModITerm> getModITerms();
   void removeUnusedPortsAndPins();
 
-  dbModNet* findHierNet(const char* base_name) const;
-  dbNet* findFlatNet(const char* base_name) const;
-  bool findNet(const char* base_name,
-               dbNet*& flat_net,
-               dbModNet*& hier_net) const;
+  dbModNet *findHierNet(const char *base_name) const;
+  dbNet *findFlatNet(const char *base_name) const;
+  bool findNet(const char *base_name, dbNet *&flat_net,
+               dbModNet *&hier_net) const;
 
   /// Swap the module of this instance.
   /// Returns new mod inst if the operations succeeds.
   /// Old mod inst is deleted along with its child insts.
-  dbModInst* swapMaster(dbModule* module);
+  dbModInst *swapMaster(dbModule *module);
 
   // Recursive search a given dbInst through child mod insts
-  bool containsDbInst(dbInst* inst) const;
+  bool containsDbInst(dbInst *inst) const;
 
   // Recursive search a given dbModInst through child mod insts
-  bool containsDbModInst(dbModInst* mod_inst) const;
+  bool containsDbModInst(dbModInst *mod_inst) const;
 
-  static dbModInst* create(dbModule* parentModule,
-                           dbModule* masterModule,
-                           const char* name);
+  static dbModInst *create(dbModule *parentModule, dbModule *masterModule,
+                           const char *name);
 
   // This destroys this modinst but does not destroy the master dbModule.
-  static void destroy(dbModInst* modinst);
+  static void destroy(dbModInst *modinst);
 
-  static dbSet<dbModInst>::iterator destroy(dbSet<dbModInst>::iterator& itr);
+  static dbSet<dbModInst>::iterator destroy(dbSet<dbModInst>::iterator &itr);
 
-  static dbModInst* getModInst(dbBlock* block_, uint32_t dbid_);
+  static dbModInst *getModInst(dbBlock *block_, uint32_t dbid_);
   // User Code End dbModInst
 };
 
-class dbModITerm : public dbObject
-{
- public:
-  const char* getName() const;
+class dbModITerm : public dbObject {
+public:
+  const char *getName() const;
 
-  dbModInst* getParent() const;
+  dbModInst *getParent() const;
 
   // User Code Begin dbModITerm
   std::string getHierarchicalName() const;
-  void setModNet(dbModNet* modNet);
-  dbModNet* getModNet() const;
-  void setChildModBTerm(dbModBTerm* child_port);
-  dbModBTerm* getChildModBTerm() const;
-  void connect(dbModNet* modnet);
+  void setModNet(dbModNet *modNet);
+  dbModNet *getModNet() const;
+  void setChildModBTerm(dbModBTerm *child_port);
+  dbModBTerm *getChildModBTerm() const;
+  void connect(dbModNet *modnet);
   void disconnect();
 
-  static dbModITerm* create(dbModInst* parentInstance,
-                            const char* name,
-                            dbModBTerm* modbterm = nullptr);
-  static void destroy(dbModITerm*);
-  static dbSet<dbModITerm>::iterator destroy(dbSet<dbModITerm>::iterator& itr);
-  static dbModITerm* getModITerm(dbBlock* block, uint32_t dbid);
+  static dbModITerm *create(dbModInst *parentInstance, const char *name,
+                            dbModBTerm *modbterm = nullptr);
+  static void destroy(dbModITerm *);
+  static dbSet<dbModITerm>::iterator destroy(dbSet<dbModITerm>::iterator &itr);
+  static dbModITerm *getModITerm(dbBlock *block, uint32_t dbid);
   // User Code End dbModITerm
 };
 
-class dbModNet : public dbObject
-{
- public:
-  dbModule* getParent() const;
+class dbModNet : public dbObject {
+public:
+  dbModule *getParent() const;
 
   // User Code Begin dbModNet
   dbSet<dbModITerm> getModITerms() const;
@@ -8829,9 +8556,9 @@ class dbModNet : public dbObject
   dbSet<dbBTerm> getBTerms() const;
   unsigned connectionCount() const;
   std::string getName() const;
-  const char* getConstName() const;
+  const char *getConstName() const;
   std::string getHierarchicalName() const;
-  void rename(const char* new_name);
+  void rename(const char *new_name);
   void disconnectAllTerms();
   void dump() const;
 
@@ -8839,7 +8566,7 @@ class dbModNet : public dbObject
   // A dbModNet should be associated with a single dbNet.
   // This function traverses the terminals connected to this dbModNet
   // and returns the first dbNet it finds.
-  dbNet* findRelatedNet() const;
+  dbNet *findRelatedNet() const;
   void checkSanity() const;
 
   ///
@@ -8851,22 +8578,22 @@ class dbModNet : public dbObject
   ///
   /// Merge the terminals of the in_modnet with this modnet
   ///
-  void mergeModNet(dbModNet* in_modnet);
+  void mergeModNet(dbModNet *in_modnet);
 
   ///
   /// Connect the terminals of the in_net with this modnet
   ///
-  void connectTermsOf(dbNet* in_net);
+  void connectTermsOf(dbNet *in_net);
 
   ///
   /// Returns true if this dbModNet is connected to other dbNet.
   ///
-  bool isConnected(const dbNet* other) const;
+  bool isConnected(const dbNet *other) const;
 
   ///
   /// Returns true if this dbModNet is connected to other dbModNet.
   ///
-  bool isConnected(const dbModNet* other) const;
+  bool isConnected(const dbModNet *other) const;
 
   ///
   /// Returns true if this dbModNet is connected to an INPUT, INOUT, or
@@ -8884,63 +8611,61 @@ class dbModNet : public dbObject
   /// Returns the next dbModNets in the fanin of this dbModNet.
   /// Traverses up to parent inputs or down to child outputs.
   ///
-  std::vector<dbModNet*> getNextModNetsInFanin() const;
+  std::vector<dbModNet *> getNextModNetsInFanin() const;
 
   ///
   /// Returns the next dbModNets in the fanout of this dbModNet.
   /// Traverses down to child inputs or up to parent outputs.
   ///
-  std::vector<dbModNet*> getNextModNetsInFanout() const;
+  std::vector<dbModNet *> getNextModNetsInFanout() const;
 
   ///
   /// Returns the first connected dbModNet in the parent module hierarchy.
   ///
-  dbModNet* getFirstParentModNet() const;
+  dbModNet *getFirstParentModNet() const;
 
   ///
   /// Traverses the hierarchy in search of the first mod net that satisfies the
   /// given condition.
   ///
-  dbModNet* findInHierarchy(const std::function<bool(dbModNet*)>& condition,
+  dbModNet *findInHierarchy(const std::function<bool(dbModNet *)> &condition,
                             dbHierSearchDir dir) const;
 
-  static dbModNet* getModNet(dbBlock* block, uint32_t id);
-  static dbModNet* create(dbModule* parent_module, const char* base_name);
-  static dbModNet* create(dbModule* parent_module,
-                          const char* base_name,
-                          const dbNameUniquifyType& uniquify,
-                          dbNet* corresponding_flat_net = nullptr);
-  static dbSet<dbModNet>::iterator destroy(dbSet<dbModNet>::iterator& itr);
-  static void destroy(dbModNet*);
+  static dbModNet *getModNet(dbBlock *block, uint32_t id);
+  static dbModNet *create(dbModule *parent_module, const char *base_name);
+  static dbModNet *create(dbModule *parent_module, const char *base_name,
+                          const dbNameUniquifyType &uniquify,
+                          dbNet *corresponding_flat_net = nullptr);
+  static dbSet<dbModNet>::iterator destroy(dbSet<dbModNet>::iterator &itr);
+  static void destroy(dbModNet *);
   // User Code End dbModNet
 };
 
-class dbModule : public dbObject
-{
- public:
-  const char* getName() const;
+class dbModule : public dbObject {
+public:
+  const char *getName() const;
 
-  void setModInst(dbModInst* mod_inst);
+  void setModInst(dbModInst *mod_inst);
 
-  dbModInst* getModInst() const;
+  dbModInst *getModInst() const;
 
   // User Code Begin dbModule
 
   ///
   /// Returns the parent module, or nullptr if this is the top-level module.
   ///
-  dbModule* getParentModule() const;
+  dbModule *getParentModule() const;
 
   std::string getHierarchicalName() const;
 
   // Get a mod net by name
-  dbModNet* getModNet(const char* net_name) const;
+  dbModNet *getModNet(const char *net_name) const;
 
   // Adding an inst to a new module will remove it from its previous
   // module.
-  void addInst(dbInst* inst);
+  void addInst(dbInst *inst);
 
-  dbBlock* getOwner() const;
+  dbBlock *getOwner() const;
 
   dbSet<dbModInst> getChildren() const;
   dbSet<dbModInst> getModInsts() const;
@@ -8949,70 +8674,67 @@ class dbModule : public dbObject
   dbSet<dbModBTerm> getPorts();
   // Get the leaf level connections on a module (flat connected view).
   dbSet<dbModBTerm> getModBTerms() const;
-  dbModBTerm* getModBTerm(uint32_t id);
+  dbModBTerm *getModBTerm(uint32_t id);
   dbSet<dbInst> getInsts() const;
 
-  dbModInst* findModInst(const char* name) const;
-  dbInst* findDbInst(const char* name) const;
-  dbModBTerm* findModBTerm(const char* name) const;
+  dbModInst *findModInst(const char *name) const;
+  dbInst *findDbInst(const char *name) const;
+  dbModBTerm *findModBTerm(const char *name) const;
 
-  std::vector<dbInst*> getLeafInsts();
+  std::vector<dbInst *> getLeafInsts();
 
   int getModInstCount();
   int getDbInstCount();
 
-  const dbModBTerm* getHeadDbModBTerm() const;
-  bool canSwapWith(dbModule* new_module) const;
+  const dbModBTerm *getHeadDbModBTerm() const;
+  bool canSwapWith(dbModule *new_module) const;
   bool isTop() const;
-  bool containsDbInst(dbInst* inst) const;
-  bool containsDbModInst(dbModInst* inst) const;
+  bool containsDbInst(dbInst *inst) const;
+  bool containsDbModInst(dbModInst *inst) const;
 
-  static dbModule* create(dbBlock* block, const char* name);
+  static dbModule *create(dbBlock *block, const char *name);
 
-  static void destroy(dbModule* module);
+  static void destroy(dbModule *module);
 
-  static dbModule* getModule(dbBlock* block_, uint32_t dbid_);
+  static dbModule *getModule(dbBlock *block_, uint32_t dbid_);
 
-  static dbModule* makeUniqueDbModule(const char* cell_name,
-                                      const char* inst_name,
-                                      dbBlock* block);
+  static dbModule *makeUniqueDbModule(const char *cell_name,
+                                      const char *inst_name, dbBlock *block);
 
   // User Code End dbModule
 };
 
-class dbNetTrack : public dbObject
-{
- public:
+class dbNetTrack : public dbObject {
+public:
   Rect getBox() const;
 
   // User Code Begin dbNetTrack
 
-  dbNet* getNet() const;
+  dbNet *getNet() const;
 
-  dbTechLayer* getLayer() const;
+  dbTechLayer *getLayer() const;
 
-  static dbNetTrack* create(dbNet* net, dbTechLayer* layer, Rect box);
+  static dbNetTrack *create(dbNet *net, dbTechLayer *layer, Rect box);
 
-  static dbNetTrack* getNetTrack(dbBlock* block, uint32_t dbid);
+  static dbNetTrack *getNetTrack(dbBlock *block, uint32_t dbid);
 
-  static void destroy(dbNetTrack* guide);
+  static void destroy(dbNetTrack *guide);
 
-  static dbSet<dbNetTrack>::iterator destroy(dbSet<dbNetTrack>::iterator& itr);
+  static dbSet<dbNetTrack>::iterator destroy(dbSet<dbNetTrack>::iterator &itr);
 
   // User Code End dbNetTrack
 };
 
-class dbPolygon : public dbObject
-{
- public:
-  const Polygon& getPolygon() const;
+class dbPolygon : public dbObject {
+public:
+  const Polygon &getPolygon() const;
 
   int getDesignRuleWidth() const;
 
   int getMinSpacing() const;
 
   // User Code Begin dbPolygon
-  dbTechLayer* getTechLayer();
+  dbTechLayer *getTechLayer();
   dbSet<dbBox> getGeometry();
   void setDesignRuleWidth(int design_rule_width);
   void setMinSpacing(int min_spacing);
@@ -9020,111 +8742,102 @@ class dbPolygon : public dbObject
   ///
   /// Add an obstruction to a master.
   ///
-  static dbPolygon* create(dbMaster* master,
-                           dbTechLayer* layer,
-                           const std::vector<Point>& polygon);
+  static dbPolygon *create(dbMaster *master, dbTechLayer *layer,
+                           const std::vector<Point> &polygon);
 
   ///
   /// Add a wire-shape to a master-pin.
   ///
-  static dbPolygon* create(dbMPin* pin,
-                           dbTechLayer* layer,
-                           const std::vector<Point>& polygon);
+  static dbPolygon *create(dbMPin *pin, dbTechLayer *layer,
+                           const std::vector<Point> &polygon);
 
   // User Code End dbPolygon
 };
 
-class dbPowerDomain : public dbObject
-{
- public:
-  const char* getName() const;
+class dbPowerDomain : public dbObject {
+public:
+  const char *getName() const;
 
-  dbGroup* getGroup() const;
+  dbGroup *getGroup() const;
 
   void setTop(bool top);
 
   bool isTop() const;
 
-  void setParent(dbPowerDomain* parent);
+  void setParent(dbPowerDomain *parent);
 
-  dbPowerDomain* getParent() const;
+  dbPowerDomain *getParent() const;
 
   void setVoltage(float voltage);
 
   float getVoltage() const;
 
   // User Code Begin dbPowerDomain
-  void setGroup(dbGroup* group);
-  static dbPowerDomain* create(dbBlock* block, const char* name);
-  static void destroy(dbPowerDomain* pd);
+  void setGroup(dbGroup *group);
+  static dbPowerDomain *create(dbBlock *block, const char *name);
+  static void destroy(dbPowerDomain *pd);
 
-  void addElement(const std::string& element);
+  void addElement(const std::string &element);
   std::vector<std::string> getElements();
 
-  void addPowerSwitch(dbPowerSwitch* ps);
-  void addIsolation(dbIsolation* iso);
-  void addLevelShifter(dbLevelShifter* shifter);
+  void addPowerSwitch(dbPowerSwitch *ps);
+  void addIsolation(dbIsolation *iso);
+  void addLevelShifter(dbLevelShifter *shifter);
 
-  std::vector<dbPowerSwitch*> getPowerSwitches();
-  std::vector<dbIsolation*> getIsolations();
-  std::vector<dbLevelShifter*> getLevelShifters();
+  std::vector<dbPowerSwitch *> getPowerSwitches();
+  std::vector<dbIsolation *> getIsolations();
+  std::vector<dbLevelShifter *> getLevelShifters();
 
-  void setArea(const Rect& area);
-  bool getArea(Rect& area);
+  void setArea(const Rect &area);
+  bool getArea(Rect &area);
 
   // User Code End dbPowerDomain
 };
 
-class dbPowerSwitch : public dbObject
-{
- public:
-  struct UPFIOSupplyPort
-  {
+class dbPowerSwitch : public dbObject {
+public:
+  struct UPFIOSupplyPort {
     std::string port_name;
     std::string supply_net_name;
   };
-  struct UPFControlPort
-  {
+  struct UPFControlPort {
     std::string port_name;
     std::string net_name;
   };
-  struct UPFAcknowledgePort
-  {
+  struct UPFAcknowledgePort {
     std::string port_name;
     std::string net_name;
     std::string boolean_expression;
   };
-  struct UPFOnState
-  {
+  struct UPFOnState {
     std::string state_name;
     std::string input_supply_port;
     std::string boolean_expression;
   };
 
-  const char* getName() const;
+  const char *getName() const;
 
-  void setPowerDomain(dbPowerDomain* power_domain);
+  void setPowerDomain(dbPowerDomain *power_domain);
 
-  dbPowerDomain* getPowerDomain() const;
+  dbPowerDomain *getPowerDomain() const;
 
   // User Code Begin dbPowerSwitch
-  static dbPowerSwitch* create(dbBlock* block, const char* name);
-  static void destroy(dbPowerSwitch* ps);
-  void addInSupplyPort(const std::string& in_port, const std::string& net);
-  void setOutSupplyPort(const std::string& out_port, const std::string& net);
-  void addControlPort(const std::string& control_port,
-                      const std::string& control_net);
-  void addAcknowledgePort(const std::string& port_name,
-                          const std::string& net_name,
-                          const std::string& boolean_expression);
-  void addOnState(const std::string& on_state,
-                  const std::string& port_name,
-                  const std::string& boolean_expression);
-  void setLibCell(dbMaster* master);
-  void addPortMap(const std::string& model_port,
-                  const std::string& switch_port);
+  static dbPowerSwitch *create(dbBlock *block, const char *name);
+  static void destroy(dbPowerSwitch *ps);
+  void addInSupplyPort(const std::string &in_port, const std::string &net);
+  void setOutSupplyPort(const std::string &out_port, const std::string &net);
+  void addControlPort(const std::string &control_port,
+                      const std::string &control_net);
+  void addAcknowledgePort(const std::string &port_name,
+                          const std::string &net_name,
+                          const std::string &boolean_expression);
+  void addOnState(const std::string &on_state, const std::string &port_name,
+                  const std::string &boolean_expression);
+  void setLibCell(dbMaster *master);
+  void addPortMap(const std::string &model_port,
+                  const std::string &switch_port);
 
-  void addPortMap(const std::string& model_port, dbMTerm* mterm);
+  void addPortMap(const std::string &model_port, dbMTerm *mterm);
   std::vector<UPFControlPort> getControlPorts();
   std::vector<UPFIOSupplyPort> getInputSupplyPorts();
   UPFIOSupplyPort getOutputSupplyPort();
@@ -9132,21 +8845,19 @@ class dbPowerSwitch : public dbObject
   std::vector<UPFOnState> getOnStates();
 
   // Returns library cell that was defined in the upf for this power switch
-  dbMaster* getLibCell();
+  dbMaster *getLibCell();
 
   // returns a map associating the model ports to actual instances of dbMTerms
   // belonging to the first
   //  lib cell defined in the upf
-  std::map<std::string, dbMTerm*> getPortMap();
+  std::map<std::string, dbMTerm *> getPortMap();
   // User Code End dbPowerSwitch
 };
 
-class dbProperty : public dbObject
-{
- public:
+class dbProperty : public dbObject {
+public:
   // User Code Begin dbProperty
-  enum Type
-  {
+  enum Type {
     // Do not change the order or the values of this enum.
     STRING_PROP = 0,
     BOOL_PROP = 1,
@@ -9161,24 +8872,24 @@ class dbProperty : public dbObject
   std::string getName();
 
   /// Get the owner of this property
-  dbObject* getPropOwner();
+  dbObject *getPropOwner();
 
   /// Find the named property. Returns nullptr if the property does not exist.
-  static dbProperty* find(dbObject* object, const char* name);
+  static dbProperty *find(dbObject *object, const char *name);
 
   /// Find the named property of the specified type. Returns nullptr if the
   /// property does not exist.
-  static dbProperty* find(dbObject* object, const char* name, Type type);
+  static dbProperty *find(dbObject *object, const char *name, Type type);
 
   /// Destroy a specific property
-  static void destroy(dbProperty* prop);
+  static void destroy(dbProperty *prop);
   /// Destroy all properties of the specific object
-  static void destroyProperties(dbObject* obj);
-  static dbSet<dbProperty> getProperties(dbObject* object);
+  static void destroyProperties(dbObject *obj);
+  static dbSet<dbProperty> getProperties(dbObject *object);
   static dbSet<dbProperty>::iterator destroy(dbSet<dbProperty>::iterator itr);
   // 5.8
-  static std::string writeProperties(dbObject* object);
-  static std::string writePropValue(dbProperty* prop);
+  static std::string writeProperties(dbObject *object);
+  static std::string writePropValue(dbProperty *prop);
   // User Code End dbProperty
 };
 
@@ -9187,36 +8898,35 @@ class dbProperty : public dbObject
 // scan chain is connected.  Each scan chain is also associated with a
 // particular test mode and test mode pin that puts the Circuit Under Test (CUT)
 // in test. The Scan Enable port/pin puts the scan chain into shifting mode.
-class dbScanChain : public dbObject
-{
- public:
+class dbScanChain : public dbObject {
+public:
   dbSet<dbScanPartition> getScanPartitions() const;
 
   // User Code Begin dbScanChain
-  const std::string& getName() const;
+  const std::string &getName() const;
 
   void setName(std::string_view name);
 
-  void setScanIn(dbBTerm* scan_in);
-  void setScanIn(dbITerm* scan_in);
-  std::variant<dbBTerm*, dbITerm*> getScanIn() const;
+  void setScanIn(dbBTerm *scan_in);
+  void setScanIn(dbITerm *scan_in);
+  std::variant<dbBTerm *, dbITerm *> getScanIn() const;
 
-  void setScanOut(dbBTerm* scan_out);
-  void setScanOut(dbITerm* scan_out);
-  std::variant<dbBTerm*, dbITerm*> getScanOut() const;
+  void setScanOut(dbBTerm *scan_out);
+  void setScanOut(dbITerm *scan_out);
+  std::variant<dbBTerm *, dbITerm *> getScanOut() const;
 
-  void setScanEnable(dbBTerm* scan_enable);
-  void setScanEnable(dbITerm* scan_enable);
-  std::variant<dbBTerm*, dbITerm*> getScanEnable() const;
+  void setScanEnable(dbBTerm *scan_enable);
+  void setScanEnable(dbITerm *scan_enable);
+  std::variant<dbBTerm *, dbITerm *> getScanEnable() const;
 
-  void setTestMode(dbBTerm* test_mode);
-  void setTestMode(dbITerm* test_mode);
-  std::variant<dbBTerm*, dbITerm*> getTestMode() const;
+  void setTestMode(dbBTerm *test_mode);
+  void setTestMode(dbITerm *test_mode);
+  std::variant<dbBTerm *, dbITerm *> getTestMode() const;
 
-  void setTestModeName(const std::string& test_mode_name);
-  const std::string& getTestModeName() const;
+  void setTestModeName(const std::string &test_mode_name);
+  const std::string &getTestModeName() const;
 
-  static dbScanChain* create(dbDft* dft);
+  static dbScanChain *create(dbDft *dft);
   // User Code End dbScanChain
 };
 
@@ -9228,24 +8938,18 @@ class dbScanChain : public dbObject
 // multibit cells with external scan or black boxes.  In this case, the scan_in,
 // scan_out and scan enables are pins in the dbInst. The scan clock is the pin
 // that we use to shift patterns in and out of the scan chain.
-class dbScanInst : public dbObject
-{
- public:
-  struct AccessPins
-  {
-    std::variant<dbBTerm*, dbITerm*> scan_in;
-    std::variant<dbBTerm*, dbITerm*> scan_out;
+class dbScanInst : public dbObject {
+public:
+  struct AccessPins {
+    std::variant<dbBTerm *, dbITerm *> scan_in;
+    std::variant<dbBTerm *, dbITerm *> scan_out;
   };
 
-  enum class ClockEdge
-  {
-    Rising,
-    Falling
-  };
+  enum class ClockEdge { Rising, Falling };
 
   // User Code Begin dbScanInst
   void setScanClock(std::string_view scan_clock);
-  const std::string& getScanClock() const;
+  const std::string &getScanClock() const;
 
   void setClockEdge(ClockEdge clock_edge);
   ClockEdge getClockEdge() const;
@@ -9256,18 +8960,18 @@ class dbScanInst : public dbObject
   void setBits(uint32_t bits);
   uint32_t getBits() const;
 
-  void setScanEnable(dbBTerm* scan_enable);
-  void setScanEnable(dbITerm* scan_enable);
-  std::variant<dbBTerm*, dbITerm*> getScanEnable() const;
+  void setScanEnable(dbBTerm *scan_enable);
+  void setScanEnable(dbITerm *scan_enable);
+  std::variant<dbBTerm *, dbITerm *> getScanEnable() const;
 
-  void setAccessPins(const AccessPins& access_pins);
+  void setAccessPins(const AccessPins &access_pins);
   AccessPins getAccessPins() const;
 
-  dbInst* getInst() const;
+  dbInst *getInst() const;
 
-  void insertAtFront(dbScanList* scan_list);
+  void insertAtFront(dbScanList *scan_list);
 
-  static dbScanInst* create(dbScanList* scan_list, dbInst* inst);
+  static dbScanInst *create(dbScanList *scan_list, dbInst *inst);
   // User Code End dbScanInst
 };
 
@@ -9276,13 +8980,12 @@ class dbScanInst : public dbObject
 // with two or more elements we say that they are ORDERED. If the ScanList
 // contains only one element then they are FLOATING elements that don't have any
 // restriccion when optimizing the scan chain.
-class dbScanList : public dbObject
-{
- public:
+class dbScanList : public dbObject {
+public:
   // User Code Begin dbScanList
   dbSet<dbScanInst> getScanInsts() const;
-  dbScanInst* add(dbInst* inst);
-  static dbScanList* create(dbScanPartition* scan_partition);
+  dbScanInst *add(dbInst *inst);
+  static dbScanList *create(dbScanPartition *scan_partition);
   // User Code End dbScanList
 };
 
@@ -9292,16 +8995,15 @@ class dbScanList : public dbObject
 // between them for reordering and repartitioning. The name of this partition is
 // not unique, as multiple partitions may have the same same and therefore
 // contain the same type of flops.
-class dbScanPartition : public dbObject
-{
- public:
+class dbScanPartition : public dbObject {
+public:
   dbSet<dbScanList> getScanLists() const;
 
   // User Code Begin dbScanPartition
-  const std::string& getName() const;
-  void setName(const std::string& name);
+  const std::string &getName() const;
+  void setName(const std::string &name);
 
-  static dbScanPartition* create(dbScanChain* chain);
+  static dbScanPartition *create(dbScanChain *chain);
   // User Code End dbScanPartition
 };
 
@@ -9310,23 +9012,20 @@ class dbScanPartition : public dbObject
 // ports or cell's pins.  For example: a scan chain may be connected to a top
 // level design port (dbBTerm) or to an output/input pin of a cell that is part
 // of a decompressor/compressor
-class dbScanPin : public dbObject
-{
- public:
+class dbScanPin : public dbObject {
+public:
   // User Code Begin dbScanPin
-  std::variant<dbBTerm*, dbITerm*> getPin() const;
-  void setPin(dbBTerm* bterm);
-  void setPin(dbITerm* iterm);
-  static dbScanPin* create(dbDft* dft, dbBTerm* bterm);
-  static dbScanPin* create(dbDft* dft, dbITerm* iterm);
+  std::variant<dbBTerm *, dbITerm *> getPin() const;
+  void setPin(dbBTerm *bterm);
+  void setPin(dbITerm *iterm);
+  static dbScanPin *create(dbDft *dft, dbBTerm *bterm);
+  static dbScanPin *create(dbDft *dft, dbITerm *iterm);
   // User Code End dbScanPin
 };
 
-class dbTechLayer : public dbObject
-{
- public:
-  enum LEF58_TYPE
-  {
+class dbTechLayer : public dbObject {
+public:
+  enum LEF58_TYPE {
     NONE,
     NWELL,
     PWELL,
@@ -9361,11 +9060,11 @@ class dbTechLayer : public dbObject
 
   float getLayerAdjustment() const;
 
-  void getOrthSpacingTable(std::vector<std::pair<int, int>>& tbl) const;
+  void getOrthSpacingTable(std::vector<std::pair<int, int>> &tbl) const;
 
   dbSet<dbTechLayerCutClassRule> getTechLayerCutClassRules() const;
 
-  dbTechLayerCutClassRule* findTechLayerCutClassRule(const char* name) const;
+  dbTechLayerCutClassRule *findTechLayerCutClassRule(const char *name) const;
 
   dbSet<dbTechLayerSpacingEolRule> getTechLayerSpacingEolRules() const;
 
@@ -9375,14 +9074,14 @@ class dbTechLayer : public dbObject
 
   dbSet<dbTechLayerCornerSpacingRule> getTechLayerCornerSpacingRules() const;
 
-  dbSet<dbTechLayerSpacingTablePrlRule> getTechLayerSpacingTablePrlRules()
-      const;
+  dbSet<dbTechLayerSpacingTablePrlRule>
+  getTechLayerSpacingTablePrlRules() const;
 
   dbSet<dbTechLayerCutSpacingTableOrthRule>
   getTechLayerCutSpacingTableOrthRules() const;
 
-  dbSet<dbTechLayerCutSpacingTableDefRule> getTechLayerCutSpacingTableDefRules()
-      const;
+  dbSet<dbTechLayerCutSpacingTableDefRule>
+  getTechLayerCutSpacingTableDefRules() const;
 
   dbSet<dbTechLayerCutEnclosureRule> getTechLayerCutEnclosureRules() const;
 
@@ -9400,13 +9099,13 @@ class dbTechLayer : public dbObject
 
   dbSet<dbTechLayerAreaRule> getTechLayerAreaRules() const;
 
-  dbSet<dbTechLayerForbiddenSpacingRule> getTechLayerForbiddenSpacingRules()
-      const;
+  dbSet<dbTechLayerForbiddenSpacingRule>
+  getTechLayerForbiddenSpacingRules() const;
 
   dbSet<dbTechLayerKeepOutZoneRule> getTechLayerKeepOutZoneRules() const;
 
-  dbSet<dbTechLayerWrongDirSpacingRule> getTechLayerWrongDirSpacingRules()
-      const;
+  dbSet<dbTechLayerWrongDirSpacingRule>
+  getTechLayerWrongDirSpacingRules() const;
 
   dbSet<dbTechLayerTwoWiresForbiddenSpcRule>
   getTechLayerTwoWiresForbiddenSpcRules() const;
@@ -9456,7 +9155,7 @@ class dbTechLayer : public dbObject
   ///
   /// Get the layer name.
   ///
-  const char* getConstName() const;
+  const char *getConstName() const;
 
   ///
   /// Returns true if this layer has an alias.
@@ -9471,7 +9170,7 @@ class dbTechLayer : public dbObject
   ///
   /// Set the layer alias.
   ///
-  void setAlias(const char* alias);
+  void setAlias(const char *alias);
 
   ///
   /// Get the default width.
@@ -9500,8 +9199,8 @@ class dbTechLayer : public dbObject
   ///
   /// Get the low end of the uppermost range for wide wire design rules.
   ///
-  void getMaxWideDRCRange(int& owidth, int& olength);
-  void getMinWideDRCRange(int& owidth, int& olength);
+  void getMaxWideDRCRange(int &owidth, int &olength);
+  void getMinWideDRCRange(int &owidth, int &olength);
 
   ///
   /// Get the collection of spacing rules for the object, assuming
@@ -9517,17 +9216,16 @@ class dbTechLayer : public dbObject
   /// single spacing value for all length/width combinations.
   ///
   bool hasV55SpacingRules() const;
-  bool getV55SpacingWidthsAndLengths(std::vector<uint32_t>& width_idx,
-                                     std::vector<uint32_t>& length_idx) const;
-  bool getV55SpacingTable(std::vector<std::vector<uint32_t>>& sptbl) const;
+  bool getV55SpacingWidthsAndLengths(std::vector<uint32_t> &width_idx,
+                                     std::vector<uint32_t> &length_idx) const;
+  bool getV55SpacingTable(std::vector<std::vector<uint32_t>> &sptbl) const;
 
   void initV55LengthIndex(uint32_t numelems);
   void addV55LengthEntry(uint32_t length);
   void initV55WidthIndex(uint32_t numelems);
   void addV55WidthEntry(uint32_t width);
   void initV55SpacingTable(uint32_t numrows, uint32_t numcols);
-  void addV55SpacingTableEntry(uint32_t inrow,
-                               uint32_t incol,
+  void addV55SpacingTableEntry(uint32_t inrow, uint32_t incol,
                                uint32_t spacing);
 
   dbSet<dbTechV55InfluenceEntry> getV55InfluenceRules();
@@ -9537,8 +9235,8 @@ class dbTechLayer : public dbObject
   /// with index tables
   ///
   bool hasTwoWidthsSpacingRules() const;
-  bool getTwoWidthsSpacingTable(
-      std::vector<std::vector<uint32_t>>& sptbl) const;
+  bool
+  getTwoWidthsSpacingTable(std::vector<std::vector<uint32_t>> &sptbl) const;
   uint32_t getTwoWidthsSpacingTableNumWidths() const;
   uint32_t getTwoWidthsSpacingTableWidth(uint32_t row) const;
   bool getTwoWidthsSpacingTableHasPRL(uint32_t row) const;
@@ -9547,16 +9245,15 @@ class dbTechLayer : public dbObject
 
   void initTwoWidths(uint32_t num_widths);
   void addTwoWidthsIndexEntry(uint32_t width, int parallel_run_length = -1);
-  void addTwoWidthsSpacingTableEntry(uint32_t inrow,
-                                     uint32_t incol,
+  void addTwoWidthsSpacingTableEntry(uint32_t inrow, uint32_t incol,
                                      uint32_t spacing);
   ///
   ///  create container for layer specific antenna rules
   ///  currently only oxide1 (default) and oxide2 models supported.
   ///
-  dbTechLayerAntennaRule* createDefaultAntennaRule();
-  dbTechLayerAntennaRule* createOxide2AntennaRule();
-  dbTechLayerAntennaRule* getOrCreateAntennaModel(int oxide_idx);
+  dbTechLayerAntennaRule *createDefaultAntennaRule();
+  dbTechLayerAntennaRule *createOxide2AntennaRule();
+  dbTechLayerAntennaRule *getOrCreateAntennaModel(int oxide_idx);
 
   ///
   /// Access and write antenna rule models -- get functions will return nullptr
@@ -9564,14 +9261,14 @@ class dbTechLayer : public dbObject
   ///
   bool hasDefaultAntennaRule() const;
   bool hasOxide2AntennaRule() const;
-  dbTechLayerAntennaRule* getDefaultAntennaRule() const;
-  dbTechLayerAntennaRule* getOxide2AntennaRule() const;
+  dbTechLayerAntennaRule *getDefaultAntennaRule() const;
+  dbTechLayerAntennaRule *getOxide2AntennaRule() const;
 
   ///
   /// Get collection of minimum cuts, minimum enclosure rules, if exist
   ///
-  bool getMinimumCutRules(std::vector<dbTechMinCutRule*>& cut_rules);
-  bool getMinEnclosureRules(std::vector<dbTechMinEncRule*>& enc_rules);
+  bool getMinimumCutRules(std::vector<dbTechMinCutRule *> &cut_rules);
+  bool getMinEnclosureRules(std::vector<dbTechMinEncRule *> &enc_rules);
 
   dbSet<dbTechMinCutRule> getMinCutRules();
   dbSet<dbTechMinEncRule> getMinEncRules();
@@ -9599,7 +9296,7 @@ class dbTechLayer : public dbObject
   ///  Get THICKNESS in DB units, and return indicator of existence.
   ///  Do not trust value of output parm if return value is false.
   ///
-  bool getThickness(uint32_t& inthk) const;
+  bool getThickness(uint32_t &inthk) const;
   void setThickness(uint32_t thickness);
 
   ///
@@ -9651,8 +9348,7 @@ class dbTechLayer : public dbObject
   uint32_t getProtrusionWidth() const;
   uint32_t getProtrusionLength() const;
   uint32_t getProtrusionFromWidth() const;
-  void setProtrusion(uint32_t pt_width,
-                     uint32_t pt_length,
+  void setProtrusion(uint32_t pt_width, uint32_t pt_length,
                      uint32_t pt_from_width);
 
   /// Get the layer-type
@@ -9711,18 +9407,18 @@ class dbTechLayer : public dbObject
   /// Get the layer below this layer.
   /// Returns nullptr if at bottom of layer stack.
   ///
-  dbTechLayer* getLowerLayer();
+  dbTechLayer *getLowerLayer();
 
   ///
   /// Get the layer above this layer.
   /// Returns nullptr if at top of layer stack.
   ///
-  dbTechLayer* getUpperLayer();
+  dbTechLayer *getUpperLayer();
 
   ///
   /// Get the technology this layer belongs too.
   ///
-  dbTech* getTech() const;
+  dbTech *getTech() const;
 
   bool hasOrthSpacingTable() const;
 
@@ -9732,20 +9428,18 @@ class dbTechLayer : public dbObject
   /// Create a new layer. The mask order is implicit in the create order.
   /// Returns nullptr if a layer with this name already exists
   ///
-  static dbTechLayer* create(dbTech* tech,
-                             const char* name,
+  static dbTechLayer *create(dbTech *tech, const char *name,
                              dbTechLayerType type);
 
   ///
   /// Translate a database-id back to a pointer.
   ///
-  static dbTechLayer* getTechLayer(dbTech* tech, uint32_t oid);
+  static dbTechLayer *getTechLayer(dbTech *tech, uint32_t oid);
   // User Code End dbTechLayer
 };
 
-class dbTechLayerAreaRule : public dbObject
-{
- public:
+class dbTechLayerAreaRule : public dbObject {
+public:
   void setArea(int64_t area);
 
   int64_t getArea() const;
@@ -9758,15 +9452,15 @@ class dbTechLayerAreaRule : public dbObject
 
   int getExceptEdgeLength() const;
 
-  void setExceptEdgeLengths(const std::pair<int, int>& except_edge_lengths);
+  void setExceptEdgeLengths(const std::pair<int, int> &except_edge_lengths);
 
   std::pair<int, int> getExceptEdgeLengths() const;
 
-  void setExceptMinSize(const std::pair<int, int>& except_min_size);
+  void setExceptMinSize(const std::pair<int, int> &except_min_size);
 
   std::pair<int, int> getExceptMinSize() const;
 
-  void setExceptStep(const std::pair<int, int>& except_step);
+  void setExceptStep(const std::pair<int, int> &except_step);
 
   std::pair<int, int> getExceptStep() const;
 
@@ -9786,20 +9480,19 @@ class dbTechLayerAreaRule : public dbObject
 
   uint32_t getOverlap() const;
 
-  static dbTechLayerAreaRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerAreaRule* obj);
+  static dbTechLayerAreaRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerAreaRule *obj);
   // User Code Begin dbTechLayerAreaRule
 
-  void setTrimLayer(dbTechLayer* trim_layer);
+  void setTrimLayer(dbTechLayer *trim_layer);
 
-  dbTechLayer* getTrimLayer() const;
+  dbTechLayer *getTrimLayer() const;
 
   // User Code End dbTechLayerAreaRule
 };
 
-class dbTechLayerArraySpacingRule : public dbObject
-{
- public:
+class dbTechLayerArraySpacingRule : public dbObject {
+public:
   void setViaWidth(int via_width);
 
   int getViaWidth() const;
@@ -9816,7 +9509,7 @@ class dbTechLayerArraySpacingRule : public dbObject
 
   int getArrayWidth() const;
 
-  void setCutClass(dbTechLayerCutClassRule* cut_class);
+  void setCutClass(dbTechLayerCutClassRule *cut_class);
 
   void setParallelOverlap(bool parallel_overlap);
 
@@ -9834,31 +9527,25 @@ class dbTechLayerArraySpacingRule : public dbObject
 
   bool isWithinValid() const;
 
-  static dbTechLayerArraySpacingRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerArraySpacingRule* obj);
+  static dbTechLayerArraySpacingRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerArraySpacingRule *obj);
   // User Code Begin dbTechLayerArraySpacingRule
 
   void setCutsArraySpacing(int num_cuts, int spacing);
 
-  const std::map<int, int>& getCutsArraySpacing() const;
+  const std::map<int, int> &getCutsArraySpacing() const;
 
-  dbTechLayerCutClassRule* getCutClass() const;
+  dbTechLayerCutClassRule *getCutClass() const;
 
-  static dbTechLayerArraySpacingRule* getTechLayerArraySpacingRule(
-      dbTechLayer* inly,
-      uint32_t dbid);
+  static dbTechLayerArraySpacingRule *
+  getTechLayerArraySpacingRule(dbTechLayer *inly, uint32_t dbid);
 
   // User Code End dbTechLayerArraySpacingRule
 };
 
-class dbTechLayerCornerSpacingRule : public dbObject
-{
- public:
-  enum CornerType
-  {
-    CONVEXCORNER,
-    CONCAVECORNER
-  };
+class dbTechLayerCornerSpacingRule : public dbObject {
+public:
+  enum CornerType { CONVEXCORNER, CONCAVECORNER };
 
   void setWithin(int within);
 
@@ -9932,8 +9619,8 @@ class dbTechLayerCornerSpacingRule : public dbObject
 
   bool isCornerToCorner() const;
 
-  static dbTechLayerCornerSpacingRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerCornerSpacingRule* obj);
+  static dbTechLayerCornerSpacingRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerCornerSpacingRule *obj);
   // User Code Begin dbTechLayerCornerSpacingRule
   void setType(CornerType _type);
 
@@ -9941,20 +9628,18 @@ class dbTechLayerCornerSpacingRule : public dbObject
 
   void addSpacing(uint32_t width, uint32_t spacing1, uint32_t spacing2 = 0);
 
-  void getSpacingTable(std::vector<std::pair<int, int>>& tbl);
+  void getSpacingTable(std::vector<std::pair<int, int>> &tbl);
 
-  void getWidthTable(std::vector<int>& tbl);
+  void getWidthTable(std::vector<int> &tbl);
 
-  static dbTechLayerCornerSpacingRule* getTechLayerCornerSpacingRule(
-      dbTechLayer* inly,
-      uint32_t dbid);
+  static dbTechLayerCornerSpacingRule *
+  getTechLayerCornerSpacingRule(dbTechLayer *inly, uint32_t dbid);
   // User Code End dbTechLayerCornerSpacingRule
 };
 
-class dbTechLayerCutClassRule : public dbObject
-{
- public:
-  const char* getName() const;
+class dbTechLayerCutClassRule : public dbObject {
+public:
+  const char *getName() const;
 
   void setWidth(int width);
 
@@ -9977,25 +9662,18 @@ class dbTechLayerCutClassRule : public dbObject
   bool isCutsValid() const;
 
   // User Code Begin dbTechLayerCutClassRule
-  static dbTechLayerCutClassRule* getTechLayerCutClassRule(dbTechLayer* inly,
+  static dbTechLayerCutClassRule *getTechLayerCutClassRule(dbTechLayer *inly,
                                                            uint32_t dbid);
 
-  static dbTechLayerCutClassRule* create(dbTechLayer* _layer, const char* name);
+  static dbTechLayerCutClassRule *create(dbTechLayer *_layer, const char *name);
 
-  static void destroy(dbTechLayerCutClassRule* rule);
+  static void destroy(dbTechLayerCutClassRule *rule);
   // User Code End dbTechLayerCutClassRule
 };
 
-class dbTechLayerCutEnclosureRule : public dbObject
-{
- public:
-  enum ENC_TYPE
-  {
-    DEFAULT,
-    EOL,
-    ENDSIDE,
-    HORZ_AND_VERT
-  };
+class dbTechLayerCutEnclosureRule : public dbObject {
+public:
+  enum ENC_TYPE { DEFAULT, EOL, ENDSIDE, HORZ_AND_VERT };
 
   // User Code Begin dbTechLayerCutEnclosureRuleEnums
   /*
@@ -10008,9 +9686,9 @@ class dbTechLayerCutEnclosureRule : public dbObject
   */
   // User Code End dbTechLayerCutEnclosureRuleEnums
 
-  void setCutClass(dbTechLayerCutClassRule* cut_class);
+  void setCutClass(dbTechLayerCutClassRule *cut_class);
 
-  dbTechLayerCutClassRule* getCutClass() const;
+  dbTechLayerCutClassRule *getCutClass() const;
 
   void setEolWidth(int eol_width);
 
@@ -10172,24 +9850,21 @@ class dbTechLayerCutEnclosureRule : public dbObject
 
   bool isConcaveCornersValid() const;
 
-  static dbTechLayerCutEnclosureRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerCutEnclosureRule* obj);
+  static dbTechLayerCutEnclosureRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerCutEnclosureRule *obj);
   // User Code Begin dbTechLayerCutEnclosureRule
   void setType(ENC_TYPE type);
 
   ENC_TYPE getType() const;
 
-  static dbTechLayerCutEnclosureRule* getTechLayerCutEnclosureRule(
-      dbTechLayer* inly,
-      uint32_t dbid);
+  static dbTechLayerCutEnclosureRule *
+  getTechLayerCutEnclosureRule(dbTechLayer *inly, uint32_t dbid);
   // User Code End dbTechLayerCutEnclosureRule
 };
 
-class dbTechLayerCutSpacingRule : public dbObject
-{
- public:
-  enum CutSpacingType
-  {
+class dbTechLayerCutSpacingRule : public dbObject {
+public:
+  enum CutSpacingType {
     NONE,
     MAXXY,
     SAMEMASK,
@@ -10205,7 +9880,7 @@ class dbTechLayerCutSpacingRule : public dbObject
 
   int getCutSpacing() const;
 
-  void setSecondLayer(dbTechLayer* second_layer);
+  void setSecondLayer(dbTechLayer *second_layer);
 
   void setOrthogonalSpacing(int orthogonal_spacing);
 
@@ -10271,7 +9946,7 @@ class dbTechLayerCutSpacingRule : public dbObject
 
   int getSecondWithin() const;
 
-  void setCutClass(dbTechLayerCutClassRule* cut_class);
+  void setCutClass(dbTechLayerCutClassRule *cut_class);
 
   void setTwoCuts(uint32_t two_cuts);
 
@@ -10441,36 +10116,28 @@ class dbTechLayerCutSpacingRule : public dbObject
 
   bool isParWithinEnclosureValid() const;
 
-  static dbTechLayerCutSpacingRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerCutSpacingRule* obj);
+  static dbTechLayerCutSpacingRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerCutSpacingRule *obj);
   // User Code Begin dbTechLayerCutSpacingRule
-  dbTechLayerCutClassRule* getCutClass() const;
+  dbTechLayerCutClassRule *getCutClass() const;
 
-  dbTechLayer* getSecondLayer() const;
+  dbTechLayer *getSecondLayer() const;
 
-  dbTechLayer* getTechLayer() const;
+  dbTechLayer *getTechLayer() const;
 
   void setType(CutSpacingType _type);
 
   CutSpacingType getType() const;
 
-  static dbTechLayerCutSpacingRule* getTechLayerCutSpacingRule(
-      dbTechLayer* inly,
-      uint32_t dbid);
+  static dbTechLayerCutSpacingRule *
+  getTechLayerCutSpacingRule(dbTechLayer *inly, uint32_t dbid);
 
   // User Code End dbTechLayerCutSpacingRule
 };
 
-class dbTechLayerCutSpacingTableDefRule : public dbObject
-{
- public:
-  enum LOOKUP_STRATEGY
-  {
-    FIRST,
-    SECOND,
-    MAX,
-    MIN
-  };
+class dbTechLayerCutSpacingTableDefRule : public dbObject {
+public:
+  enum LOOKUP_STRATEGY { FIRST, SECOND, MAX, MIN };
 
   // User Code Begin dbTechLayerCutSpacingTableDefRuleEnums
   /*
@@ -10486,7 +10153,7 @@ class dbTechLayerCutSpacingTableDefRule : public dbObject
 
   int getDefault() const;
 
-  void setSecondLayer(dbTechLayer* second_layer);
+  void setSecondLayer(dbTechLayer *second_layer);
 
   void setPrl(int prl);
 
@@ -10590,119 +10257,109 @@ class dbTechLayerCutSpacingTableDefRule : public dbObject
 
   bool isOppositeEnclosureResizeSpacingValid() const;
 
-  static dbTechLayerCutSpacingTableDefRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerCutSpacingTableDefRule* obj);
+  static dbTechLayerCutSpacingTableDefRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerCutSpacingTableDefRule *obj);
   // User Code Begin dbTechLayerCutSpacingTableDefRule
-  void addPrlForAlignedCutEntry(const std::string& from, const std::string& to);
+  void addPrlForAlignedCutEntry(const std::string &from, const std::string &to);
 
-  void addCenterToCenterEntry(const std::string& from, const std::string& to);
+  void addCenterToCenterEntry(const std::string &from, const std::string &to);
 
-  void addCenterAndEdgeEntry(const std::string& from, const std::string& to);
+  void addCenterAndEdgeEntry(const std::string &from, const std::string &to);
 
-  void addPrlEntry(const std::string& from, const std::string& to, int ccPrl);
+  void addPrlEntry(const std::string &from, const std::string &to, int ccPrl);
 
-  void addEndExtensionEntry(const std::string& cls, int ext);
+  void addEndExtensionEntry(const std::string &cls, int ext);
 
-  void addSideExtensionEntry(const std::string& cls, int ext);
+  void addSideExtensionEntry(const std::string &cls, int ext);
 
-  void addExactElignedEntry(const std::string& cls, int spacing);
+  void addExactElignedEntry(const std::string &cls, int spacing);
 
-  void addNonOppEncSpacingEntry(const std::string& cls, int spacing);
+  void addNonOppEncSpacingEntry(const std::string &cls, int spacing);
 
-  void addOppEncSpacingEntry(const std::string& cls,
-                             int rsz1,
-                             int rsz2,
+  void addOppEncSpacingEntry(const std::string &cls, int rsz1, int rsz2,
                              int spacing);
 
-  dbTechLayer* getSecondLayer() const;
+  dbTechLayer *getSecondLayer() const;
 
-  bool isCenterToCenter(const std::string& cutClass1,
-                        const std::string& cutClass2);
+  bool isCenterToCenter(const std::string &cutClass1,
+                        const std::string &cutClass2);
 
-  bool isCenterAndEdge(const std::string& cutClass1,
-                       const std::string& cutClass2);
+  bool isCenterAndEdge(const std::string &cutClass1,
+                       const std::string &cutClass2);
 
-  bool isPrlForAlignedCutClasses(const std::string& cutClass1,
-                                 const std::string& cutClass2);
+  bool isPrlForAlignedCutClasses(const std::string &cutClass1,
+                                 const std::string &cutClass2);
 
-  int getPrlEntry(const std::string& cutClass1, const std::string& cutClass2);
+  int getPrlEntry(const std::string &cutClass1, const std::string &cutClass2);
 
-  void setSpacingTable(
-      const std::vector<std::vector<std::pair<int, int>>>& table,
-      const std::map<std::string, uint32_t>& row_map,
-      const std::map<std::string, uint32_t>& col_map);
+  void
+  setSpacingTable(const std::vector<std::vector<std::pair<int, int>>> &table,
+                  const std::map<std::string, uint32_t> &row_map,
+                  const std::map<std::string, uint32_t> &col_map);
 
-  void getSpacingTable(std::vector<std::vector<std::pair<int, int>>>& table,
-                       std::map<std::string, uint32_t>& row_map,
-                       std::map<std::string, uint32_t>& col_map);
+  void getSpacingTable(std::vector<std::vector<std::pair<int, int>>> &table,
+                       std::map<std::string, uint32_t> &row_map,
+                       std::map<std::string, uint32_t> &col_map);
 
   int getMaxSpacing(std::string cutClass, bool SIDE) const;
 
-  int getExactAlignedSpacing(const std::string& cutClass) const;
+  int getExactAlignedSpacing(const std::string &cutClass) const;
 
-  int getMaxSpacing(const std::string& cutClass1,
-                    const std::string& cutClass2,
+  int getMaxSpacing(const std::string &cutClass1, const std::string &cutClass2,
                     LOOKUP_STRATEGY strategy = MAX) const;
 
-  int getSpacing(std::string class1,
-                 bool SIDE1,
-                 std::string class2,
-                 bool SIDE2,
+  int getSpacing(std::string class1, bool SIDE1, std::string class2, bool SIDE2,
                  LOOKUP_STRATEGY strategy = MAX) const;
 
-  dbTechLayer* getTechLayer() const;
+  dbTechLayer *getTechLayer() const;
 
-  static dbTechLayerCutSpacingTableDefRule*
-  getTechLayerCutSpacingTableDefSubRule(dbTechLayer* parent, uint32_t dbid);
+  static dbTechLayerCutSpacingTableDefRule *
+  getTechLayerCutSpacingTableDefSubRule(dbTechLayer *parent, uint32_t dbid);
 
   // User Code End dbTechLayerCutSpacingTableDefRule
 };
 
-class dbTechLayerCutSpacingTableOrthRule : public dbObject
-{
- public:
-  void getSpacingTable(std::vector<std::pair<int, int>>& tbl) const;
+class dbTechLayerCutSpacingTableOrthRule : public dbObject {
+public:
+  void getSpacingTable(std::vector<std::pair<int, int>> &tbl) const;
 
-  static dbTechLayerCutSpacingTableOrthRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerCutSpacingTableOrthRule* obj);
+  static dbTechLayerCutSpacingTableOrthRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerCutSpacingTableOrthRule *obj);
   // User Code Begin dbTechLayerCutSpacingTableOrthRule
-  void setSpacingTable(const std::vector<std::pair<int, int>>& tbl);
+  void setSpacingTable(const std::vector<std::pair<int, int>> &tbl);
 
-  static dbTechLayerCutSpacingTableOrthRule*
-  getTechLayerCutSpacingTableOrthSubRule(dbTechLayer* parent, uint32_t dbid);
+  static dbTechLayerCutSpacingTableOrthRule *
+  getTechLayerCutSpacingTableOrthSubRule(dbTechLayer *parent, uint32_t dbid);
 
   // User Code End dbTechLayerCutSpacingTableOrthRule
 };
 
-class dbTechLayerEolExtensionRule : public dbObject
-{
- public:
+class dbTechLayerEolExtensionRule : public dbObject {
+public:
   void setSpacing(int spacing);
 
   int getSpacing() const;
 
-  void getExtensionTable(std::vector<std::pair<int, int>>& tbl) const;
+  void getExtensionTable(std::vector<std::pair<int, int>> &tbl) const;
 
   void setParallelOnly(bool parallel_only);
 
   bool isParallelOnly() const;
 
-  static dbTechLayerEolExtensionRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerEolExtensionRule* obj);
+  static dbTechLayerEolExtensionRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerEolExtensionRule *obj);
   // User Code Begin dbTechLayerEolExtensionRule
 
   void addEntry(int eol, int ext);
 
-  static dbTechLayerEolExtensionRule* getTechLayerEolExtensionRule(
-      dbTechLayer* inly,
-      uint32_t dbid);
+  static dbTechLayerEolExtensionRule *
+  getTechLayerEolExtensionRule(dbTechLayer *inly, uint32_t dbid);
 
   // User Code End dbTechLayerEolExtensionRule
 };
 
-class dbTechLayerEolKeepOutRule : public dbObject
-{
- public:
+class dbTechLayerEolKeepOutRule : public dbObject {
+public:
   void setEolWidth(int eol_width);
 
   int getEolWidth() const;
@@ -10727,9 +10384,9 @@ class dbTechLayerEolKeepOutRule : public dbObject
 
   int getWithinHigh() const;
 
-  void setClassName(const std::string& class_name);
+  void setClassName(const std::string &class_name);
 
-  const std::string& getClassName() const;
+  const std::string &getClassName() const;
 
   void setClassValid(bool class_valid);
 
@@ -10743,20 +10400,18 @@ class dbTechLayerEolKeepOutRule : public dbObject
 
   bool isExceptWithin() const;
 
-  static dbTechLayerEolKeepOutRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerEolKeepOutRule* obj);
+  static dbTechLayerEolKeepOutRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerEolKeepOutRule *obj);
   // User Code Begin dbTechLayerEolKeepOutRule
 
-  static dbTechLayerEolKeepOutRule* getTechLayerEolKeepOutRule(
-      dbTechLayer* inly,
-      uint32_t dbid);
+  static dbTechLayerEolKeepOutRule *
+  getTechLayerEolKeepOutRule(dbTechLayer *inly, uint32_t dbid);
   // User Code End dbTechLayerEolKeepOutRule
 };
 
-class dbTechLayerForbiddenSpacingRule : public dbObject
-{
- public:
-  void setForbiddenSpacing(const std::pair<int, int>& forbidden_spacing);
+class dbTechLayerForbiddenSpacingRule : public dbObject {
+public:
+  void setForbiddenSpacing(const std::pair<int, int> &forbidden_spacing);
 
   std::pair<int, int> getForbiddenSpacing() const;
 
@@ -10786,23 +10441,22 @@ class dbTechLayerForbiddenSpacingRule : public dbObject
 
   bool hasTwoEdges();
 
-  static dbTechLayerForbiddenSpacingRule* create(dbTechLayer* _layer);
+  static dbTechLayerForbiddenSpacingRule *create(dbTechLayer *_layer);
 
-  static void destroy(dbTechLayerForbiddenSpacingRule* rule);
+  static void destroy(dbTechLayerForbiddenSpacingRule *rule);
 
   // User Code End dbTechLayerForbiddenSpacingRule
 };
 
-class dbTechLayerKeepOutZoneRule : public dbObject
-{
- public:
-  void setFirstCutClass(const std::string& first_cut_class);
+class dbTechLayerKeepOutZoneRule : public dbObject {
+public:
+  void setFirstCutClass(const std::string &first_cut_class);
 
-  const std::string& getFirstCutClass() const;
+  const std::string &getFirstCutClass() const;
 
-  void setSecondCutClass(const std::string& second_cut_class);
+  void setSecondCutClass(const std::string &second_cut_class);
 
-  const std::string& getSecondCutClass() const;
+  const std::string &getSecondCutClass() const;
 
   void setAlignedSpacing(int aligned_spacing);
 
@@ -10856,40 +10510,38 @@ class dbTechLayerKeepOutZoneRule : public dbObject
 
   bool isExceptAlignedEnd() const;
 
-  static dbTechLayerKeepOutZoneRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerKeepOutZoneRule* obj);
+  static dbTechLayerKeepOutZoneRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerKeepOutZoneRule *obj);
   // User Code Begin dbTechLayerKeepOutZoneRule
 
   // User Code End dbTechLayerKeepOutZoneRule
 };
 
-class dbTechLayerMaxSpacingRule : public dbObject
-{
- public:
-  void setCutClass(const std::string& cut_class);
+class dbTechLayerMaxSpacingRule : public dbObject {
+public:
+  void setCutClass(const std::string &cut_class);
 
-  const std::string& getCutClass() const;
+  const std::string &getCutClass() const;
 
   void setMaxSpacing(int max_spacing);
 
   int getMaxSpacing() const;
 
-  static dbTechLayerMaxSpacingRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerMaxSpacingRule* obj);
+  static dbTechLayerMaxSpacingRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerMaxSpacingRule *obj);
   // User Code Begin dbTechLayerMaxSpacingRule
   bool hasCutClass() const;
 
   // User Code End dbTechLayerMaxSpacingRule
 };
 
-class dbTechLayerMinCutRule : public dbObject
-{
- public:
+class dbTechLayerMinCutRule : public dbObject {
+public:
   void setNumCuts(int num_cuts);
 
   int getNumCuts() const;
 
-  const std::map<std::string, int>& getCutClassCutsMap() const;
+  const std::map<std::string, int> &getCutClassCutsMap() const;
 
   void setWidth(int width);
 
@@ -10951,21 +10603,20 @@ class dbTechLayerMinCutRule : public dbObject
 
   bool isFullyEnclosed() const;
 
-  static dbTechLayerMinCutRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerMinCutRule* obj);
+  static dbTechLayerMinCutRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerMinCutRule *obj);
   // User Code Begin dbTechLayerMinCutRule
 
-  void setCutsPerCutClass(const std::string& cut_class, int num_cuts);
+  void setCutsPerCutClass(const std::string &cut_class, int num_cuts);
 
-  static dbTechLayerMinCutRule* getTechLayerMinCutRule(dbTechLayer* inly,
+  static dbTechLayerMinCutRule *getTechLayerMinCutRule(dbTechLayer *inly,
                                                        uint32_t dbid);
 
   // User Code End dbTechLayerMinCutRule
 };
 
-class dbTechLayerMinStepRule : public dbObject
-{
- public:
+class dbTechLayerMinStepRule : public dbObject {
+public:
   void setMinStepLength(int min_step_length);
 
   int getMinStepLength() const;
@@ -11030,19 +10681,18 @@ class dbTechLayerMinStepRule : public dbObject
 
   bool isNoAdjacentEol() const;
 
-  static dbTechLayerMinStepRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerMinStepRule* obj);
+  static dbTechLayerMinStepRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerMinStepRule *obj);
   // User Code Begin dbTechLayerMinStepRule
 
-  static dbTechLayerMinStepRule* getTechLayerMinStepRule(dbTechLayer* inly,
+  static dbTechLayerMinStepRule *getTechLayerMinStepRule(dbTechLayer *inly,
                                                          uint32_t dbid);
 
   // User Code End dbTechLayerMinStepRule
 };
 
-class dbTechLayerSpacingEolRule : public dbObject
-{
- public:
+class dbTechLayerSpacingEolRule : public dbObject {
+public:
   void setEolSpace(int eol_space);
 
   int getEolSpace() const;
@@ -11339,20 +10989,18 @@ class dbTechLayerSpacingEolRule : public dbObject
 
   bool isToNotchLengthValid() const;
 
-  static dbTechLayerSpacingEolRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerSpacingEolRule* obj);
+  static dbTechLayerSpacingEolRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerSpacingEolRule *obj);
   // User Code Begin dbTechLayerSpacingEolRule
 
-  static dbTechLayerSpacingEolRule* getTechLayerSpacingEolRule(
-      dbTechLayer* inly,
-      uint32_t dbid);
+  static dbTechLayerSpacingEolRule *
+  getTechLayerSpacingEolRule(dbTechLayer *inly, uint32_t dbid);
 
   // User Code End dbTechLayerSpacingEolRule
 };
 
-class dbTechLayerSpacingTablePrlRule : public dbObject
-{
- public:
+class dbTechLayerSpacingTablePrlRule : public dbObject {
+public:
   void setEolWidth(int eol_width);
 
   int getEolWidth() const;
@@ -11369,24 +11017,22 @@ class dbTechLayerSpacingTablePrlRule : public dbObject
 
   bool isExceeptEol() const;
 
-  static dbTechLayerSpacingTablePrlRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerSpacingTablePrlRule* obj);
+  static dbTechLayerSpacingTablePrlRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerSpacingTablePrlRule *obj);
   // User Code Begin dbTechLayerSpacingTablePrlRule
-  static dbTechLayerSpacingTablePrlRule* getTechLayerSpacingTablePrlRule(
-      dbTechLayer* inly,
-      uint32_t dbid);
+  static dbTechLayerSpacingTablePrlRule *
+  getTechLayerSpacingTablePrlRule(dbTechLayer *inly, uint32_t dbid);
 
-  void setTable(const std::vector<int>& width_tbl,
-                const std::vector<int>& length_tbl,
-                const std::vector<std::vector<int>>& spacing_tbl,
-                const std::map<uint32_t, std::pair<int, int>>& excluded_map);
-  void getTable(std::vector<int>& width_tbl,
-                std::vector<int>& length_tbl,
-                std::vector<std::vector<int>>& spacing_tbl,
-                std::map<uint32_t, std::pair<int, int>>& excluded_map);
+  void setTable(const std::vector<int> &width_tbl,
+                const std::vector<int> &length_tbl,
+                const std::vector<std::vector<int>> &spacing_tbl,
+                const std::map<uint32_t, std::pair<int, int>> &excluded_map);
+  void getTable(std::vector<int> &width_tbl, std::vector<int> &length_tbl,
+                std::vector<std::vector<int>> &spacing_tbl,
+                std::map<uint32_t, std::pair<int, int>> &excluded_map);
 
   void setSpacingTableInfluence(
-      const std::vector<std::tuple<int, int, int>>& influence_tbl);
+      const std::vector<std::tuple<int, int, int>> &influence_tbl);
 
   int getSpacing(int width, int length) const;
 
@@ -11397,9 +11043,8 @@ class dbTechLayerSpacingTablePrlRule : public dbObject
   // User Code End dbTechLayerSpacingTablePrlRule
 };
 
-class dbTechLayerTwoWiresForbiddenSpcRule : public dbObject
-{
- public:
+class dbTechLayerTwoWiresForbiddenSpcRule : public dbObject {
+public:
   void setMinSpacing(int min_spacing);
 
   int getMinSpacing() const;
@@ -11429,15 +11074,14 @@ class dbTechLayerTwoWiresForbiddenSpcRule : public dbObject
   bool isMaxExactSpanLength() const;
 
   // User Code Begin dbTechLayerTwoWiresForbiddenSpcRule
-  static dbTechLayerTwoWiresForbiddenSpcRule* create(dbTechLayer* layer);
+  static dbTechLayerTwoWiresForbiddenSpcRule *create(dbTechLayer *layer);
 
-  static void destroy(dbTechLayerTwoWiresForbiddenSpcRule* rule);
+  static void destroy(dbTechLayerTwoWiresForbiddenSpcRule *rule);
   // User Code End dbTechLayerTwoWiresForbiddenSpcRule
 };
 
-class dbTechLayerVoltageSpacing : public dbObject
-{
- public:
+class dbTechLayerVoltageSpacing : public dbObject {
+public:
   void setTocutAbove(bool tocut_above);
 
   bool isTocutAbove() const;
@@ -11446,18 +11090,17 @@ class dbTechLayerVoltageSpacing : public dbObject
 
   bool isTocutBelow() const;
 
-  static dbTechLayerVoltageSpacing* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerVoltageSpacing* obj);
+  static dbTechLayerVoltageSpacing *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerVoltageSpacing *obj);
   // User Code Begin dbTechLayerVoltageSpacing
-  const std::map<float, int>& getTable() const;
+  const std::map<float, int> &getTable() const;
   void addEntry(float voltage, int spacing);
 
   // User Code End dbTechLayerVoltageSpacing
 };
 
-class dbTechLayerWidthTableRule : public dbObject
-{
- public:
+class dbTechLayerWidthTableRule : public dbObject {
+public:
   void setWrongDirection(bool wrong_direction);
 
   bool isWrongDirection() const;
@@ -11472,19 +11115,17 @@ class dbTechLayerWidthTableRule : public dbObject
 
   std::vector<int> getWidthTable() const;
 
-  static dbTechLayerWidthTableRule* create(dbTechLayer* layer);
+  static dbTechLayerWidthTableRule *create(dbTechLayer *layer);
 
-  static dbTechLayerWidthTableRule* getTechLayerWidthTableRule(
-      dbTechLayer* inly,
-      uint32_t dbid);
+  static dbTechLayerWidthTableRule *
+  getTechLayerWidthTableRule(dbTechLayer *inly, uint32_t dbid);
 
-  static void destroy(dbTechLayerWidthTableRule* rule);
+  static void destroy(dbTechLayerWidthTableRule *rule);
   // User Code End dbTechLayerWidthTableRule
 };
 
-class dbTechLayerWrongDirSpacingRule : public dbObject
-{
- public:
+class dbTechLayerWrongDirSpacingRule : public dbObject {
+public:
   void setWrongdirSpace(int wrongdir_space);
 
   int getWrongdirSpace() const;
@@ -11509,43 +11150,39 @@ class dbTechLayerWrongDirSpacingRule : public dbObject
 
   bool isLengthValid() const;
 
-  static dbTechLayerWrongDirSpacingRule* create(dbTechLayer* parent);
-  static void destroy(dbTechLayerWrongDirSpacingRule* obj);
+  static dbTechLayerWrongDirSpacingRule *create(dbTechLayer *parent);
+  static void destroy(dbTechLayerWrongDirSpacingRule *obj);
   // User Code Begin dbTechLayerWrongDirSpacingRule
 
-  static dbTechLayerWrongDirSpacingRule* getTechLayerWrongDirSpacingRule(
-      dbTechLayer* inly,
-      uint32_t dbid);
+  static dbTechLayerWrongDirSpacingRule *
+  getTechLayerWrongDirSpacingRule(dbTechLayer *inly, uint32_t dbid);
 
   // User Code End dbTechLayerWrongDirSpacingRule
 };
 
-class dbUnfoldedChipBumpInst : public dbObject
-{
- public:
-  dbChipBumpInst* getChipBumpInst() const;
+class dbUnfoldedChipBumpInst : public dbObject {
+public:
+  dbChipBumpInst *getChipBumpInst() const;
 
-  dbUnfoldedChipRegionInst* getParentRegion() const;
+  dbUnfoldedChipRegionInst *getParentRegion() const;
 
   // User Code Begin dbUnfoldedChipBumpInst
   Point3D getGlobalPosition() const;
   // User Code End dbUnfoldedChipBumpInst
 };
 
-class dbUnfoldedChipConn : public dbObject
-{
- public:
-  dbChipConn* getChipConn() const;
+class dbUnfoldedChipConn : public dbObject {
+public:
+  dbChipConn *getChipConn() const;
 
-  dbUnfoldedChipRegionInst* getTopRegion() const;
+  dbUnfoldedChipRegionInst *getTopRegion() const;
 
-  dbUnfoldedChipRegionInst* getBottomRegion() const;
+  dbUnfoldedChipRegionInst *getBottomRegion() const;
 };
 
-class dbUnfoldedChipInst : public dbObject
-{
- public:
-  const std::string& getName() const;
+class dbUnfoldedChipInst : public dbObject {
+public:
+  const std::string &getName() const;
 
   dbTransform getTransform() const;
 
@@ -11558,40 +11195,32 @@ class dbUnfoldedChipInst : public dbObject
   /// Return the chip-instance path that uniquely identifies this unfolded
   /// chip in the folded hierarchy (top-most chip inst first, leaf last).
   ///
-  std::vector<dbChipInst*> getChipInstPath() const;
+  std::vector<dbChipInst *> getChipInstPath() const;
 
   ///
   /// Find the unfolded region within this chip whose source region instance
   /// matches `source`. Returns nullptr if no match.
   ///
-  dbUnfoldedChipRegionInst* findRegion(dbChipRegionInst* source) const;
+  dbUnfoldedChipRegionInst *findRegion(dbChipRegionInst *source) const;
   // User Code End dbUnfoldedChipInst
 };
 
-class dbUnfoldedChipNet : public dbObject
-{
- public:
-  dbChipNet* getChipNet() const;
+class dbUnfoldedChipNet : public dbObject {
+public:
+  dbChipNet *getChipNet() const;
 
   // User Code Begin dbUnfoldedChipNet
-  std::vector<dbUnfoldedChipBumpInst*> getConnectedBumps() const;
+  std::vector<dbUnfoldedChipBumpInst *> getConnectedBumps() const;
   // User Code End dbUnfoldedChipNet
 };
 
-class dbUnfoldedChipRegionInst : public dbObject
-{
- public:
-  enum class EffectiveSide
-  {
-    TOP,
-    BOTTOM,
-    INTERNAL,
-    INTERNAL_EXT
-  };
+class dbUnfoldedChipRegionInst : public dbObject {
+public:
+  enum class EffectiveSide { TOP, BOTTOM, INTERNAL, INTERNAL_EXT };
 
-  dbChipRegionInst* getChipRegionInst() const;
+  dbChipRegionInst *getChipRegionInst() const;
 
-  dbUnfoldedChipInst* getParentChip() const;
+  dbUnfoldedChipInst *getParentChip() const;
 
   // User Code Begin dbUnfoldedChipRegionInst
   Cuboid getCuboid() const;
@@ -11614,9 +11243,8 @@ class dbUnfoldedChipRegionInst : public dbObject
 ///
 /// dbProperty - Boolean property.
 ///
-class dbBoolProperty : public dbProperty
-{
- public:
+class dbBoolProperty : public dbProperty {
+public:
   /// Get the value of this property.
   bool getValue();
 
@@ -11625,42 +11253,39 @@ class dbBoolProperty : public dbProperty
 
   /// Create a bool property. Returns nullptr if a property with the same name
   /// already exists.
-  static dbBoolProperty* create(dbObject* object, const char* name, bool value);
+  static dbBoolProperty *create(dbObject *object, const char *name, bool value);
 
   /// Find the named property of type bool. Returns nullptr if the property does
   /// not exist.
-  static dbBoolProperty* find(dbObject* object, const char* name);
+  static dbBoolProperty *find(dbObject *object, const char *name);
 };
 
 ///
 /// dbProperty - String property.
 ///
-class dbStringProperty : public dbProperty
-{
- public:
+class dbStringProperty : public dbProperty {
+public:
   /// Get the value of this property.
   std::string getValue();
 
   /// Set the value of this property.
-  void setValue(const char* value);
+  void setValue(const char *value);
 
   /// Create a string property. Returns nullptr if a property with the same name
   /// already exists.
-  static dbStringProperty* create(dbObject* object,
-                                  const char* name,
-                                  const char* value);
+  static dbStringProperty *create(dbObject *object, const char *name,
+                                  const char *value);
 
   /// Find the named property of type string. Returns nullptr if the property
   /// does not exist.
-  static dbStringProperty* find(dbObject* object, const char* name);
+  static dbStringProperty *find(dbObject *object, const char *name);
 };
 
 ///
 /// dbProperty - Int property.
 ///
-class dbIntProperty : public dbProperty
-{
- public:
+class dbIntProperty : public dbProperty {
+public:
   /// Get the value of this property.
   int getValue();
 
@@ -11669,19 +11294,18 @@ class dbIntProperty : public dbProperty
 
   /// Create a int property. Returns nullptr if a property with the same name
   /// already exists.
-  static dbIntProperty* create(dbObject* object, const char* name, int value);
+  static dbIntProperty *create(dbObject *object, const char *name, int value);
 
   /// Find the named property of type int. Returns nullptr if the property does
   /// not exist.
-  static dbIntProperty* find(dbObject* object, const char* name);
+  static dbIntProperty *find(dbObject *object, const char *name);
 };
 
 ///
 /// dbProperty - Double property.
 ///
-class dbDoubleProperty : public dbProperty
-{
- public:
+class dbDoubleProperty : public dbProperty {
+public:
   /// Get the value of this property.
   double getValue();
 
@@ -11690,16 +11314,15 @@ class dbDoubleProperty : public dbProperty
 
   /// Create a double property. Returns nullptr if a property with the same name
   /// already exists.
-  static dbDoubleProperty* create(dbObject* object,
-                                  const char* name,
+  static dbDoubleProperty *create(dbObject *object, const char *name,
                                   double value);
 
   /// Find the named property of type double. Returns nullptr if the property
   /// does not exist.
-  static dbDoubleProperty* find(dbObject* object, const char* name);
+  static dbDoubleProperty *find(dbObject *object, const char *name);
 };
 
-}  // namespace odb
+} // namespace odb
 
 // Overload std::less for these types
-#include "odb/dbCompare.inc"  // IWYU pragma: export
+#include "odb/dbCompare.inc" // IWYU pragma: export

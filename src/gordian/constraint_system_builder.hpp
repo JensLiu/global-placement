@@ -12,7 +12,8 @@ public:
                           const Vector<Region> &regions,
                           const MovableSystem &parameters)
       : registry__(registry), regions__(regions), sys__(parameters) {
-    sys__.module_id_to_free_id__.resize(registry.n_movable_modules());
+    sys__.module_id_to_free_id__.assign(registry.n_movable_modules(),
+                                        ConstraintSystem::not_free);
 
     build_free_id__();
     build_Z_dx_dy__();
@@ -27,7 +28,7 @@ private:
 
   void build_free_id__() {
 
-    Set<int> rep_module_ids;
+    Set<size_t> rep_module_ids;
     for (const auto &region : regions__) {
       rep_module_ids.insert(region.representative()->get_id());
     }
@@ -93,9 +94,26 @@ private:
     // std::cout << "x0=" << sys__.x0.transpose() << std::endl;
     // std::cout << "y0=" << sys__.y0.transpose() << std::endl;
 
+    sys__.Z.makeCompressed();
+
     const auto &param = sys__.parameters;
     sys__.dx = sys__.Z.transpose() * (param.C * sys__.x0 + param.bx);
     sys__.dy = sys__.Z.transpose() * (param.C * sys__.y0 + param.by);
+
+    // Stopping reference only; the system above is unchanged.
+    Eigen::VectorXd xc(static_cast<Eigen::Index>(n_modules));
+    Eigen::VectorXd yc(static_cast<Eigen::Index>(n_modules));
+    for (const auto &region : regions__) {
+      const auto [x_bar, y_bar] = region.get_centre_xy();
+      for (const auto *module : region.movable_modules) {
+        xc(static_cast<Eigen::Index>(module->get_id())) = x_bar;
+        yc(static_cast<Eigen::Index>(module->get_id())) = y_bar;
+      }
+    }
+    sys__.dx_reference_norm =
+        (sys__.Z.transpose() * (param.C * xc + param.bx)).norm();
+    sys__.dy_reference_norm =
+        (sys__.Z.transpose() * (param.C * yc + param.by)).norm();
   }
 
   const ModuleRegistry &registry__;

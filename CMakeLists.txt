@@ -13,10 +13,17 @@ set(GP_DEPENDENCY_CACHE "" CACHE PATH
     "Existing OpenROAD Bazel external directory containing dependency sources")
 add_subdirectory(src/libs)
 
+# Optional observational trace support; the numerical solver has no JSON logic.
+add_library(placement_tracer STATIC src/tracer/placement_tracer.cpp
+                                   src/tracer/placement_metrics.cpp)
+target_include_directories(placement_tracer PUBLIC src)
+target_link_libraries(placement_tracer PUBLIC opendb_core Eigen3::Eigen PRIVATE placement_json)
+target_compile_options(placement_tracer PRIVATE -Wall -Wextra -Wpedantic)
+
 # Algorithm targets belong here. Learning tools build separately in docs/plan/tools.
 add_executable(odb_hello src/main.cpp)
 target_include_directories(odb_hello PRIVATE src)
-target_link_libraries(odb_hello PRIVATE opendb_core Eigen3::Eigen)
+target_link_libraries(odb_hello PRIVATE opendb_core Eigen3::Eigen placement_json placement_tracer)
 target_compile_options(odb_hello PRIVATE -Wall -Wextra -Wpedantic)
 
 # Give standalone first-party headers the application's exact compiler flags.
@@ -32,6 +39,16 @@ add_dependencies(odb_hello clangd_database)
 
 include(CTest)
 if(BUILD_TESTING)
+  add_executable(placement_tracer_smoke tests/placement_tracer_smoke.cpp)
+  target_link_libraries(placement_tracer_smoke PRIVATE placement_tracer placement_json)
+  target_compile_options(placement_tracer_smoke PRIVATE -Wall -Wextra -Wpedantic)
+  add_test(NAME placement_tracer_smoke COMMAND placement_tracer_smoke)
+
+  add_executable(json_smoke tests/json_smoke.cpp)
+  target_link_libraries(json_smoke PRIVATE placement_json)
+  target_compile_options(json_smoke PRIVATE -Wall -Wextra -Wpedantic)
+  add_test(NAME json_smoke COMMAND json_smoke)
+
   add_executable(eigen_smoke tests/eigen_smoke.cpp)
   target_link_libraries(eigen_smoke PRIVATE Eigen3::Eigen)
   target_compile_options(eigen_smoke PRIVATE -Wall -Wextra -Wpedantic)
@@ -39,7 +56,7 @@ if(BUILD_TESTING)
 
   add_executable(gordian_builder_smoke tests/gordian_builder_smoke.cpp)
   target_include_directories(gordian_builder_smoke PRIVATE src)
-  target_link_libraries(gordian_builder_smoke PRIVATE opendb_core Eigen3::Eigen)
+  target_link_libraries(gordian_builder_smoke PRIVATE opendb_core Eigen3::Eigen placement_tracer)
   target_compile_options(gordian_builder_smoke PRIVATE -Wall -Wextra -Wpedantic)
   add_test(NAME gordian_builder_smoke COMMAND gordian_builder_smoke)
 

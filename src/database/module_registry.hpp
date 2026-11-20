@@ -89,6 +89,14 @@ public:
 
   auto size() const -> std::size_t { return modules__.size(); }
 
+  auto n_movable_modules() const -> std::size_t {
+    return fixed_module_id_start__;
+  }
+
+  auto n_fixed_modules() const -> std::size_t {
+    return modules__.size() - fixed_module_id_start__;
+  }
+
   auto movable_count() const -> std::size_t { return fixed_module_id_start__; }
 
   // Read-only, non-owning views into the contiguous ID partitions. Successful
@@ -116,10 +124,9 @@ public:
 
   auto is_fixed(std::size_t id) const -> bool { return !is_movable(id); }
 
-  auto n_movable_modules() const -> size_t { return fixed_module_id_start__; }
-
-  auto n_fixed_modules() const -> size_t {
-    return modules__.size() - n_movable_modules();
+  auto get_modules() const -> std::span<const ModuleRef> {
+    require_collected__();
+    return std::span(modules__);
   }
 
   auto get_movable_modules() const -> std::span<const ModuleRef> {

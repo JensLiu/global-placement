@@ -1,0 +1,15 @@
+AGENTS.md
+/docs/
+/build/
+.clangd
+.nvim.lua
+/.vscode/
+/cmake/
+
+# Generated caches and Python bytecode (at any depth).
+__pycache__/
+*.py[cod]
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
