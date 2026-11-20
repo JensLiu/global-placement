@@ -26,11 +26,9 @@ endforeach()
 add_library(placement_eigen INTERFACE)
 add_library(Eigen3::Eigen ALIAS placement_eigen)
 target_include_directories(placement_eigen SYSTEM INTERFACE "${GP_EIGEN_SOURCE_DIR}")
-# Eigen parallelises only when compiled with OpenMP (it then defines
-# EIGEN_HAS_OPENMP). Disabled for now: the current operator gains nothing from
-# threads (see docs/plan/eigen-matrix-free-interface.md). Uncomment to restore.
-# find_package(OpenMP REQUIRED COMPONENTS CXX)
-# target_link_libraries(placement_eigen INTERFACE OpenMP::OpenMP_CXX)
+# Enable Eigen's OpenMP kernels as well as our own parallel net assembly.
+# OMP_NUM_THREADS controls both; column-major sparse products may stay serial.
+target_link_libraries(placement_eigen INTERFACE OpenMP::OpenMP_CXX)
 
 set(ABSL_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 set(ABSL_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)

@@ -132,12 +132,21 @@ int main() {
           "region did not observe registry placement");
   registry.place_module(moving_ref->get_id(), original_xy.first, original_xy.second);
 
+  // The OpenMP builder must reproduce the serial system.
+  const auto same_as_parallel = [&](const gordian::MovableSystem &serial,
+                                    gordian::IoMode mode) {
+    const auto parallel = GlobalParameterBuilder::build_parallel(block, registry, mode);
+    near((Eigen::MatrixXd(serial.C) - Eigen::MatrixXd(parallel.C)).norm(), 0);
+    near((serial.bx - parallel.bx).norm(), 0);
+    near((serial.by - parallel.by).norm(), 0);
+  };
   auto parameters = GlobalParameterBuilder{}.build(block, registry, gordian::IoMode::FIXED);
   require(parameters.C.rows() == 1 && parameters.C.cols() == 1,
           "returned system is not movable-only");
   near(parameters.C.coeff(0, 0), 1.0);
   near(parameters.bx(0), -70.0);
   near(parameters.by(0), -124.0);
+  same_as_parallel(parameters, gordian::IoMode::FIXED);
 
   // Solver exposes the same owned reduced result, not full-system storage.
   Solver with_io(block);
@@ -154,6 +163,7 @@ int main() {
   // Reacquire after recollection: pointers into the old collection are invalid.
   near(skip.bx(0), -(2.0 / 3.0) * registry.from_inst(fixed)->get_xy().first);
   near(skip.by(0), -(2.0 / 3.0) * registry.from_inst(fixed)->get_xy().second);
+  same_as_parallel(skip, gordian::IoMode::SKIP);
   const auto before = Eigen::MatrixXd(skip.C);
   skip = GlobalParameterBuilder{}.build(block, registry, gordian::IoMode::SKIP);
   near((Eigen::MatrixXd(skip.C) - before).norm(), 0);
@@ -179,6 +189,7 @@ int main() {
   near(all_movable.C.coeff(0, 0), 2.0 / 3.0);
   near(all_movable.C.coeff(0, 1), -2.0 / 3.0);
   near(all_movable.bx.norm(), 0);
+  same_as_parallel(all_movable, gordian::IoMode::SKIP);
   near(all_movable.by.norm(), 0);
 
   fixed->findITerm("A")->disconnect();

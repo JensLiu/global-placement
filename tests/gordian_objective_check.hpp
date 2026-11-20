@@ -207,8 +207,14 @@ inline void randomized_objective_checks() {
       const gordian::GlobalParameterBuilder builder;
       auto system = builder.build(block, registry, mode);
       verify_objective(system, registry, included_nets, mode, rng);
-      system = builder.build(block, registry, mode);
-      verify_objective(system, registry, included_nets, mode, rng);
+      auto parallel = builder.build_parallel(block, registry, mode);
+      if (parallel.C.nonZeros() != system.C.nonZeros() ||
+          (parallel.C - system.C).norm() != 0 ||
+          !(parallel.bx.array() == system.bx.array()).all() ||
+          !(parallel.by.array() == system.by.array()).all()) {
+        throw std::runtime_error("parallel builder differs from serial oracle case");
+      }
+      verify_objective(parallel, registry, included_nets, mode, rng);
     }
   }
 }

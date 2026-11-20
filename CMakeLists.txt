@@ -11,19 +11,23 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static application libraries" FORCE)
 set(GP_DEPENDENCY_CACHE "" CACHE PATH
     "Existing OpenROAD Bazel external directory containing dependency sources")
+# OpenMP supports both first-party parallel code and Eigen's eligible kernels.
+find_package(OpenMP REQUIRED COMPONENTS CXX)
+add_library(placement_openmp INTERFACE)
+target_link_libraries(placement_openmp INTERFACE OpenMP::OpenMP_CXX)
 add_subdirectory(src/libs)
 
 # Optional observational trace support; the numerical solver has no JSON logic.
 add_library(placement_tracer STATIC src/tracer/placement_tracer.cpp
                                    src/tracer/placement_metrics.cpp)
 target_include_directories(placement_tracer PUBLIC src)
-target_link_libraries(placement_tracer PUBLIC opendb_core Eigen3::Eigen PRIVATE placement_json)
+target_link_libraries(placement_tracer PUBLIC opendb_core Eigen3::Eigen PRIVATE placement_json placement_openmp)
 target_compile_options(placement_tracer PRIVATE -Wall -Wextra -Wpedantic)
 
 # Algorithm targets belong here. Learning tools build separately in docs/plan/tools.
 add_executable(odb_hello src/main.cpp)
 target_include_directories(odb_hello PRIVATE src)
-target_link_libraries(odb_hello PRIVATE opendb_core Eigen3::Eigen placement_json placement_tracer)
+target_link_libraries(odb_hello PRIVATE opendb_core Eigen3::Eigen placement_json placement_tracer placement_openmp)
 target_compile_options(odb_hello PRIVATE -Wall -Wextra -Wpedantic)
 
 # Give standalone first-party headers the application's exact compiler flags.
@@ -39,6 +43,18 @@ add_dependencies(odb_hello clangd_database)
 
 include(CTest)
 if(BUILD_TESTING)
+  # Opt-in: requires a real ORFS ODB, so it is not an automatic CTest test.
+  add_executable(real_design_audit EXCLUDE_FROM_ALL tests/real_design_audit.cpp)
+  target_include_directories(real_design_audit PRIVATE src)
+  target_link_libraries(real_design_audit PRIVATE opendb_core Eigen3::Eigen placement_openmp)
+  target_compile_options(real_design_audit PRIVATE -Wall -Wextra -Wpedantic)
+
+  add_executable(constraint_system_smoke tests/constraint_system_smoke.cpp)
+  target_include_directories(constraint_system_smoke PRIVATE src)
+  target_link_libraries(constraint_system_smoke PRIVATE opendb_core Eigen3::Eigen)
+  target_compile_options(constraint_system_smoke PRIVATE -Wall -Wextra -Wpedantic)
+  add_test(NAME constraint_system_smoke COMMAND constraint_system_smoke)
+
   add_executable(placement_tracer_smoke tests/placement_tracer_smoke.cpp)
   target_link_libraries(placement_tracer_smoke PRIVATE placement_tracer placement_json)
   target_compile_options(placement_tracer_smoke PRIVATE -Wall -Wextra -Wpedantic)
@@ -56,7 +72,7 @@ if(BUILD_TESTING)
 
   add_executable(gordian_builder_smoke tests/gordian_builder_smoke.cpp)
   target_include_directories(gordian_builder_smoke PRIVATE src)
-  target_link_libraries(gordian_builder_smoke PRIVATE opendb_core Eigen3::Eigen placement_tracer)
+  target_link_libraries(gordian_builder_smoke PRIVATE opendb_core Eigen3::Eigen placement_tracer placement_openmp)
   target_compile_options(gordian_builder_smoke PRIVATE -Wall -Wextra -Wpedantic)
   add_test(NAME gordian_builder_smoke COMMAND gordian_builder_smoke)
 

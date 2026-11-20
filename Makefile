@@ -42,6 +42,8 @@ DESIGN ?= picorv32
 ODB ?= $(ORFS_FLOW)/results/$(PLATFORM)/$(DESIGN)/base/3_2_place_iop.odb
 # Frame image formats: png = preview, pdf = vector (sharp at any zoom), svg also possible.
 IMAGE_FORMATS ?= png pdf
+# 0 chooses up to eight rendering processes; 1 restores serial export.
+RENDER_JOBS ?= 0
 # fixed: post-IO placement; skip: preliminary placement without IO endpoints.
 IO_MODE ?= fixed
 # A fresh directory per invocation: the collector never overwrites a run.
@@ -70,7 +72,7 @@ run: build
 	if test -n "$$trace_dir"; then printf 'Placement trace: %s\n' "$$trace_dir"; fi; \
 	GP_TRACE_DIR="$$trace_dir" "$(BUILD_DIR)/odb_hello" "$(ODB)" --io-mode "$(IO_MODE)" || exit $$?; \
 	if test -n "$$trace_dir"; then \
-		"$(PYTHON)" scripts/generate_placement_images.py "$$trace_dir" --bbox --format $(IMAGE_FORMATS) || exit $$?; \
+		"$(PYTHON)" scripts/generate_placement_images.py "$$trace_dir" --jobs "$(RENDER_JOBS)" --bbox --format $(IMAGE_FORMATS) || exit $$?; \
 		"$(PYTHON)" scripts/summarise_trace.py "$$trace_dir" --plot "$$trace_dir/metrics.png"; \
 	fi
 
@@ -88,7 +90,7 @@ full: build
 	printf 'Run folder: %s\n' "$$trace_dir"; \
 	GP_TRACE_DIR="$$trace_dir" "$(BUILD_DIR)/odb_hello" "$(ODB)" --io-mode "$(IO_MODE)" \
 		--write-db "$$trace_dir/global_placement.odb" || exit $$?; \
-	"$(PYTHON)" scripts/generate_placement_images.py "$$trace_dir" --bbox --format $(IMAGE_FORMATS) > /dev/null || exit $$?; \
+	"$(PYTHON)" scripts/generate_placement_images.py "$$trace_dir" --jobs "$(RENDER_JOBS)" --bbox --format $(IMAGE_FORMATS) > /dev/null || exit $$?; \
 	"$(PYTHON)" scripts/summarise_trace.py "$$trace_dir" --plot "$$trace_dir/metrics.png" || exit $$?; \
 	$(BENCH_REF) || exit $$?; \
 	"$(PYTHON)" scripts/bench.py evaluate "$$trace_dir" --design "$(DESIGN)" --platform "$(PLATFORM)" --orfs "$(ORFS_FLOW)" || exit $$?; \
@@ -135,7 +137,8 @@ help:
 		'make run TRACE_DIR=path  Collect JSON and export images in a new directory of your choice' \
 		'make run TRACE_DIR=  Run without collecting JSON or exporting images' \
 		'make run PYTHON=path  Select the Python interpreter (requires Matplotlib)' \
+		'make run RENDER_JOBS=8  Render up to eight frames concurrently (0 = auto, 1 = serial)' \
 		'make run IO_MODE=fixed ODB=path  Run an IO-aware placement input' \
 		'make run IO_MODE=skip ODB=path   Run a pre-IO placement input' \
 		'make clean           Clean selected configuration; retain the other builds' \
-		'Overrides: DEBUG (0/1), BUILD_DIR, BUILD_TYPE, GENERATOR, JOBS, CMAKE, GDB, PYTHON, GP_DEPENDENCY_CACHE, ODB, IO_MODE (fixed|skip), TRACE_DIR'
+		'Overrides: DEBUG (0/1), BUILD_DIR, BUILD_TYPE, GENERATOR, JOBS, CMAKE, GDB, PYTHON, GP_DEPENDENCY_CACHE, ODB, IO_MODE (fixed|skip), TRACE_DIR, IMAGE_FORMATS, RENDER_JOBS'

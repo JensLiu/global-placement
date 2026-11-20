@@ -5,6 +5,12 @@
 #include "database/pin_ref.hpp"
 #include "gordian/movable_system.hpp"
 
+#include <cstdint>
+#include <exception>
+#include <iostream>
+#include <mutex>
+#include <tuple>
+
 namespace gordian {
 
 class GlobalParameterBuilder {
@@ -18,6 +24,23 @@ public:
     // Validate collection even when the block contains no nets.
     (void)registry.movable_modules();
     auto full = build_full_C_b__(block, registry, io_mode);
+    return build_movable_C_b__(std::move(full), registry);
+  }
+
+  // PARALLEL: OpenMP version of build(). Nets are processed in parallel,
+  // each into its own slot; the slots are then merged serially in net order,
+  // so every coefficient is summed in exactly the order build() uses. The
+  // result is bit-identical to build() for any thread count. Without -fopenmp
+  // the pragmas are ignored and it runs on one thread.
+  static auto build_parallel(odb::dbBlock *block,
+                             const ModuleRegistry &registry, IoMode io_mode)
+      -> MovableSystem {
+    if (block == nullptr) {
+      throw std::invalid_argument(
+          "GlobalParameterBuilder::build_parallel: null block");
+    }
+    (void)registry.movable_modules();
+    auto full = build_full_C_b_parallel__(block, registry, io_mode);
     return build_movable_C_b__(std::move(full), registry);
   }
 
@@ -148,6 +171,127 @@ private:
 #endif
     }
     return full;
+  }
+
+  // PARALLEL: one net's contribution, in the order build_full_C_b__ applies it.
+  struct NetContribution__ {
+    Vector<Eigen::Triplet<double>> C; // (i, j, -W_ij) then (i, i, +W_ij)
+    Vector<std::tuple<Eigen::Index, double, double>> b; // (i, Bx_ij, By_ij)
+  };
+
+  // PARALLEL: OpenMP counterpart of build_full_C_b__.
+  static auto build_full_C_b_parallel__(odb::dbBlock *block__,
+                                        const ModuleRegistry &module_registry__,
+                                        IoMode io_mode__) -> MovableSystem {
+    const auto n_modules = static_cast<Eigen::Index>(module_registry__.size());
+
+    // Filter serially: ODB set iteration is sequential, and the "Skipped"
+    // messages keep the serial builder's order.
+    Vector<const odb::dbNet *> nets;
+    for (const auto *net : block__->getNets()) {
+      if (!include_net__(net)) {
+        std::cout << "Skipped " << net->getName() << std::endl;
+        continue;
+      }
+      assert(net->getWeight() == 1);
+      nets.push_back(net);
+    }
+
+    Vector<NetContribution__> contributions(nets.size());
+    std::exception_ptr error;
+    std::mutex error_mutex;
+    const auto n_nets = static_cast<std::int64_t>(nets.size());
+
+    // Read-only ODB/registry access; each iteration writes only its own slot.
+#pragma omp parallel for schedule(dynamic, 64)
+    for (std::int64_t k = 0; k < n_nets; ++k) {
+      const auto slot = static_cast<std::size_t>(k);
+      try {
+        contributions[slot] = net_contribution_parallel__(nets[slot], io_mode__,
+                                                          module_registry__);
+      } catch (...) {
+        // Exceptions must not leave an OpenMP region; rethrow afterwards.
+        const std::lock_guard lock(error_mutex);
+        if (!error) {
+          error = std::current_exception();
+        }
+      }
+    }
+    if (error) {
+      std::rethrow_exception(error);
+    }
+
+    // Serial merge in net order. setFromTriplets sums duplicates in insertion
+    // order, matching build_full_C_b__'s coeffRef accumulation.
+    std::size_t n_triplets = 0;
+    for (const auto &contribution : contributions) {
+      n_triplets += contribution.C.size();
+    }
+    Vector<Eigen::Triplet<double>> triplets;
+    triplets.reserve(n_triplets);
+    MovableSystem full;
+    full.bx.setZero(n_modules);
+    full.by.setZero(n_modules);
+    for (auto &contribution : contributions) {
+      triplets.insert(triplets.end(), contribution.C.begin(),
+                      contribution.C.end());
+      for (const auto &[i, bx, by] : contribution.b) {
+        full.bx(i) += bx;
+        full.by(i) += by;
+      }
+      contribution = {}; // release memory as we go
+    }
+    full.C.resize(n_modules, n_modules);
+    full.C.setFromTriplets(triplets.begin(), triplets.end());
+    return full;
+  }
+
+  // PARALLEL helper: mirrors one iteration of build_full_C_b__'s net loop.
+  static auto net_contribution_parallel__(const odb::dbNet *net, IoMode io_mode,
+                                          const ModuleRegistry &module_registry)
+      -> NetContribution__ {
+    NetContribution__ out;
+    const auto net_modules =
+        extract_net_modules__(net, io_mode, module_registry);
+    size_t p_n = 0;
+    for (const auto &[module, pins] : net_modules) {
+      p_n += pins.size();
+    }
+    if (p_n < 2) {
+      return out;
+    }
+    const double e = net->getWeight() / static_cast<double>(p_n);
+
+    Map<size_t, Pair<double>> offset_sums;
+    for (const auto &[module, pins] : net_modules) {
+      offset_sums.emplace(module.get_id(), get_pin_sum_of_offsets__(pins));
+    }
+
+    for (const auto &[module, pins] : net_modules) {
+      const auto i = module.get_id();
+      const int p_ni = pins.size();
+      const auto poff_sum_i = offset_sums.at(i);
+      for (const auto &[another_module, another_pins] : net_modules) {
+        const auto j = another_module.get_id();
+        if (i == j) {
+          continue;
+        }
+        const int p_nj = another_pins.size();
+        const double W_ij_partial = e * p_ni * p_nj;
+        const auto poff_sum_j = offset_sums.at(j);
+        const double Bx_ij_partial =
+            e * (p_nj * poff_sum_i.first - p_ni * poff_sum_j.first);
+        const double By_ij_partial =
+            e * (p_nj * poff_sum_i.second - p_ni * poff_sum_j.second);
+        out.C.emplace_back(static_cast<int>(i), static_cast<int>(j),
+                           -W_ij_partial);
+        out.C.emplace_back(static_cast<int>(i), static_cast<int>(i),
+                           W_ij_partial);
+        out.b.emplace_back(static_cast<Eigen::Index>(i), Bx_ij_partial,
+                           By_ij_partial);
+      }
+    }
+    return out;
   }
 
   static auto build_movable_C_b__(MovableSystem full,

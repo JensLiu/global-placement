@@ -9,6 +9,9 @@
 
 static_assert(EIGEN_VERSION_AT_LEAST(3, 4, 0),
               "Eigen 3.4 or newer is required");
+#ifndef EIGEN_HAS_OPENMP
+#error "Eigen OpenMP support must be enabled"
+#endif
 
 int main() {
   // Positive-definite toy system, not a placement algorithm.
@@ -55,6 +58,29 @@ int main() {
     return 1;
   }
 
+  // Exercise an eligible OpenMP kernel (>20 000 nonzeros, row-major), and
+  // compare against the column-major sparse product, which stays serial.
+  constexpr int rows = 12000;
+  std::vector<Eigen::Triplet<double>> parallel_entries;
+  parallel_entries.reserve(3 * rows);
+  for (int i = 0; i < rows; ++i) {
+    parallel_entries.emplace_back(i, i, 4.0);
+    if (i > 0) parallel_entries.emplace_back(i, i-1, -1.0);
+    if (i+1 < rows) parallel_entries.emplace_back(i, i+1, -1.0);
+  }
+  Eigen::SparseMatrix<double, Eigen::RowMajor> row_major(rows, rows);
+  row_major.setFromTriplets(parallel_entries.begin(), parallel_entries.end());
+  const Eigen::SparseMatrix<double> column_major = row_major;
+  const Eigen::VectorXd v = Eigen::VectorXd::LinSpaced(rows, -2, 3);
+  const Eigen::VectorXd parallel_product = row_major * v;
+  const Eigen::VectorXd serial_product = column_major * v;
+  if (!parallel_product.allFinite() ||
+      (parallel_product-serial_product).norm() > 1e-12 * serial_product.norm()) {
+    std::cerr << "Parallel sparse product differs from serial reference\n";
+    return 1;
+  }
+
+  std::cout << "Eigen OpenMP threads: " << Eigen::nbThreads() << '\n';
   std::cout << "Eigen " << EIGEN_WORLD_VERSION << '.' << EIGEN_MAJOR_VERSION
             << '.' << EIGEN_MINOR_VERSION << ": sparse solver checks passed\n";
   return 0;

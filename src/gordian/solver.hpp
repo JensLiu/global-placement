@@ -37,7 +37,8 @@ public:
     construct_module_data__();
     initial_partition__();
     parameters__ =
-        GlobalParameterBuilder::build(block__, module_registry__, io_mode__);
+        GlobalParameterBuilder::build_parallel(block__, module_registry__,
+                                               io_mode__);
     std::cout << "Finished building" << std::endl;
   }
 

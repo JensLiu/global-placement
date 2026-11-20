@@ -297,6 +297,49 @@ class TraceTests(unittest.TestCase):
                         "--output-dir", single, "--frame", 1, "--format", "svg")
         self.assertEqual([p.name for p in single.iterdir()], ["frame-000001-solve.svg"])
 
+    def test_parallel_export_matches_serial_pixels_and_metrics(self):
+        import matplotlib.image as mpimg
+        import numpy as np
+        self.write_metrics(json.loads(self.original_design)["run_id"])
+        try:
+            directories = []
+            for jobs in (1, 2):
+                output = Path(self.temp.name) / f"export-jobs-{jobs}"
+                directories.append(output)
+                result = self.run_script(
+                    "generate_placement_images.py", self.directory, "--output-dir", output,
+                    "--jobs", jobs, "--format", "png", "pdf", "svg", "--dpi", 60,
+                    "--bbox", "--drift", "--no-area", "--no-colour", "--scale", 1)
+                self.assertEqual([Path(line).name for line in result.stdout.splitlines()],
+                                 [f"frame-{index:06d}-solve.{fmt}"
+                                  for index in range(2) for fmt in ("png", "pdf", "svg")])
+                for path in output.iterdir():
+                    self.assertGreater(path.stat().st_size, 1000)
+            for index in range(2):
+                name = f"frame-{index:06d}-solve.png"
+                np.testing.assert_array_equal(mpimg.imread(directories[0] / name),
+                                              mpimg.imread(directories[1] / name))
+                svg = (directories[1] / f"frame-{index:06d}-solve.svg").read_text()
+                self.assertIn("HPWL", svg)
+            # Selecting frame 1 must retain that frame's metrics, not frame 0's.
+            single = Path(self.temp.name) / "export-single-metrics"
+            self.run_script("generate_placement_images.py", self.directory,
+                            "--output-dir", single, "--frame", 1, "--jobs", 8,
+                            "--format", "svg")
+            self.assertIn("HPWL 1,000", (single / "frame-000001-solve.svg").read_text())
+        finally:
+            (self.directory / "metrics.jsonl").unlink(missing_ok=True)
+
+    def test_image_export_rejects_invalid_jobs_and_worker_errors(self):
+        result = self.run_script("generate_placement_images.py", self.directory,
+                                 "--jobs", -1, check=False)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Jobs must be nonnegative", result.stderr)
+        result = self.run_script("generate_placement_images.py", self.directory,
+                                 "--jobs", 2, "--scale", -1, check=False)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Error:", result.stderr)
+
     def test_image_export_rejects_invalid_frame(self):
         result = self.run_script("generate_placement_images.py", self.directory,
                                  "--frame", 99, check=False)

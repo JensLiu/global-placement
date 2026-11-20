@@ -20,6 +20,7 @@ class MakeBuildVariantsTest(unittest.TestCase):
         for key in (
             "DEBUG", "BUILD_TYPE", "BUILD_DIR", "MAKEFLAGS", "MFLAGS",
             "MAKEOVERRIDES", "CMAKE", "GDB", "PYTHON", "TRACE_DIR", "GP_TRACE_DIR",
+            "RENDER_JOBS", "IMAGE_FORMATS", "DESIGN",
         ):
             env.pop(key, None)
         return subprocess.check_output(
@@ -68,7 +69,7 @@ class MakeBuildVariantsTest(unittest.TestCase):
 
     def test_run_enables_json_collection_by_default(self):
         output = self.dry_run("run")
-        self.assertIn('trace_dir="build/traces/3_2_place_iop-Release-', output)
+        self.assertIn('trace_dir="build/traces/picorv32-', output)
         self.assertIn('GP_TRACE_DIR="$trace_dir"', output)
 
     def test_run_accepts_explicit_trace_directory_and_opt_out(self):
@@ -81,7 +82,7 @@ class MakeBuildVariantsTest(unittest.TestCase):
     def test_run_exports_images_from_same_trace(self):
         output = self.dry_run("run", "TRACE_DIR=custom traces/new-run",
                               "PYTHON=/custom/python")
-        self.assertIn('"/custom/python" scripts/generate_placement_images.py "$trace_dir" --bbox',
+        self.assertIn('"/custom/python" scripts/generate_placement_images.py "$trace_dir" --jobs "0" --bbox',
                       output)
         self.assertIn('|| exit $?;', output)
 
@@ -104,8 +105,9 @@ class MakeBuildVariantsTest(unittest.TestCase):
                                       f'"{placement_log}"\nexit {placement_status}\n')
                     placer.chmod(0o755)
                     python = directory / "mock python"
-                    python.write_text('#!/bin/sh\nprintf "%s\\n" "$@" > '
-                                      f'"{export_log}"\nexit {export_status}\n')
+                    python.write_text('#!/bin/sh\nif [ "$1" = scripts/generate_placement_images.py ]; then\n'
+                                      'printf "%s\\n" "$@" > '
+                                      f'"{export_log}"\nfi\nexit {export_status}\n')
                     python.chmod(0o755)
                     trace = str(directory / "trace with spaces") if trace_enabled else ""
                     env = os.environ.copy()
@@ -113,7 +115,8 @@ class MakeBuildVariantsTest(unittest.TestCase):
                         env.pop(key, None)
                     result = subprocess.run(
                         ["make", "run", "CMAKE=true", f"BUILD_DIR={build}",
-                         f"PYTHON={python}", f"TRACE_DIR={trace}"],
+                         f"PYTHON={python}", f"TRACE_DIR={trace}", "RENDER_JOBS=3",
+                         "IMAGE_FORMATS=png pdf"],
                         cwd=ROOT, env=env, text=True, capture_output=True,
                     )
                     self.assertEqual(placement_log.read_text(), trace + "\n")
@@ -121,9 +124,18 @@ class MakeBuildVariantsTest(unittest.TestCase):
                     self.assertEqual(export_log.exists(), should_export)
                     if should_export:
                         self.assertEqual(export_log.read_text().splitlines(),
-                                         ["scripts/generate_placement_images.py", trace, "--bbox"])
+                                         ["scripts/generate_placement_images.py", trace,
+                                          "--jobs", "3", "--bbox", "--format", "png", "pdf"])
                     success = placement_status == 0 and (not trace_enabled or export_status == 0)
                     self.assertEqual(result.returncode == 0, success, result.stderr)
+
+    def test_render_jobs_are_forwarded(self):
+        for target in ("run", "full"):
+            for jobs in (0, 1, 8):
+                with self.subTest(target=target, jobs=jobs):
+                    output = self.dry_run(target, f"RENDER_JOBS={jobs}")
+                    self.assertIn(f'scripts/generate_placement_images.py "$trace_dir" --jobs "{jobs}"',
+                                  output)
 
     def test_clean_only_targets_selected_configuration(self):
         for debug, variant in (("0", "Release"), ("1", "Debug")):
